@@ -1,0 +1,53 @@
+<div class="container my-3">
+    <div class="row">
+        <div class="col-12 col-md-6 mb-2">
+            <label for="seleccCodProv" class="form-label text-light">Codigo Proveedor:</label>
+            <select for="seleccCodProv" class="form-select" aria-label="Default select example">
+                <option selected>Selecciona un proveedor</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+        <div class="col-12 col-md-6 mb-2">
+            <label for="seleccCodProd" class="form-label text-light">Codigo / Sku:</label>
+            <select for="seleccCodProd" class="form-select" aria-label="Default select example">
+                <option selected>Selecciona un Cod. / Sku</option>
+                <option value="101">101</option>
+                <option value="202">202</option>
+                <option value="303">303</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 mb-2">
+            <label for="orden" class="form-label text-light">Numero de orden:</label>
+            <input required type="text" id="orden" placeholder="Ingese su numero de orden" class="form-control">
+        </div>
+        <div class="col-12 col-md-6 mb-2">
+            <label for="calleynumOrdenes" class="form-label text-light">Calle y numero:</label>
+            <input required type="text" id="calleynumOrdenes" placeholder="Ingese calle y numero" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 mb-2">
+            <label for="emision" class="form-label text-light">Fecha de emision:</label>
+            <input required type="date" id="emision" placeholder="Ingese fecha de emision" class="form-control">
+        </div>
+        <div class="col-12 col-md-6 mb-2">
+            <label for="entrega" class="form-label text-light">Fecha de entrega:</label>
+            <input required type="date" id="entrega" placeholder="Ingese fecha de entrega" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mb-2">
+            <label for="cantidad" class="form-label text-light">Cantidad:</label>
+            <input min="1" required type="number" id="cantidad" placeholder="Ingese cantidad" class="form-control">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mt-2">
+            <button type="button" class="btn btn-success w-100">Agregar / Actualizar</button>
+        </div>
+    </div>
+</div>

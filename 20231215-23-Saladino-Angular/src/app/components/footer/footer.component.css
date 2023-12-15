@@ -1,0 +1,9 @@
+.footer {
+    border-top: 1px solid #fff;
+}
+.item-link {
+    font-weight: 400;
+}
+.item-link:hover {
+    font-weight: 600;
+}

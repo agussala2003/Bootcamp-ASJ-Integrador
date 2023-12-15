@@ -1,0 +1,21 @@
+aside {
+    border-right: 1px solid #fff;
+}
+.desplegable-link {
+    cursor: pointer;
+}
+.transition {
+    transition: all 0.3s;
+}
+.item-link {
+    font-weight: 400;
+}
+.item-link:hover {
+    font-weight: 600;
+}
+@media (max-width:767.5px) {
+    aside {
+        border-right: none;
+        border-bottom: 1px solid #fff;
+    } 
+}

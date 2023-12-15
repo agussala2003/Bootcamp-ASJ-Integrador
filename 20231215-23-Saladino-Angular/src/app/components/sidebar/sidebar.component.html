@@ -1,0 +1,33 @@
+<aside class="bg-dark h-100" data-bs-theme="dark">
+    <div class="container py-3 py-md-5 ps-5">
+        <h2 class="text-light text-uppercase mb-4">Navegación</h2>
+        <div class="desplegable">
+          <div (click)="adminFlag = !adminFlag" class="d-flex desplegable-link">
+            <i class='text-light fs-4 bx bx-cog me-2'></i>
+            <p class="text-light fw-semibold">
+                Administracion
+            </p>
+            <i class='bx bx-chevron-down text-light pt-1 ms-2'></i>
+          </div>
+          <ul [ngClass]="adminFlag ? 'd-block' : 'd-none transition'">
+            <li class="list-unstyled mb-2"><a class="item-link text-decoration-none text-light" routerLink="proveedores">Proveedores</a></li>
+            <li class="list-unstyled mb-2"><a class="item-link text-decoration-none text-light" routerLink="productos-servicios">Productos y servicios</a></li>
+            <li class="list-unstyled mb-2"><a class="item-link text-decoration-none text-light" routerLink="ordenes">Ordenes de compra</a></li>
+          </ul>
+        </div>
+
+        <div class="desplegable">
+          <div (click)="userFlag = !userFlag" class="d-flex desplegable-link">
+            <i class='text-light fs-4 bx bx-user me-2'></i>
+            <p class="text-light fw-semibold">
+                Usuarios
+            </p>
+            <i class='bx bx-chevron-down text-light pt-1 ms-2'></i>
+          </div>
+          <ul [ngClass]="userFlag ? 'd-block' : 'd-none'">
+            <li class="list-unstyled mb-2"><a class="item-link text-decoration-none text-light">Administradores</a></li>
+            <li class="list-unstyled mb-2"><a class="item-link text-decoration-none text-light">Clientes</a></li>
+          </ul>
+        </div>
+    </div>
+</aside>

@@ -1,0 +1,11 @@
+<app-header></app-header>
+<div class="row h-100 position-relative">
+  <app-sidebar [ngClass]="sidebarFlag ? 'col-12 col-md-3' : 'd-none'"></app-sidebar>
+  <div class="d-none d-md-block position-absolute ps-2 mt-1">
+    <i (click)="sidebarBurguer()" class='text-light fs-3 btn bx bx-menu'></i>
+  </div>
+  <main [ngClass]="sidebarFlag ? 'col-12 bg-dark col-md-9' : 'col-12'">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+<app-footer></app-footer>

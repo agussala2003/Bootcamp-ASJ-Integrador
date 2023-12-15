@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="table-responsive rounded-3 mt-5 mb-3">
+          <table class="table align-middle mb-0 bg-white">
+            <thead class="bg-light">
+              <tr>
+                <th>Codigo</th>
+                <th>Razon Social</th>
+                <th>Rubro</th>
+                <th>Contacto</th>
+                <th>Pais</th>
+                <th>Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let proveedor of proveedores">
+                <td>
+                    <p class="fw-normal mb-1 text-nowrap text-center">{{proveedor.Codigo}}</p>
+                </td>
+                <td>
+                    <p class="fw-normal mb-1 text-nowrap">{{proveedor.RazonSocial}}</p>
+                </td>
+                <td>
+                    <p class="fw-normal mb-1 text-nowrap">{{proveedor.Rubro}}</p>
+                </td>
+                <td>
+                    <p class="fw-normal mb-1 text-nowrap">{{proveedor.Contacto}}</p>
+                </td>
+                <td>
+                    <p class="fw-normal mb-1 text-nowrap">{{proveedor.Direccion.Pais}}</p>
+                </td>
+                <td>
+                    <div class="d-flex">
+                        <i class='btn btn-danger bx bx-trash me-2'></i>
+                        <i class='btn btn-primary bx bx-edit-alt' ></i>
+                    </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+</div>
