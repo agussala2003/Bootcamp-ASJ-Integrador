@@ -7,9 +7,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MainPrincipalComponent } from './components/main-principal/main-principal.component';
-import { MainProveedoresComponent } from './components/main-proveedores/main-proveedores.component';
-import { MainProductosyserviciosComponent } from './components/main-productosyservicios/main-productosyservicios.component';
-import { MainOrdenesdecompraComponent } from './components/main-ordenesdecompra/main-ordenesdecompra.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TablaProveedoresComponent } from './components/main-proveedores/tabla-proveedores/tabla-proveedores.component';
 import { FormProveedoresComponent } from './components/main-proveedores/form-proveedores/form-proveedores.component';
@@ -17,6 +14,8 @@ import { FormProductosyserviciosComponent } from './components/main-productosyse
 import { TablaProductosyserviciosComponent } from './components/main-productosyservicios/tabla-productosyservicios/tabla-productosyservicios.component';
 import { TablaOrdenesdecompraComponent } from './components/main-ordenesdecompra/tabla-ordenesdecompra/tabla-ordenesdecompra.component';
 import { FormOrdenesdecompraComponent } from './components/main-ordenesdecompra/form-ordenesdecompra/form-ordenesdecompra.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,9 +24,6 @@ import { FormOrdenesdecompraComponent } from './components/main-ordenesdecompra/
     SidebarComponent,
     FooterComponent,
     MainPrincipalComponent,
-    MainProveedoresComponent,
-    MainProductosyserviciosComponent,
-    MainOrdenesdecompraComponent,
     TablaProveedoresComponent,
     FormProveedoresComponent,
     FormProductosyserviciosComponent,
@@ -38,7 +34,9 @@ import { FormOrdenesdecompraComponent } from './components/main-ordenesdecompra/
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

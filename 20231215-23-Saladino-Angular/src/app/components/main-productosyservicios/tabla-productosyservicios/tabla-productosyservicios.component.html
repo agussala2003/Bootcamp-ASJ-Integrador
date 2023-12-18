@@ -1,41 +1,54 @@
-<div class="container">
+<div class="bg-dark">
+  <div class="container p-5">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-start justify-content-md-end mb-3 ">
+        <a routerLink="/productos-servicios/form/0" class="btn btn-primary"
+          >Agregar Producto o Servicio</a
+        >
+      </div>
+    </div>
     <div class="table-responsive rounded-3 mt-5 mb-3">
-          <table class="table align-middle mb-0 bg-white">
-            <thead class="bg-light">
-              <tr>
-                <th>Proveedor</th>
-                <th class="text-nowrap">Codigo / Sku</th>
-                <th>Categoria</th>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Accion</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of productosyServicios">
-                <td>
-                    <p class="fw-normal mb-1 text-nowrap text-center">{{item.Proveedor}}</p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1 text-nowrap text-center">{{item.Sku}}</p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1 text-nowrap">{{item.Categoria}}</p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1 text-nowrap">{{item.Producto}}</p>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1 text-nowrap">${{item.Precio}}</p>
-                </td>
-                <td>
-                    <div class="d-flex">
-                        <i class='btn btn-danger bx bx-trash me-2'></i>
-                        <i class='btn btn-primary bx bx-edit-alt' ></i>
-                    </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <table class="table align-middle mb-0 bg-white">
+        <thead class="bg-light">
+          <tr>
+            <th class="text-center">Proveedor</th>
+            <th class="text-nowrap text-center">Codigo / Sku</th>
+            <th>Categoria</th>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Accion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of productosyServicios">
+            <td>
+              <p class="fw-normal mb-1 text-nowrap text-center">
+                {{ item.Proveedor }}
+              </p>
+            </td>
+            <td>
+              <p class="fw-normal mb-1 text-nowrap text-center">
+                {{ item.Sku }}
+              </p>
+            </td>
+            <td>
+              <p class="fw-normal mb-1 text-nowrap">{{ item.Categoria }}</p>
+            </td>
+            <td>
+              <p class="fw-normal mb-1 text-nowrap">{{ item.Producto }}</p>
+            </td>
+            <td>
+              <p class="fw-normal mb-1 text-nowrap">${{ item.Precio }}</p>
+            </td>
+            <td>
+              <div class="d-flex">
+                <i (click)="borrarProductoyservicio(item.Sku)" class="btn btn-danger bx bx-trash me-2"></i>
+                <i class="btn btn-primary bx bx-edit-alt"></i>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

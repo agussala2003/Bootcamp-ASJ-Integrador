@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainPrincipalComponent } from './components/main-principal/main-principal.component';
-import { MainProveedoresComponent } from './components/main-proveedores/main-proveedores.component';
-import { MainProductosyserviciosComponent } from './components/main-productosyservicios/main-productosyservicios.component';
-import { MainOrdenesdecompraComponent } from './components/main-ordenesdecompra/main-ordenesdecompra.component';
+import { FormProveedoresComponent } from './components/main-proveedores/form-proveedores/form-proveedores.component';
+import { TablaProveedoresComponent } from './components/main-proveedores/tabla-proveedores/tabla-proveedores.component';
+import { TablaProductosyserviciosComponent } from './components/main-productosyservicios/tabla-productosyservicios/tabla-productosyservicios.component';
+import { FormProductosyserviciosComponent } from './components/main-productosyservicios/form-productosyservicios/form-productosyservicios.component';
+import { TablaOrdenesdecompraComponent } from './components/main-ordenesdecompra/tabla-ordenesdecompra/tabla-ordenesdecompra.component';
+import { FormOrdenesdecompraComponent } from './components/main-ordenesdecompra/form-ordenesdecompra/form-ordenesdecompra.component';
 
 const routes: Routes = [
   {
@@ -12,15 +15,42 @@ const routes: Routes = [
   },
   {
     path: 'proveedores',
-    component: MainProveedoresComponent
+    children: [ 
+      {
+        path: "",
+        component: TablaProveedoresComponent
+      },
+      {
+        path: "form/:idProv",
+        component: FormProveedoresComponent
+      }
+    ]
   },
   {
     path: 'productos-servicios',
-    component: MainProductosyserviciosComponent
+    children: [ 
+      {
+        path: "",
+        component: TablaProductosyserviciosComponent
+      },
+      {
+        path: "form/:idProdServ",
+        component: FormProductosyserviciosComponent
+      }
+    ]
   },
   {
     path: 'ordenes',
-    component: MainOrdenesdecompraComponent
+    children: [ 
+      {
+        path: "",
+        component: TablaOrdenesdecompraComponent
+      },
+      {
+        path: "form/:idOrden",
+        component: FormOrdenesdecompraComponent
+      }
+    ]
   },
   {
     path: '**',
