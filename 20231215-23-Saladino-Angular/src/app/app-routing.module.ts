@@ -23,6 +23,10 @@ const routes: Routes = [
       {
         path: "form/:idProv",
         component: FormProveedoresComponent
+      },
+      {
+        path: "form",
+        component: FormProveedoresComponent
       }
     ]
   },

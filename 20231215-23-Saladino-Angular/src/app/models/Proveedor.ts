@@ -2,9 +2,12 @@ export type Proveedor = {
   Codigo: string;
   RazonSocial: string;
   Rubro: string;
-  Contacto: string;
+  Telefono: string;
+  Email: string;
+  SitioWeb: string;
   Direccion: {
-    CalleyN: string;
+    Calle: string;
+    Numero:string;
     CP: string;
     Localidad: string;
     Provincia: string;

@@ -27,9 +27,13 @@ export class ProveedoresService {
       this.lista.push(list);
     }
   }
-  public deleteFakeData(id: number) {
+  public deleteFakeData(id: string) {
     console.log(id)
-    this.lista = this.lista.filter(item => parseInt(item.Codigo) !== id)
+    this.lista = this.lista.filter(item => item.Codigo !== id)
     return this.lista;
+  }
+  public getProvData(id:string) {
+    const lista = this.lista.filter(item => item.Codigo === id)
+    return lista;
   }
 }

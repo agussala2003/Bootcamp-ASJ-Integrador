@@ -2,7 +2,7 @@
   <div class="container p-5">
     <div class="row">
       <div class="col-12 d-flex justify-content-start justify-content-md-end mb-3 ">
-        <a routerLink="/proveedores/form/0" class="btn btn-primary"
+        <a routerLink="/proveedores/form" class="btn btn-primary"
           >Agregar Proveedor</a
         >
       </div>
@@ -35,7 +35,7 @@
               <p class="fw-normal mb-1 text-nowrap">{{ proveedor.Rubro }}</p>
             </td>
             <td>
-              <p class="fw-normal mb-1 text-nowrap">{{ proveedor.Contacto }}</p>
+              <p class="fw-normal mb-1 text-nowrap">{{ proveedor.Telefono }}</p>
             </td>
             <td>
               <p class="fw-normal mb-1 text-nowrap">
@@ -45,7 +45,7 @@
             <td>
               <div class="d-flex">
                 <i (click)="borrarProveedor(proveedor.Codigo)" class="btn btn-danger bx bx-trash me-2"></i>
-                <i class="btn btn-primary bx bx-edit-alt"></i>
+                <i [routerLink]="['/proveedores/form/',proveedor.Codigo]" class="btn btn-primary bx bx-edit-alt"></i>
               </div>
             </td>
           </tr>

@@ -2,31 +2,48 @@
   <div class="container p-5">
     <div class="row">
       <div class="col-12 d-flex justify-content-start justify-content-md-end mb-3 ">
-        <a routerLink="../../" class="btn btn-primary">Volver a la lista</a>
+        <a routerLink="/proveedores" class="btn btn-primary">Volver a la lista</a>
       </div>
     </div>
+    <form #formProv="ngForm" (ngSubmit)="agregarProveedor(formProv)">
     <div class="row">
       <div class="col-12 col-md-6 mb-2">
         <label for="codProv" class="form-label text-light">Codigo:</label>
         <input
           [(ngModel)]="codProv"
           required
+          name="proveedor"
           type="text"
           id="codProv"
           placeholder="Ingese su codigo"
           class="form-control"
+          minlength="4"
         />
+        <div *ngIf="formProv.controls['proveedor']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light"> El dato es obligatorio </span>
+        </div>
+        <div *ngIf="formProv.controls['proveedor']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light"> El codigo debe ser de 4 o mas digitos </span>
+        </div>
       </div>
       <div class="col-12 col-md-6 mb-2">
         <label for="rs" class="form-label text-light">Razon Social:</label>
         <input
           [(ngModel)]="rs"
           required
-          type="text"
+          name="razonsocial"
           id="rs"
+          type="text"
           placeholder="Ingese Razon Social"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProv.controls['razonsocial']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['razonsocial']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">La razon social debe ser de 3 o mas digitos</span>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -35,38 +52,111 @@
         <input
           [(ngModel)]="rubro"
           required
+          name="rubro"
           type="text"
           id="rubro"
           placeholder="Ingese su rubro"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProv.controls['rubro']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['rubro']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">La razon social debe ser de 3 o mas digitos</span>
+        </div>
       </div>
       <div class="col-12 col-md-6 mb-2">
-        <label for="contactoProv" class="form-label text-light"
-          >Sitio web, email o teléfono:</label
+        <label for="telefonoproveedor" class="form-label text-light"
+          >Telefono:</label
         >
         <input
-          [(ngModel)]="contactoProv"
+          [(ngModel)]="telefonoProv"
           required
+          name="telefonoproveedor"
+          id="telefonoproveedor"
           type="text"
-          id="contactoProv"
-          placeholder="Ingese Contacto"
+          placeholder="Ingese telefono"
           class="form-control"
+          minlength="5"
         />
+        <div *ngIf="formProv.controls['telefonoproveedor']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['telefonoproveedor']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">El telefono debe ser de 11 o mas digitos</span>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 mb-2">
+        <label for="emailProv" class="form-label text-light"
+          >Email:</label
+        >
+        <input
+          [(ngModel)]="emailProv"
+          required
+          name="emailProv"
+          id="emailProv"
+          type="text"
+          placeholder="Ingese email"
+          class="form-control"
+          minlength="5"
+        />
+        <div *ngIf="formProv.controls['emailProv']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['emailProv']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">El email debe ser de 5 o mas digitos</span>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 mb-2">
+        <label for="sitioProv" class="form-label text-light"
+          >Sitio Web:</label
+        >
+        <input
+          [(ngModel)]="sitioProv"
+          required
+          name="sitioProv"
+          id="sitioProv"
+          type="text"
+          placeholder="Ingese sitio web"
+          class="form-control"
+          minlength="5"
+        />
+        <div *ngIf="formProv.controls['sitioProv']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['sitioProv']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">La razon social debe ser de 3 o mas digitos</span>
+        </div>
       </div>
     </div>
     <div class="row">
       <h4 class="text-light my-2 text-uppercase">Dirección</h4>
       <div class="col-12 col-md-6 mb-2">
-        <label for="calleynum" class="form-label text-light"
-          >Calle y numero:</label
+        <label for="calle" class="form-label text-light"
+          >Calle:</label
         >
         <input
-          [(ngModel)]="calleynum"
+          [(ngModel)]="calle"
           required
+          name="calle"
           type="text"
-          id="calleynum"
-          placeholder="Ingese su calle y numero"
+          id="calle"
+          placeholder="Ingese su calle"
+          class="form-control"
+        />
+      </div>
+      <div class="col-12 col-md-6 mb-2">
+        <label for="num" class="form-label text-light"
+          >Numero:</label
+        >
+        <input
+          [(ngModel)]="num"
+          required
+          name="num"
+          type="text"
+          id="num"
+          placeholder="Ingese numero"
           class="form-control"
         />
       </div>
@@ -75,6 +165,7 @@
         <input
           [(ngModel)]="localidad"
           required
+          name="localidad"
           type="text"
           id="localidad"
           placeholder="Ingese localidad"
@@ -88,6 +179,7 @@
         <input
           [(ngModel)]="provincia"
           required
+          name="provincia"
           type="text"
           id="provincia"
           placeholder="Ingese provincia"
@@ -99,6 +191,7 @@
         <input
           [(ngModel)]="pais"
           required
+          name="pais"
           type="text"
           id="pais"
           placeholder="Ingese pais"
@@ -112,6 +205,7 @@
         <input
           [(ngModel)]="cp"
           required
+          name="codigopostal"
           type="text"
           id="cp"
           placeholder="Ingese codigo postal"
@@ -126,6 +220,7 @@
         <input
           [(ngModel)]="cuit"
           required
+          name="cuit"
           type="text"
           id="cuit"
           placeholder="Ingese su CUIT"
@@ -139,6 +234,7 @@
         <input
           [(ngModel)]="condicion"
           required
+          name="condicion"
           type="text"
           id="condicion"
           placeholder="Ingese condicion IVA"
@@ -155,6 +251,7 @@
         <input
           [(ngModel)]="nombreContacto"
           required
+          name="nombrecontacto"
           type="text"
           id="nombreContacto"
           placeholder="Ingese su nombre"
@@ -168,6 +265,7 @@
         <input
           [(ngModel)]="apellidoContacto"
           required
+          name="apellidocontacto"
           type="text"
           id="apellidoContacto"
           placeholder="Ingese su apellido"
@@ -183,6 +281,7 @@
         <input
           [(ngModel)]="telefonoContacto"
           required
+          name="telefonocontacto"
           type="text"
           id="telefonoContacto"
           placeholder="Ingese su telefono"
@@ -194,6 +293,7 @@
         <input
           [(ngModel)]="emailContacto"
           required
+          name="emailcontacto"
           type="email"
           id="emailContacto"
           placeholder="Ingese su email"
@@ -207,6 +307,7 @@
         <input
           [(ngModel)]="rol"
           required
+          name="rol"
           type="text"
           id="rol"
           placeholder="Ingese su rol"
@@ -217,13 +318,14 @@
     <div class="row">
       <div class="col-12 mt-2">
         <button
-          (click)="agregarProveedor()"
-          type="button"
+          [disabled]="!formProv.valid"
+          type="submit"
           class="btn btn-success w-100"
         >
           Agregar / Actualizar
         </button>
       </div>
     </div>
+  </form>
   </div>
 </div>

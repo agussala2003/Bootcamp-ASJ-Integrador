@@ -14,6 +14,6 @@ export class TablaProveedoresComponent implements OnInit {
     this.proveedores = this.servicio.getFakeData();
   }
   borrarProveedor(idProv:string) {
-    this.proveedores = this.servicio.deleteFakeData(parseInt(idProv))
+    this.proveedores = this.servicio.deleteFakeData(idProv)
   }
 }
