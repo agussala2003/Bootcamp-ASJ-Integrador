@@ -9,31 +9,67 @@ const data:Proveedor[] = proveedores;
 export class ProveedoresService {
   lista: Proveedor[] = data;
   constructor(private http: HttpClient) {}
-  // public getDatosApi () {
-  //   return this.http.get('URL');
-  // }
+  datosProv:Proveedor = {
+    Codigo: '',
+    RazonSocial: '',
+    Rubro: '',
+    Telefono: '',
+    Email: '',
+    SitioWeb: '',
+    Imagen: '',
+    Direccion: {
+      Calle: '',
+      Numero: '',
+      CP: '',
+      Localidad: '',
+      Provincia: '',
+      Pais: '',
+    },
+    DatosFiscales: {
+      CUIT: '',
+      CondicionIVA: '',
+    },
+    DatosContacto: {
+      Nombre: '',
+      Apellido: '',
+      Telefono: '',
+      Email: '',
+      Rol: '',
+    }
+  }
   public getFakeData() {
     return this.lista;
   }
-  public uploadFakeData(list: Proveedor) {
-    const index = this.lista.findIndex(item => item.Codigo === list.Codigo);
+  public uploadFakeData() {
+    const index = this.lista.findIndex(item => item.Codigo === this.datosProv.Codigo);
+    const nuevoProveedor: Proveedor = { ...this.datosProv }; // Crear una nueva instancia
+    nuevoProveedor.Direccion = { ...this.datosProv.Direccion };
+    nuevoProveedor.DatosFiscales = { ...this.datosProv.DatosFiscales };
+    nuevoProveedor.DatosContacto = { ...this.datosProv.DatosContacto };
     if (index !== -1) {
       // Si existe, actualiza el elemento en la posición index
-      alert('Ya tienes uno con esa orden. Actualizando...');
-      this.lista[index] = list;
+      alert('Ya tienes uno de ese proveedor. Actualizando...');
+      this.lista[index] = { ...this.datosProv };
+      this.lista[index].Direccion = { ...this.datosProv.Direccion };
+      this.lista[index].DatosFiscales = { ...this.datosProv.DatosFiscales };
+      this.lista[index].DatosContacto = { ...this.datosProv.DatosContacto };
     } else {
       // Si no existe, agrega el nuevo elemento
       alert('No existe. Agregando...');
-      this.lista.push(list);
+      this.lista.push(nuevoProveedor);
     }
   }
   public deleteFakeData(id: string) {
-    console.log(id)
     this.lista = this.lista.filter(item => item.Codigo !== id)
     return this.lista;
   }
-  public getProvData(id:string) {
-    const lista = this.lista.filter(item => item.Codigo === id)
-    return lista;
+  public getProvData(id: string) {
+    const num = this.lista.findIndex(item => item.Codigo === id);
+    if (num !== -1) {
+      this.datosProv = { ...this.lista[num] };
+      this.datosProv.Direccion = { ...this.lista[num].Direccion };
+      this.datosProv.DatosFiscales = { ...this.lista[num].DatosFiscales };
+      this.datosProv.DatosContacto = { ...this.lista[num].DatosContacto };
+    }
   }
 }

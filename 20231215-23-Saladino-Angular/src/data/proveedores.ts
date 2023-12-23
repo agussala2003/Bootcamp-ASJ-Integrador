@@ -1,12 +1,13 @@
 import { Proveedor } from '../app/models/Proveedor';
 export const proveedores: Proveedor[] = [
   {
-    Codigo: '1',
+    Codigo: '1A45',
     RazonSocial: 'Empresa A S.A.',
     Rubro: 'Tecnología',
     Telefono: '1135655234',
     Email: 'juanperez@gmail.com',
     SitioWeb: 'juanperez.com',
+    Imagen: 'lalala.com',
     Direccion: {
       Calle: 'Av. Principal',
       Numero: '123',
@@ -17,7 +18,7 @@ export const proveedores: Proveedor[] = [
     },
     DatosFiscales: {
       CUIT: '30-12345678-9',
-      CondiciónIVA: 'Responsable Inscripto',
+      CondicionIVA: 'Consumidor Final',
     },
     DatosContacto: {
       Nombre: 'Carlos',
@@ -28,12 +29,13 @@ export const proveedores: Proveedor[] = [
     },
   },
   {
-    Codigo: '2',
+    Codigo: '2A45',
     RazonSocial: 'Compañía B S.R.L.',
     Rubro: 'Alimentación',
     Telefono: '1135655234',
     Email: 'anarodriguez@gmail.com',
     SitioWeb: 'anarodriguez.com',
+    Imagen: 'lalala.com',
     Direccion: {
       Calle: 'Calle Secundaria',
       Numero: '456',
@@ -44,7 +46,7 @@ export const proveedores: Proveedor[] = [
     },
     DatosFiscales: {
       CUIT: '30-87654321-0',
-      CondiciónIVA: 'Monotributo',
+      CondicionIVA: 'Consumidor Final',
     },
     DatosContacto: {
       Nombre: 'Lucía',
@@ -55,12 +57,13 @@ export const proveedores: Proveedor[] = [
     },
   },
   {
-    Codigo: '3',
+    Codigo: '3A45',
     RazonSocial: 'Tienda C E.I.R.L.',
     Rubro: 'Moda',
     Telefono: '1134555234',
     Email: 'luisagarcia@gmail.com',
     SitioWeb: 'luisagarcia.com',
+    Imagen: 'lalala.com',
     Direccion: {
       Calle: 'Plaza Central',
       Numero: '789',
@@ -71,7 +74,7 @@ export const proveedores: Proveedor[] = [
     },
     DatosFiscales: {
       CUIT: '30-13579246-7',
-      CondiciónIVA: 'Exento',
+      CondicionIVA: 'Consumidor Final',
     },
     DatosContacto: {
       Nombre: 'Miguel',

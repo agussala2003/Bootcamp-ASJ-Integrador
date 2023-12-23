@@ -22,9 +22,18 @@
         <tbody>
           <tr *ngFor="let proveedor of proveedores">
             <td>
-              <p class="fw-normal mb-1 text-nowrap text-center">
-                {{ proveedor.Codigo }}
-              </p>
+              <div class="d-flex align-items-center">
+                <img
+                  src="{{ proveedor.Imagen }}"
+                  alt=""
+                  style="width: 35px; height: 35px"
+                  class="rounded-circle"
+                  (error)="handleImageError(proveedor)"
+                />
+                <div class="ms-3">
+                  <p class="fw-normal mb-1 text-nowrap text-center">{{ proveedor.Codigo }}</p>
+                </div>
+              </div>
             </td>
             <td>
               <p class="fw-normal mb-1 text-nowrap">

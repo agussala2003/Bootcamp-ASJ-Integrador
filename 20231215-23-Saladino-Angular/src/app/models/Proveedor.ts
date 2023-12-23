@@ -5,6 +5,7 @@ export type Proveedor = {
   Telefono: string;
   Email: string;
   SitioWeb: string;
+  Imagen:string;
   Direccion: {
     Calle: string;
     Numero:string;
@@ -15,7 +16,7 @@ export type Proveedor = {
   };
   DatosFiscales: {
     CUIT: string;
-    CondiciónIVA: string;
+    CondicionIVA: string;
   };
   DatosContacto: {
     Nombre: string;

@@ -7,10 +7,11 @@
     </div>
     <form #formProv="ngForm" (ngSubmit)="agregarProveedor(formProv)">
     <div class="row">
-      <div class="col-12 col-md-6 mb-2">
+      <h4 class="text-light my-2 text-uppercase">Datos Proveedor</h4>
+      <div class="col-12 col-md-3 mb-2">
         <label for="codProv" class="form-label text-light">Codigo:</label>
         <input
-          [(ngModel)]="codProv"
+          [(ngModel)]="this.service.datosProv.Codigo"
           required
           name="proveedor"
           type="text"
@@ -23,13 +24,13 @@
           <span class="form-text text-light"> El dato es obligatorio </span>
         </div>
         <div *ngIf="formProv.controls['proveedor']?.hasError('minlength')" class="col-auto">
-          <span class="form-text text-light"> El codigo debe ser de 4 o mas digitos </span>
+          <span class="form-text text-light"> Alphanumerico de 4 o mas digitos </span>
         </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="rs" class="form-label text-light">Razon Social:</label>
         <input
-          [(ngModel)]="rs"
+          [(ngModel)]="this.service.datosProv.RazonSocial"
           required
           name="razonsocial"
           id="rs"
@@ -42,36 +43,34 @@
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
         <div *ngIf="formProv.controls['razonsocial']?.hasError('minlength')" class="col-auto">
-          <span class="form-text text-light">La razon social debe ser de 3 o mas digitos</span>
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="rubro" class="form-label text-light">Rubro:</label>
         <input
-          [(ngModel)]="rubro"
+          [(ngModel)]="this.service.datosProv.Rubro"
           required
           name="rubro"
           type="text"
           id="rubro"
           placeholder="Ingese su rubro"
           class="form-control"
-          minlength="3"
+          minlength="2"
         />
         <div *ngIf="formProv.controls['rubro']?.hasError('required')" class="col-auto">
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
         <div *ngIf="formProv.controls['rubro']?.hasError('minlength')" class="col-auto">
-          <span class="form-text text-light">La razon social debe ser de 3 o mas digitos</span>
+          <span class="form-text text-light">Ingrese 2 o mas digitos</span>
         </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="telefonoproveedor" class="form-label text-light"
           >Telefono:</label
         >
         <input
-          [(ngModel)]="telefonoProv"
+          [(ngModel)]="this.service.datosProv.Telefono"
           required
           name="telefonoproveedor"
           id="telefonoproveedor"
@@ -84,15 +83,15 @@
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
         <div *ngIf="formProv.controls['telefonoproveedor']?.hasError('minlength')" class="col-auto">
-          <span class="form-text text-light">El telefono debe ser de 11 o mas digitos</span>
+          <span class="form-text text-light">Ingrese 11 o mas digitos</span>
         </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="emailProv" class="form-label text-light"
           >Email:</label
         >
         <input
-          [(ngModel)]="emailProv"
+          [(ngModel)]="this.service.datosProv.Email"
           required
           name="emailProv"
           id="emailProv"
@@ -105,15 +104,15 @@
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
         <div *ngIf="formProv.controls['emailProv']?.hasError('minlength')" class="col-auto">
-          <span class="form-text text-light">El email debe ser de 5 o mas digitos</span>
+          <span class="form-text text-light">Ingrese 5 o mas digitos</span>
         </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="sitioProv" class="form-label text-light"
           >Sitio Web:</label
         >
         <input
-          [(ngModel)]="sitioProv"
+          [(ngModel)]="this.service.datosProv.SitioWeb"
           required
           name="sitioProv"
           id="sitioProv"
@@ -126,193 +125,289 @@
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
         <div *ngIf="formProv.controls['sitioProv']?.hasError('minlength')" class="col-auto">
-          <span class="form-text text-light">La razon social debe ser de 3 o mas digitos</span>
+          <span class="form-text text-light">Ingrese 5 o mas digitos</span>
         </div>
+      </div>
+      <div class="col-12 col-md-3 mb-2">
+        <label for="imgProv" class="form-label text-light"
+          >Imagen proveedor:</label
+        >
+        <input
+          [(ngModel)]="this.service.datosProv.Imagen"
+          name="imgProv"
+          id="imgProv"
+          type="text"
+          placeholder="Ingese URL"
+          class="form-control"
+          minlength="5"
+        />
       </div>
     </div>
     <div class="row">
       <h4 class="text-light my-2 text-uppercase">Dirección</h4>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="calle" class="form-label text-light"
           >Calle:</label
         >
         <input
-          [(ngModel)]="calle"
+          [(ngModel)]="this.service.datosProv.Direccion.Calle"
           required
           name="calle"
           type="text"
           id="calle"
           placeholder="Ingese su calle"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProv.controls['calle']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['calle']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="num" class="form-label text-light"
           >Numero:</label
         >
         <input
-          [(ngModel)]="num"
+          [(ngModel)]="this.service.datosProv.Direccion.Numero"
           required
           name="num"
-          type="text"
+          type="number"
           id="num"
           placeholder="Ingese numero"
           class="form-control"
+          min="1"
         />
+        <div *ngIf="formProv.controls['num']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['num']?.hasError('min')" class="col-auto">
+          <span class="form-text text-light">Ingrese un minimo de 1</span>
+        </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="localidad" class="form-label text-light">Localidad:</label>
         <input
-          [(ngModel)]="localidad"
+          [(ngModel)]="this.service.datosProv.Direccion.Localidad"
           required
           name="localidad"
           type="text"
           id="localidad"
           placeholder="Ingese localidad"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProv.controls['localidad']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['localidad']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="provincia" class="form-label text-light">Provincia:</label>
         <input
-          [(ngModel)]="provincia"
+          [(ngModel)]="this.service.datosProv.Direccion.Provincia"
           required
           name="provincia"
           type="text"
           id="provincia"
           placeholder="Ingese provincia"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProv.controls['provincia']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['provincia']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="pais" class="form-label text-light">Pais:</label>
         <input
-          [(ngModel)]="pais"
+          [(ngModel)]="this.service.datosProv.Direccion.Pais"
           required
           name="pais"
           type="text"
           id="pais"
           placeholder="Ingese pais"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProv.controls['pais']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['pais']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="cp" class="form-label text-light">Codigo Postal:</label>
         <input
-          [(ngModel)]="cp"
+          [(ngModel)]="this.service.datosProv.Direccion.CP"
           required
           name="codigopostal"
-          type="text"
+          type="number"
           id="cp"
           placeholder="Ingese codigo postal"
           class="form-control"
+          min="1"
         />
+        <div *ngIf="formProv.controls['codigopostal']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['codigopostal']?.hasError('min')" class="col-auto">
+          <span class="form-text text-light">Ingrese 1 o mas digitos</span>
+        </div>
       </div>
     </div>
     <div class="row">
       <h4 class="text-light my-2 text-uppercase">Datos Fiscales</h4>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="cuit" class="form-label text-light">CUIT:</label>
         <input
-          [(ngModel)]="cuit"
+          [(ngModel)]="this.service.datosProv.DatosFiscales.CUIT"
           required
           name="cuit"
           type="text"
           id="cuit"
           placeholder="Ingese su CUIT"
           class="form-control"
+          minlength="1"
         />
+        <div *ngIf="formProv.controls['cuit']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['cuit']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 1 o mas digitos</span>
+        </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="condicion" class="form-label text-light"
-          >Condicion IVA:</label
-        >
-        <input
-          [(ngModel)]="condicion"
-          required
-          name="condicion"
-          type="text"
-          id="condicion"
-          placeholder="Ingese condicion IVA"
-          class="form-control"
-        />
+          >Condicion IVA:</label>
+        <select [(ngModel)]="this.service.datosProv.DatosFiscales.CondicionIVA" required name="condicion" id="condicion" class="form-select" aria-label="Default select example">
+          <option selected disabled>Selecciona Condicion</option>
+          <option value="IVA Responsable Inscripto">IVA Responsable Inscripto</option>
+          <option value="IVA Responsable No Inscripto">IVA Responsable No Inscripto</option>
+          <option value="IVA Sujeto Exento">IVA Sujeto Exento</option>
+          <option value="Consumidor Final">Consumidor Final</option>
+          <option value="Responsable Monotributo">Responsable Monotributo</option>
+          <option value="Sujeto no Categorizado">Sujeto no Categorizado</option>
+          <option value="Proveedor del Exterior">Proveedor del Exterior</option>
+          <option value="Cliente del Exterior">Cliente del Exterior</option>
+          <option value="IVA Liberado">Iva Liberado</option>
+          <option value="Monotributista social">Monotributista social</option>
+        </select>
+        <div *ngIf="formProv.controls['condicion']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
       </div>
     </div>
     <div class="row">
       <h4 class="text-light my-2 text-uppercase">Datos de contacto</h4>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="nombreContacto" class="form-label text-light"
           >Nombre:</label
         >
         <input
-          [(ngModel)]="nombreContacto"
+          [(ngModel)]="this.service.datosProv.DatosContacto.Nombre"
           required
           name="nombrecontacto"
           type="text"
           id="nombreContacto"
           placeholder="Ingese su nombre"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProv.controls['nombrecontacto']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['nombrecontacto']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="apellidoContacto" class="form-label text-light"
           >Apellido:</label
         >
         <input
-          [(ngModel)]="apellidoContacto"
+          [(ngModel)]="this.service.datosProv.DatosContacto.Apellido"
           required
           name="apellidocontacto"
           type="text"
           id="apellidoContacto"
           placeholder="Ingese su apellido"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProv.controls['apellidocontacto']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['apellidocontacto']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="telefonoContacto" class="form-label text-light"
           >Telefono:</label
         >
         <input
-          [(ngModel)]="telefonoContacto"
+          [(ngModel)]="this.service.datosProv.DatosContacto.Telefono"
           required
           name="telefonocontacto"
           type="text"
           id="telefonoContacto"
           placeholder="Ingese su telefono"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProv.controls['telefonocontacto']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['telefonocontacto']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="emailContacto" class="form-label text-light">Email:</label>
         <input
-          [(ngModel)]="emailContacto"
+          [(ngModel)]="this.service.datosProv.DatosContacto.Email"
           required
           name="emailcontacto"
           type="email"
           id="emailContacto"
           placeholder="Ingese su email"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProv.controls['emailcontacto']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['emailcontacto']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="rol" class="form-label text-light">Rol:</label>
         <input
-          [(ngModel)]="rol"
+          [(ngModel)]="this.service.datosProv.DatosContacto.Rol"
           required
           name="rol"
           type="text"
           id="rol"
           placeholder="Ingese su rol"
           class="form-control"
+          minlength="2"
         />
+        <div *ngIf="formProv.controls['rol']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['rol']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 2 o mas digitos</span>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -320,7 +415,7 @@
         <button
           [disabled]="!formProv.valid"
           type="submit"
-          class="btn btn-success w-100"
+          class="btn btn-success"
         >
           Agregar / Actualizar
         </button>
