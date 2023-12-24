@@ -7,6 +7,8 @@ import { TablaProductosyserviciosComponent } from './components/main-productosys
 import { FormProductosyserviciosComponent } from './components/main-productosyservicios/form-productosyservicios/form-productosyservicios.component';
 import { TablaOrdenesdecompraComponent } from './components/main-ordenesdecompra/tabla-ordenesdecompra/tabla-ordenesdecompra.component';
 import { FormOrdenesdecompraComponent } from './components/main-ordenesdecompra/form-ordenesdecompra/form-ordenesdecompra.component';
+import { DetalleComponent } from './components/main-proveedores/detalle/detalle.component';
+import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
   {
@@ -27,7 +29,11 @@ const routes: Routes = [
       {
         path: "form",
         component: FormProveedoresComponent
-      }
+      },
+      {
+        path: "detalle/:idProv",
+        component: DetalleComponent
+      },
     ]
   },
   {
@@ -55,6 +61,10 @@ const routes: Routes = [
         component: FormOrdenesdecompraComponent
       }
     ]
+  },
+  {
+    path: 'login',
+    component: LoginComponent
   },
   {
     path: '**',

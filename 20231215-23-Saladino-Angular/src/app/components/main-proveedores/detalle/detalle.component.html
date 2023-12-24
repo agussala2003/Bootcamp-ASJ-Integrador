@@ -1,0 +1,281 @@
+<div class="bg-dark h-100 d-flex justify-content-center">
+<div *ngIf="userState == true" class="container py-5 p-md-5">
+  <div class="row">
+    <div class="col-12 col-md-6 d-flex align-items-center">
+      <a class="text-light text-decoration-none" routerLink="/proveedores">Proveedores</a>
+      <i class='bx bx-chevron-right text-light fs-4' ></i>
+      <p class="m-0 text-light text-md-nowrap ">Detalles <span *ngIf="this.service.datosProv.Codigo != ''">Proveedor {{this.service.datosProv.Codigo}}</span></p>
+    </div>
+    <div class="col-12 col-md-6 d-flex justify-content-md-end my-3 ">
+      <a routerLink="/proveedores" class="btn btn-primary">Volver a la lista</a>
+    </div>
+  </div>
+    <div class="row">
+      <div class="row">
+      <h3 class="my-3 text-light">Datos Proveedor</h3>
+        <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap">{{this.service.datosProv.Codigo}}</h5>
+                      <span>Codigo</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap">{{this.service.datosProv.RazonSocial}}</h5>
+                      <span>Razon Social</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap">{{this.service.datosProv.Rubro}}</h5>
+                      <span>Rubro</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap"><a target="_blank" href="tel:{{this.service.datosProv.Telefono}}">{{this.service.datosProv.Telefono}}</a></h5>
+                      <span>Telefono</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap"><a target="_blank" href="mailto:{{this.service.datosProv.Email}}">{{this.service.datosProv.Email}}</a></h5>
+                      <span>Email</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap"><a target="_blank" href="{{this.service.datosProv.SitioWeb}}">{{this.service.datosProv.SitioWeb}}</a></h5>
+                      <span>Sitio Web</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap">{{this.service.datosProv.Direccion.Calle + ' ' + this.service.datosProv.Direccion.Numero}}</h5>
+                      <span>Calle y numero</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap">{{this.service.datosProv.Direccion.Localidad}}</h5>
+                      <span>Localidad</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap">{{this.service.datosProv.Direccion.Provincia}}</h5>
+                      <span>Provincia</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap">{{this.service.datosProv.Direccion.Pais}}</h5>
+                      <span>Pais</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+            <div class="card">
+              <div class="card-content">
+                <div class="card-body">
+                  <div class="d-flex">
+                    <div class="text-start overflow-y-auto">
+                      <h5 class="text-nowrap">{{this.service.datosProv.Direccion.CP}}</h5>
+                      <span>Codigo Postal</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+                  
+      </div>
+          <div class="row">
+            <h3 class="my-3 text-light">Datos Fiscales</h3>
+            <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <div class="text-start overflow-y-auto">
+                        <h5 class="text-nowrap">{{this.service.datosProv.DatosFiscales.CUIT}}</h5>
+                        <span>CUIT</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <div class="text-start overflow-y-auto">
+                        <h5 class="text-nowrap">{{this.service.datosProv.DatosFiscales.CondicionIVA}}</h5>
+                        <span>Condicion IVA</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <h3 class="my-3 text-light">Datos Contacto</h3>
+            <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <div class="text-start overflow-y-auto">
+                        <h5 class="text-nowrap">{{this.service.datosProv.DatosContacto.Nombre}}</h5>
+                        <span>Nombre</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <div class="text-start overflow-y-auto">
+                        <h5 class="text-nowrap">{{this.service.datosProv.DatosContacto.Apellido}}</h5>
+                        <span>Apellido</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <div class="text-start overflow-y-auto">
+                        <h5 class="text-nowrap"><a target="_blank" href="tel:{{this.service.datosProv.DatosContacto.Telefono}}">{{this.service.datosProv.DatosContacto.Telefono}}</a></h5>
+                        <span>Telefono</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-xl-6 col-sm-6 mb-3"> 
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <div class="text-start overflow-y-auto">
+                        <h5 class="text-nowrap"><a target="_blank" href="mailto:{{this.service.datosProv.DatosContacto.Email}}">{{this.service.datosProv.DatosContacto.Email}}</a></h5>
+                        <span>Email</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-xl-6 col-sm-6 mb-3"> 
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <div class="text-start overflow-y-auto">
+                        <h5 class="text-nowrap">{{this.service.datosProv.DatosContacto.Rol}}</h5>
+                        <span>Rol</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+</div>
+<div *ngIf="userState == null" class="container py-5 p-md-5">
+  <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
+</div>
+</div>

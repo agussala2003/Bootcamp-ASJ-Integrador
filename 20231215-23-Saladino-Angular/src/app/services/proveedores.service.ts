@@ -23,7 +23,7 @@ export class ProveedoresService {
       CP: '',
       Localidad: '',
       Provincia: '',
-      Pais: '',
+      Pais: ''
     },
     DatosFiscales: {
       CUIT: '',
@@ -72,4 +72,18 @@ export class ProveedoresService {
       this.datosProv.DatosContacto = { ...this.lista[num].DatosContacto };
     }
   }
+  public getCountryData() {
+    const url = 'https://raw.githubusercontent.com/millan2993/countries/master/json/countries.json';
+    return this.http.get(url);
+  }  
+  public getStateData(){
+    const url = 'https://raw.githubusercontent.com/millan2993/countries/master/json/states.json'
+    return this.http.get(url);
+  }
+  public getUserState(): string | null {
+    const valor: string | null = JSON.parse(localStorage.getItem('inicio') || 'null');
+    // Si el valor es null o undefined, devuelve null
+    return valor !== null ? valor : null;
+  }
+  
 }

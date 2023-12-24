@@ -1,0 +1,18 @@
+<div class="bg-dark">
+    <div class="container py-5 p-md-5">
+        <div class="row d-flex justify-content-center">
+            <div class="loginBox"> <img class="user" src="https://i.ibb.co/yVGxFPR/2.png" height="100px" width="100px">
+                <h3>Sign in here</h3>
+                    <div class="inputBox"> 
+                        <input [(ngModel)]="this.service.datosUser.username" id="uname" type="text" name="Username" placeholder="Username"> 
+                        <input [(ngModel)]="this.service.datosUser.password" id="pass" type="password" name="Password" placeholder="Password"> 
+                    </div> 
+                        <button (click)="validarUsuario()" class="btn btn-primary w-100" type="submit">Login</button>
+                <!-- <a class="text-light" href="#">Forget Password<br> </a>
+                <div class="text-center">
+                    <p class="text-light">Sign-Up</p>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

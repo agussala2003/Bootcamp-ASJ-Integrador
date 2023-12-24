@@ -16,6 +16,8 @@ import { TablaOrdenesdecompraComponent } from './components/main-ordenesdecompra
 import { FormOrdenesdecompraComponent } from './components/main-ordenesdecompra/form-ordenesdecompra/form-ordenesdecompra.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { DetalleComponent } from './components/main-proveedores/detalle/detalle.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { FormsModule } from '@angular/forms';
     FormProductosyserviciosComponent,
     TablaProductosyserviciosComponent,
     TablaOrdenesdecompraComponent,
-    FormOrdenesdecompraComponent
+    FormOrdenesdecompraComponent,
+    DetalleComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

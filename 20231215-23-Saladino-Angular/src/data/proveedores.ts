@@ -5,16 +5,16 @@ export const proveedores: Proveedor[] = [
     RazonSocial: 'Empresa A S.A.',
     Rubro: 'Tecnología',
     Telefono: '1135655234',
-    Email: 'juanperez@gmail.com',
-    SitioWeb: 'juanperez.com',
+    Email: 'Empresa@gmail.com',
+    SitioWeb: 'Empresa.com',
     Imagen: 'lalala.com',
     Direccion: {
       Calle: 'Av. Principal',
       Numero: '123',
       CP: '12345',
       Localidad: 'Ciudad A',
-      Provincia: 'Provincia A',
-      Pais: 'Argentina',
+      Provincia: 'Buenos Aires',
+      Pais: 'Argentina'
     },
     DatosFiscales: {
       CUIT: '30-12345678-9',
@@ -33,16 +33,16 @@ export const proveedores: Proveedor[] = [
     RazonSocial: 'Compañía B S.R.L.',
     Rubro: 'Alimentación',
     Telefono: '1135655234',
-    Email: 'anarodriguez@gmail.com',
-    SitioWeb: 'anarodriguez.com',
+    Email: 'Compañía@gmail.com',
+    SitioWeb: 'Compañía.com',
     Imagen: 'lalala.com',
     Direccion: {
       Calle: 'Calle Secundaria',
       Numero: '456',
       CP: '54321',
       Localidad: 'Ciudad B',
-      Provincia: 'Provincia B',
-      Pais: 'Argentina',
+      Provincia: 'Buenos Aires',
+      Pais: 'Argentina'
     },
     DatosFiscales: {
       CUIT: '30-87654321-0',
@@ -61,16 +61,16 @@ export const proveedores: Proveedor[] = [
     RazonSocial: 'Tienda C E.I.R.L.',
     Rubro: 'Moda',
     Telefono: '1134555234',
-    Email: 'luisagarcia@gmail.com',
-    SitioWeb: 'luisagarcia.com',
+    Email: 'Tienda@gmail.com',
+    SitioWeb: 'Tienda.com',
     Imagen: 'lalala.com',
     Direccion: {
       Calle: 'Plaza Central',
       Numero: '789',
       CP: '67890',
       Localidad: 'Ciudad C',
-      Provincia: 'Provincia C',
-      Pais: 'Argentina',
+      Provincia: 'Buenos Aires',
+      Pais: 'Argentina'
     },
     DatosFiscales: {
       CUIT: '30-13579246-7',

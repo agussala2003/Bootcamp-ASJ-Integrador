@@ -1,7 +1,12 @@
 <div class="bg-dark">
-  <div class="container p-5">
+  <div *ngIf="userState == true" class="container py-5 p-md-5">
     <div class="row">
-      <div class="col-12 d-flex justify-content-start justify-content-md-end mb-3 ">
+      <div class="col-12 col-md-6 d-flex align-items-center">
+        <a class="text-light text-decoration-none" routerLink="/proveedores">Proveedores</a>
+        <i class='bx bx-chevron-right text-light fs-4' ></i>
+        <p class="m-0 text-light text-md-nowrap">Formulario <span *ngIf="this.service.datosProv.Codigo != ''">Proveedor {{this.service.datosProv.Codigo}}</span></p>
+      </div>
+      <div class="col-12 col-md-6 d-flex justify-content-md-end my-3">
         <a routerLink="/proveedores" class="btn btn-primary">Volver a la lista</a>
       </div>
     </div>
@@ -207,36 +212,11 @@
         </div>
       </div>
       <div class="col-12 col-md-3 mb-2">
-        <label for="provincia" class="form-label text-light">Provincia:</label>
-        <input
-          [(ngModel)]="this.service.datosProv.Direccion.Provincia"
-          required
-          name="provincia"
-          type="text"
-          id="provincia"
-          placeholder="Ingese provincia"
-          class="form-control"
-          minlength="3"
-        />
-        <div *ngIf="formProv.controls['provincia']?.hasError('required')" class="col-auto">
-          <span class="form-text text-light">El dato es obligatorio</span>
-        </div>
-        <div *ngIf="formProv.controls['provincia']?.hasError('minlength')" class="col-auto">
-          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
-        </div>
-      </div>
-      <div class="col-12 col-md-3 mb-2">
         <label for="pais" class="form-label text-light">Pais:</label>
-        <input
-          [(ngModel)]="this.service.datosProv.Direccion.Pais"
-          required
-          name="pais"
-          type="text"
-          id="pais"
-          placeholder="Ingese pais"
-          class="form-control"
-          minlength="3"
-        />
+        <select [(ngModel)]="this.service.datosProv.Direccion.Pais" required name="pais" id="pais" class="form-select" aria-label="Default select example">
+          <option selected disabled>Selecciona Pais</option>
+          <option *ngFor="let pais of paises" value="{{pais.name}}">{{pais.name}}</option>
+        </select>
         <div *ngIf="formProv.controls['pais']?.hasError('required')" class="col-auto">
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
@@ -244,6 +224,20 @@
           <span class="form-text text-light">Ingrese 3 o mas digitos</span>
         </div>
       </div>
+      <div class="col-12 col-md-3 mb-2">
+        <label for="provincia" class="form-label text-light">Provincia:</label>
+        <select (click)="buscarPais(this.service.datosProv.Direccion.Pais)" [disabled]="this.service.datosProv.Direccion.Pais == ''" [(ngModel)]="this.service.datosProv.Direccion.Provincia" required name="provincia" id="provincia" class="form-select" aria-label="Default select example">
+          <option selected disabled>Selecciona Provincia</option>
+          <option *ngFor="let prov of provincias" value="{{prov.name}}">{{prov.name}}</option>
+        </select>
+        <div *ngIf="formProv.controls['provincia']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProv.controls['provincia']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
+      </div>
+
       <div class="col-12 col-md-3 mb-2">
         <label for="cp" class="form-label text-light">Codigo Postal:</label>
         <input
@@ -422,5 +416,8 @@
       </div>
     </div>
   </form>
+  </div>
+  <div *ngIf="userState == null" class="container py-5 p-md-5">
+    <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
   </div>
 </div>

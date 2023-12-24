@@ -12,14 +12,29 @@ import { ActivatedRoute } from '@angular/router';
 export class FormProveedoresComponent implements OnInit {
   constructor(public service: ProveedoresService,public router: ActivatedRoute) {}
   idProv:string = '';
+  paises:any[] = [];
+  provincias:any[] = [];
+  userState:any;
   ngOnInit(): void {
     this.router.params.subscribe(data => {
       this.idProv = data['idProv'];
-      console.log(this.idProv)
       if(this.idProv !== undefined) {
         this.service.getProvData(this.idProv);
+        alert('Vas a editar el proveedor ' + this.idProv)
       } else {
         resetearLista(this.service.datosProv);
+      }
+    })
+    this.service.getCountryData().subscribe((data:any) => {
+      this.paises = data.countries
+    })
+    this.userState = this.service.getUserState();
+  }
+  buscarPais(pais:string) {
+    this.service.getStateData().subscribe((data:any) => {
+      const idPais = this.paises.find(item => item.name === pais).id
+      if(idPais != null) {
+        this.provincias = data.states.filter((item:any) => item.id_country === idPais)
       }
     })
   }

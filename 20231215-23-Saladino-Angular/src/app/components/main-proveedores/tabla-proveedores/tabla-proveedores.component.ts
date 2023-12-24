@@ -8,20 +8,26 @@ import { Proveedor } from '../../../models/Proveedor';
   styleUrls: ['./tabla-proveedores.component.css'],
 })
 export class TablaProveedoresComponent implements OnInit {
+  constructor(public service: ProveedoresService) {}
   proveedores: Proveedor[] = [];
   num: number = 0;
-
-  constructor(public servicio: ProveedoresService) {}
+  userState:any;
 
   ngOnInit(): void {
     this.actualizarListaProveedores();
+    this.userState = this.service.getUserState();
   }
   borrarProveedor(idProv: string) {
-    this.servicio.deleteFakeData(idProv);
-    this.actualizarListaProveedores();
+    if(confirm('Estas seguro que deseas eliminar el proveedor ' + idProv)) {
+      this.service.deleteFakeData(idProv);
+      alert('El proveedor ' + idProv + ' ha sido eliminado correctamente!')
+      this.actualizarListaProveedores();
+    } else {
+      alert('El proveedor ' + idProv + ' no ha sido eliminado')
+    }
   }
   private actualizarListaProveedores() {
-    this.proveedores = this.servicio.getFakeData();
+    this.proveedores = this.service.getFakeData();
   }
   handleImageError(proveedor:any) {
     proveedor.Imagen = '../../../../assets/img/logoGenerico.png'
