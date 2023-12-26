@@ -1,0 +1,166 @@
+<div class="bg-dark h-100 d-flex justify-content-center">
+    <div *ngIf="userState == true" class="container py-5 p-md-5">
+      <div class="row">
+        <div class="col-12 col-md-6 d-flex align-items-center">
+          <a class="text-light text-decoration-none" routerLink="/ordenes">Ordenes</a>
+          <i class='bx bx-chevron-right text-light fs-4' ></i>
+          <p class="m-0 text-light text-md-nowrap ">Detalles <span *ngIf="this.service.datosOrd.Orden != ''">Orden {{this.service.datosOrd.Orden}}</span></p>
+        </div>
+        <div class="col-12 col-md-6 d-flex justify-content-md-end my-3 ">
+          <a routerLink="/ordenes" class="btn btn-primary">Volver a la lista</a>
+        </div>
+      </div>
+        <div class="row">
+          <div class="row">
+          <h3 class="my-3 text-light">Datos Orden</h3>
+            <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosOrd.Orden}}</h5>
+                          <span>Orden</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosOrd.Proveedor}}</h5>
+                          <span>Proveedor</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosOrd.Activo ? 'Activa' : 'Cancelada'}}</h5>
+                          <span>Estado</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosOrd.Emision}}</h5>
+                          <span>Emision</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosOrd.Entrega}}</h5>
+                          <span>Entrega</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosOrd.InfoRecepcion}}</h5>
+                          <span>Informacion de recepcion</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h3 class="text-light my-3">Productos</h3>
+              <div *ngFor="let prodComp of this.service.datosOrd.Productos" class="row p-0 m-0">
+                  <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                    <div class="card">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="d-flex">
+                            <div class="text-start overflow-y-auto">
+                              <h5 class="text-nowrap">{{prodComp.Sku}}</h5>
+                              <span>Producto</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                    <div class="card">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="d-flex">
+                            <div class="text-start overflow-y-auto">
+                              <h5 class="text-nowrap">{{prodComp.Cantidad}}</h5>
+                              <span>Cantidad</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                    <div class="card">
+                      <div class="card-content">
+                        <div class="card-body">
+                          <div class="d-flex">
+                            <div class="text-start overflow-y-auto">
+                              <h5 class="text-nowrap">{{prodComp.Subtotal}}</h5>
+                              <span>Subtotal</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosOrd.Total}}</h5>
+                          <span>Total</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+        </div>
+    </div>
+    <div *ngIf="userState == null" class="container py-5 p-md-5">
+      <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
+    </div>
+    </div>
+    

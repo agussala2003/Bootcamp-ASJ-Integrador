@@ -9,6 +9,8 @@ import { TablaOrdenesdecompraComponent } from './components/main-ordenesdecompra
 import { FormOrdenesdecompraComponent } from './components/main-ordenesdecompra/form-ordenesdecompra/form-ordenesdecompra.component';
 import { DetalleComponent } from './components/main-proveedores/detalle/detalle.component';
 import { LoginComponent } from './components/login/login.component';
+import { DetalleProdComponent } from './components/main-productosyservicios/detalle-prod/detalle-prod.component';
+import { DetalleOrdenesComponent } from './components/main-ordenesdecompra/detalle-ordenes/detalle-ordenes.component';
 
 const routes: Routes = [
   {
@@ -46,7 +48,15 @@ const routes: Routes = [
       {
         path: "form/:idProdServ",
         component: FormProductosyserviciosComponent
-      }
+      },
+      {
+        path: "form",
+        component: FormProductosyserviciosComponent
+      },
+      {
+        path: "detalle/:idProdServ",
+        component: DetalleProdComponent
+      },
     ]
   },
   {
@@ -59,7 +69,15 @@ const routes: Routes = [
       {
         path: "form/:idOrden",
         component: FormOrdenesdecompraComponent
-      }
+      },
+      {
+        path: "form",
+        component: FormOrdenesdecompraComponent
+      },
+      {
+        path: "detalle/:idOrden",
+        component: DetalleOrdenesComponent
+      },
     ]
   },
   {

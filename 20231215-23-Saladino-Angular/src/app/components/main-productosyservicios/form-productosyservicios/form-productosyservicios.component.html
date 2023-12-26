@@ -1,87 +1,144 @@
 <div class="bg-dark">
-  <div class="container p-5">
+  <div *ngIf="userState == true" class="container py-5 p-md-5">
     <div class="row">
-      <div class="col-12 d-flex justify-content-start justify-content-md-end mb-3 ">
-        <a routerLink="../../" class="btn btn-primary">Volver a la lista</a>
+      <div class="col-12 col-md-6 d-flex align-items-center">
+        <a class="text-light text-decoration-none" routerLink="/productos-servicios">Productos y Servicios</a>
+        <i class='bx bx-chevron-right text-light fs-4' ></i>
+        <p class="m-0 text-light text-md-nowrap">Formulario <span *ngIf="this.service.datosProd.Sku != ''">Producto {{this.service.datosProd.Sku}}</span></p>
+      </div>
+      <div class="col-12 col-md-6 d-flex justify-content-start justify-content-md-end my-3 ">
+        <a routerLink="/productos-servicios" class="btn btn-primary">Volver a la lista</a>
       </div>
     </div>
+    <form #formProdyServ="ngForm" (ngSubmit)="agregarProductoyservicio(formProdyServ)">
     <div class="row">
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
+        <label for="sku" class="form-label text-light">Codigo / Sku:</label>
+        <input
+          [disabled]="!flagCode"
+          [(ngModel)]="this.service.datosProd.Sku"
+          required
+          type="text"
+          id="sku"
+          name="sku"
+          placeholder="Ingese Codigo / Sku"
+          class="form-control"
+          minlength="3"
+        />
+        <div *ngIf="formProdyServ.controls['sku']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProdyServ.controls['sku']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
+      </div>
+      <div class="col-12 col-md-3 mb-2">
         <label for="seleccCodProv" class="form-label text-light"
           >Codigo Proveedor:</label
         >
         <select
-          [(ngModel)]="seleccCodProv"
+          [(ngModel)]="this.service.datosProd.Proveedor"
           for="seleccCodProv"
+          id="seleccCodProv"
+          name="seleccCodProv"
           class="form-select"
           aria-label="Default select example"
+          required
         >
-          <option selected>Selecciona un proveedor</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
+          <option selected disabled>Selecciona un proveedor</option>
+          <option *ngFor="let prov of proveedores" value="{{prov.RazonSocial}}">{{prov.Codigo + ' - ' + prov.RazonSocial}}</option>
         </select>
+        <div *ngIf="formProdyServ.controls['seleccCodProv']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
-        <label for="sku" class="form-label text-light">Codigo / Sku:</label>
-        <input
-          [(ngModel)]="sku"
-          required
-          type="text"
-          id="sku"
-          placeholder="Ingese Codigo / Sku"
-          class="form-control"
-        />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="categoria" class="form-label text-light">Categoria:</label>
-        <input
-          [(ngModel)]="categoria"
-          required
-          type="text"
+        <select
+          [(ngModel)]="this.service.datosProd.Categoria"
+          for="categoria"
           id="categoria"
-          placeholder="Ingese su categoria"
-          class="form-control"
-        />
+          name="categoria"
+          class="form-select"
+          aria-label="Default select example"
+          required
+        >
+          <option selected disabled>Selecciona una categoria</option>
+          <option *ngFor="let item of categorias" value="{{item}}">{{item}}</option>
+        </select>
+        <div *ngIf="formProdyServ.controls['categoria']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="nomProd" class="form-label text-light"
           >Nombre del producto:</label
         >
         <input
-          [(ngModel)]="nomProd"
+          [(ngModel)]="this.service.datosProd.Producto"
           required
           type="text"
           id="nomProd"
+          name="nomProd"
           placeholder="Ingese nombre del producto"
           class="form-control"
+          minlength="3"
         />
+        <div *ngIf="formProdyServ.controls['nomProd']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProdyServ.controls['nomProd']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-5 mb-2">
         <label for="descripcion" class="form-label text-light"
           >Descripcion:</label
         >
         <input
-          [(ngModel)]="descripcion"
+          [(ngModel)]="this.service.datosProd.Descripcion"
           required
           type="text"
           id="descripcion"
+          name="descripcion"
           placeholder="Ingese descripcion"
           class="form-control"
+          minlength="11"
         />
+        <div *ngIf="formProdyServ.controls['descripcion']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProdyServ.controls['descripcion']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 11 o mas digitos</span>
+        </div>
       </div>
-      <div class="col-12 col-md-6 mb-2">
+      <div class="col-12 col-md-3 mb-2">
         <label for="precio" class="form-label text-light">Precio:</label>
         <input
-          [(ngModel)]="precio"
+          [(ngModel)]="this.service.datosProd.Precio"
           required
-          type="text"
+          type="number"
           id="precio"
+          name="precio"
           placeholder="Ingese precio"
+          class="form-control"
+          min="1"
+        />
+        <div *ngIf="formProdyServ.controls['precio']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProdyServ.controls['precio']?.hasError('min')" class="col-auto">
+          <span class="form-text text-light">Ingrese precio mayor a 1</span>
+        </div>
+      </div>
+      <div class="col-12 col-md-4 mb-2">
+        <label for="imagen" class="form-label text-light">Imagen:</label>
+        <input
+          [(ngModel)]="this.service.datosProd.Imagen"
+          type="text"
+          id="imagen"
+          name="imagen"
+          placeholder="Ingese imagen del producto"
           class="form-control"
         />
       </div>
@@ -89,13 +146,16 @@
     <div class="row">
       <div class="col-12 mt-2">
         <button
-          (click)="agregarProductoyservicio()"
-          type="button"
-          class="btn btn-success w-100"
-        >
+          [disabled]="!formProdyServ.valid"
+          type="submit"
+          class="btn btn-success">
           Agregar / Actualizar
         </button>
       </div>
     </div>
+  </form>
+  </div>
+  <div *ngIf="userState == null" class="container py-5 p-md-5">
+    <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
   </div>
 </div>

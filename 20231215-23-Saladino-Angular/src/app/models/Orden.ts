@@ -2,8 +2,14 @@ export type Orden = {
   Orden: string;
   Emision: string;
   Entrega: string;
-  Direccion: string;
+  InfoRecepcion: string;
   Proveedor: string;
-  Producto: string;
-  Cantidad: string;
+  Productos: CalcOrden [];
+  Activo: boolean;
+  Total: string;
 };
+export interface CalcOrden {
+  Sku:string;
+  Cantidad:string;
+  Subtotal:string;
+}

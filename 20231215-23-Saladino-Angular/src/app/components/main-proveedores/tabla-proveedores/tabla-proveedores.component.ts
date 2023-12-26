@@ -10,7 +10,6 @@ import { Proveedor } from '../../../models/Proveedor';
 export class TablaProveedoresComponent implements OnInit {
   constructor(public service: ProveedoresService) {}
   proveedores: Proveedor[] = [];
-  num: number = 0;
   userState:any;
 
   ngOnInit(): void {
@@ -26,7 +25,7 @@ export class TablaProveedoresComponent implements OnInit {
       alert('El proveedor ' + idProv + ' no ha sido eliminado')
     }
   }
-  private actualizarListaProveedores() {
+  actualizarListaProveedores() {
     this.proveedores = this.service.getFakeData();
   }
   handleImageError(proveedor:any) {

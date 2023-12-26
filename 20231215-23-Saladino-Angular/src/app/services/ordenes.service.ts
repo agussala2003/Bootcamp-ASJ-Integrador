@@ -7,29 +7,47 @@ const data:Orden[] = ordenes;
   providedIn: 'root',
 })
 export class OrdenesService {
-  lista:Orden[] = data;
   constructor(private http: HttpClient) {}
-  // public getDatosApi () {
-  //   return this.http.get('URL');
-  // }
+  lista:Orden[] = data;
+  datosOrd: Orden = {
+    Orden: '',
+    Emision: '',
+    Entrega: '',
+    InfoRecepcion: '',
+    Proveedor: '',
+    Productos: [],
+    Activo: true,
+    Total: ''
+  }
   public getFakeData() {
     return this.lista;
   }
-  public uploadFakeData(list: Orden) {
-    const index = this.lista.findIndex(item => item.Orden === list.Orden);
+  public uploadFakeData() {
+    const index = this.lista.findIndex(item => item.Orden === this.datosOrd.Orden);
+    const newOrden:Orden = {...this.datosOrd};
     if (index !== -1) {
       // Si existe, actualiza el elemento en la posición index
       alert('Ya tienes uno con esa orden. Actualizando...');
-      this.lista[index] = list;
+      this.lista[index] = newOrden;
     } else {
       // Si no existe, agrega el nuevo elemento
       alert('No existe. Agregando...');
-      this.lista.push(list);
+      this.lista.push(newOrden);
     }
   }
-  public deleteFakeData(id: number) {
-    console.log(id)
-    this.lista = this.lista.filter(item => parseInt(item.Orden) !== id)
+  public deleteFakeData(id: string) {
+    const index = this.lista.findIndex(item => item.Orden === id);
+    this.lista[index].Activo = false;
     return this.lista;
+  }
+  public getProdData(id: string) {
+    const num = this.lista.findIndex(item => item.Orden === id);
+    if (num !== -1) {
+      this.datosOrd = { ...this.lista[num] };
+    }
+  }
+  public getUserState(): string | null {
+    const valor: string | null = JSON.parse(localStorage.getItem('inicio') || 'null');
+    return valor !== null ? valor : null;
   }
 }

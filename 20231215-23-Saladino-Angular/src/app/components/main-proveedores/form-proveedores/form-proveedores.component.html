@@ -16,6 +16,7 @@
       <div class="col-12 col-md-3 mb-2">
         <label for="codProv" class="form-label text-light">Codigo:</label>
         <input
+          [disabled]="!flagCode"
           [(ngModel)]="this.service.datosProv.Codigo"
           required
           name="proveedor"

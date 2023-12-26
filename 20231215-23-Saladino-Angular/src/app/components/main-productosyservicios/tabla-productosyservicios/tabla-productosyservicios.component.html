@@ -1,18 +1,23 @@
 <div class="bg-dark">
-  <div class="container p-5">
+  <div *ngIf="userState == true" class="container py-5 p-md-5">
     <div class="row">
-      <div class="col-12 d-flex justify-content-start justify-content-md-end mb-3 ">
-        <a routerLink="/productos-servicios/form/0" class="btn btn-primary"
+      <div class="col-12 col-md-6 d-flex align-items-center">
+        <a class="text-light text-decoration-none" routerLink="/productos-servicios">Productos y Servicios</a>
+        <i class='bx bx-chevron-right text-light fs-4' ></i>
+        <p class="m-0 text-light text-md-nowrap">Tabla</p>
+      </div>
+      <div class="col-12 col-md-6 d-flex justify-content-start justify-content-md-end my-3 ">
+        <a routerLink="/productos-servicios/form" class="btn btn-primary"
           >Agregar Producto o Servicio</a
         >
       </div>
     </div>
-    <div class="table-responsive rounded-3 mt-5 mb-3">
+    <div *ngIf="productosyServicios.length > 0" class="table-responsive rounded-3 mt-5 mb-3">
       <table class="table align-middle mb-0 bg-white">
         <thead class="bg-light">
           <tr>
-            <th class="text-center">Proveedor</th>
             <th class="text-nowrap text-center">Codigo / Sku</th>
+            <th class="text-center">Proveedor</th>
             <th>Categoria</th>
             <th>Producto</th>
             <th>Precio</th>
@@ -20,15 +25,26 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of productosyServicios">
+          <tr *ngFor="let item of productosyServicios | atoZ">
+              <td>
+                <div class="d-flex align-items-center">
+                  <img
+                    src="{{ item.Imagen }}"
+                    alt=""
+                    style="width: 35px; height: 35px"
+                    class="rounded-circle"
+                    (error)="handleImageError(item)"
+                  />
+                  <div class="ms-3">
+                    <p class="fw-normal mb-1 text-nowrap text-center">
+                      {{ item.Sku }}
+                    </p>
+                  </div>
+                </div>
+              </td>
             <td>
               <p class="fw-normal mb-1 text-nowrap text-center">
                 {{ item.Proveedor }}
-              </p>
-            </td>
-            <td>
-              <p class="fw-normal mb-1 text-nowrap text-center">
-                {{ item.Sku }}
               </p>
             </td>
             <td>
@@ -43,12 +59,19 @@
             <td>
               <div class="d-flex">
                 <i (click)="borrarProductoyservicio(item.Sku)" class="btn btn-danger bx bx-trash me-2"></i>
-                <i class="btn btn-primary bx bx-edit-alt"></i>
+                <i [routerLink]="['/productos-servicios/form/',item.Sku]" class="btn btn-primary bx bx-edit-alt me-2"></i>
+                <i [routerLink]="['/productos-servicios/detalle/',item.Sku]" class="btn btn-success bx bx-detail"></i>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <div *ngIf="productosyServicios.length == 0">
+      <h3 class="text-light text-center">No tiene proveedores en tu lista! Por favor agregar alguno</h3>
+    </div>
+  </div>
+  <div *ngIf="userState == null" class="container py-5 p-md-5">
+    <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
   </div>
 </div>

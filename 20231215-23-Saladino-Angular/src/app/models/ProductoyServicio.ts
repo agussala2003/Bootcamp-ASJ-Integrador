@@ -5,4 +5,5 @@ export type ProductoyServicio = {
   Producto: string;
   Descripcion: string;
   Precio: string;
+  Imagen:string;
 };

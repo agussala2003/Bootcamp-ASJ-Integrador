@@ -18,7 +18,4 @@ export class DetalleComponent implements OnInit{
       this.userState = this.service.getUserState();
     })
   }
-  handleImageError(proveedor:any) {
-    proveedor.Imagen = '../../../../assets/img/logoGenerico.png'
-  }
 }

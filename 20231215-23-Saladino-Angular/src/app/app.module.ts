@@ -18,6 +18,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { DetalleComponent } from './components/main-proveedores/detalle/detalle.component';
 import { LoginComponent } from './components/login/login.component';
+import { DetalleProdComponent } from './components/main-productosyservicios/detalle-prod/detalle-prod.component';
+import { AtoZPipe } from './pipes/ato-z.pipe';
+import { DetalleOrdenesComponent } from './components/main-ordenesdecompra/detalle-ordenes/detalle-ordenes.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,10 @@ import { LoginComponent } from './components/login/login.component';
     TablaOrdenesdecompraComponent,
     FormOrdenesdecompraComponent,
     DetalleComponent,
-    LoginComponent
+    LoginComponent,
+    DetalleProdComponent,
+    AtoZPipe,
+    DetalleOrdenesComponent
   ],
   imports: [
     BrowserModule,

@@ -7,8 +7,8 @@ const data:Proveedor[] = proveedores;
   providedIn: 'root',
 })
 export class ProveedoresService {
-  lista: Proveedor[] = data;
   constructor(private http: HttpClient) {}
+  lista: Proveedor[] = data;
   datosProv:Proveedor = {
     Codigo: '',
     RazonSocial: '',
@@ -42,17 +42,17 @@ export class ProveedoresService {
   }
   public uploadFakeData() {
     const index = this.lista.findIndex(item => item.Codigo === this.datosProv.Codigo);
-    const nuevoProveedor: Proveedor = { ...this.datosProv }; // Crear una nueva instancia
+    const nuevoProveedor: Proveedor = { ...this.datosProv };
     nuevoProveedor.Direccion = { ...this.datosProv.Direccion };
     nuevoProveedor.DatosFiscales = { ...this.datosProv.DatosFiscales };
     nuevoProveedor.DatosContacto = { ...this.datosProv.DatosContacto };
     if (index !== -1) {
       // Si existe, actualiza el elemento en la posición index
       alert('Ya tienes uno de ese proveedor. Actualizando...');
-      this.lista[index] = { ...this.datosProv };
-      this.lista[index].Direccion = { ...this.datosProv.Direccion };
-      this.lista[index].DatosFiscales = { ...this.datosProv.DatosFiscales };
-      this.lista[index].DatosContacto = { ...this.datosProv.DatosContacto };
+      this.lista[index] = nuevoProveedor;
+      this.lista[index].Direccion = nuevoProveedor.Direccion;
+      this.lista[index].DatosFiscales = nuevoProveedor.DatosFiscales;
+      this.lista[index].DatosContacto =  nuevoProveedor.DatosContacto;
     } else {
       // Si no existe, agrega el nuevo elemento
       alert('No existe. Agregando...');
@@ -82,8 +82,6 @@ export class ProveedoresService {
   }
   public getUserState(): string | null {
     const valor: string | null = JSON.parse(localStorage.getItem('inicio') || 'null');
-    // Si el valor es null o undefined, devuelve null
     return valor !== null ? valor : null;
   }
-  
 }

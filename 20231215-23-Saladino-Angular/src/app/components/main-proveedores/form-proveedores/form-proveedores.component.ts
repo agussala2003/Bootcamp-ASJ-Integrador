@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProveedoresService } from '../../../services/proveedores.service';
 import { Proveedor } from '../../../models/Proveedor';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 
 @Component({
   selector: 'app-form-proveedores',
@@ -10,18 +10,21 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './form-proveedores.component.css',
 })
 export class FormProveedoresComponent implements OnInit {
-  constructor(public service: ProveedoresService,public router: ActivatedRoute) {}
+  constructor(public service: ProveedoresService,public router: ActivatedRoute,public router2:Router) {}
   idProv:string = '';
   paises:any[] = [];
   provincias:any[] = [];
   userState:any;
+  flagCode:boolean = true;
   ngOnInit(): void {
     this.router.params.subscribe(data => {
       this.idProv = data['idProv'];
       if(this.idProv !== undefined) {
         this.service.getProvData(this.idProv);
         alert('Vas a editar el proveedor ' + this.idProv)
+        this.flagCode = false;
       } else {
+        this.flagCode = true;
         resetearLista(this.service.datosProv);
       }
     })
@@ -40,7 +43,8 @@ export class FormProveedoresComponent implements OnInit {
   }
   agregarProveedor(form:NgForm) {
     this.service.uploadFakeData();
-    form.reset()
+    form.reset();
+    this.router2.navigate(['/proveedores']);
   }
 }
 function resetearLista (lista: Proveedor) {

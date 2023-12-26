@@ -1,0 +1,107 @@
+<div class="bg-dark h-100 d-flex justify-content-center">
+    <div *ngIf="userState == true" class="container py-5 p-md-5">
+      <div class="row">
+        <div class="col-12 col-md-6 d-flex align-items-center">
+          <a class="text-light text-decoration-none" routerLink="/productos-servicios">Productos y Servicios</a>
+          <i class='bx bx-chevron-right text-light fs-4' ></i>
+          <p class="m-0 text-light text-md-nowrap ">Detalles <span *ngIf="this.service.datosProd.Sku != ''">Producto {{this.service.datosProd.Sku}}</span></p>
+        </div>
+        <div class="col-12 col-md-6 d-flex justify-content-md-end my-3 ">
+          <a routerLink="/productos-servicios" class="btn btn-primary">Volver a la lista</a>
+        </div>
+      </div>
+        <div class="row">
+          <div class="row">
+          <h3 class="my-3 text-light">Datos Producto</h3>
+            <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosProd.Sku}}</h5>
+                          <span>Sku</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosProd.Proveedor}}</h5>
+                          <span>Proveedor</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosProd.Categoria}}</h5>
+                          <span>Categoria</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosProd.Precio}}</h5>
+                          <span>Precio</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-6 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto">
+                          <h5 class="text-nowrap">{{this.service.datosProd.Producto}}</h5>
+                          <span>Producto</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-6 col-sm-7 mb-3"> 
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start">
+                          <h5 class="text-wrap">{{this.service.datosProd.Descripcion}}</h5>
+                          <span>Descripcion</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+        </div>
+    </div>
+    <div *ngIf="userState == null" class="container py-5 p-md-5">
+      <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
+    </div>
+    </div>
+    

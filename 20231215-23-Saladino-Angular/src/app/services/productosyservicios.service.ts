@@ -7,29 +7,45 @@ const data:ProductoyServicio[] = productosyServicios;
   providedIn: 'root',
 })
 export class ProductosyserviciosService {
-  lista:ProductoyServicio[] = data;
   constructor(private http: HttpClient) {}
-  // public getDatosApi () {
-  //   return this.http.get('URL');
-  // }
+  lista:ProductoyServicio[] = data;
+  datosProd: ProductoyServicio = {
+    Proveedor: '',
+    Sku: '',
+    Categoria: '',
+    Producto: '',
+    Descripcion: '',
+    Precio: '',
+    Imagen: ''
+  }
   public getFakeData() {
     return this.lista;
   }
-  public uploadFakeData(list: ProductoyServicio) {
-    const index = this.lista.findIndex(item => item.Sku === list.Sku);
+  public uploadFakeData() {
+    const index = this.lista.findIndex(item => item.Sku === this.datosProd.Sku);
+    const newProd: ProductoyServicio = {...this.datosProd};
     if (index !== -1) {
       // Si existe, actualiza el elemento en la posición index
-      alert('Ya tienes uno con esa orden. Actualizando...');
-      this.lista[index] = list;
+      alert('Ya tienes uno con ese sku. Actualizando...');
+      this.lista[index] = newProd;
     } else {
       // Si no existe, agrega el nuevo elemento
       alert('No existe. Agregando...');
-      this.lista.push(list);
+      this.lista.push(newProd);
     }
   }
-  public deleteFakeData(id: number) {
-    console.log(id)
-    this.lista = this.lista.filter(item => parseInt(item.Sku) !== id)
+  public deleteFakeData(id: string) {
+    this.lista = this.lista.filter(item => item.Sku !== id)
     return this.lista;
+  }
+  public getProdData(id: string) {
+    const num = this.lista.findIndex(item => item.Sku === id);
+    if (num !== -1) {
+      this.datosProd = { ...this.lista[num] };
+    }
+  }
+  public getUserState(): string | null {
+    const valor: string | null = JSON.parse(localStorage.getItem('inicio') || 'null');
+    return valor !== null ? valor : null;
   }
 }

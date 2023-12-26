@@ -1,27 +1,30 @@
 import { ProductoyServicio } from '../app/models/ProductoyServicio';
 export const productosyServicios: ProductoyServicio[] = [
   {
-    Proveedor: '1',
+    Proveedor: 'Empresa A S.A.',
     Sku: '101',
-    Categoria: 'Electrónica',
+    Categoria: 'Electronica',
     Producto: 'Smartphone',
     Descripcion: 'Teléfono inteligente con pantalla táctil',
     Precio: '499.99',
+    Imagen: 'lalala.com'
   },
   {
-    Proveedor: '2',
+    Proveedor: 'Compañía B S.R.L.',
     Sku: '202',
     Categoria: 'Hogar',
     Producto: 'Aspiradora',
     Descripcion: 'Aspiradora sin bolsa con tecnología ciclónica',
     Precio: '129.99',
+    Imagen: 'lalala.com'
   },
   {
-    Proveedor: '3',
+    Proveedor: 'Tienda C E.I.R.L.',
     Sku: '303',
-    Categoria: 'Ropa',
+    Categoria: 'Moda',
     Producto: 'Zapatos deportivos',
     Descripcion: 'Zapatos cómodos para actividades deportivas',
     Precio: '79.99',
+    Imagen: 'lalala.com'
   },
 ];

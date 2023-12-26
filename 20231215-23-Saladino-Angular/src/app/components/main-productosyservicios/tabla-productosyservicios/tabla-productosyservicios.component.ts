@@ -8,12 +8,27 @@ import { ProductosyserviciosService } from '../../../services/productosyservicio
   styleUrl: './tabla-productosyservicios.component.css',
 })
 export class TablaProductosyserviciosComponent implements OnInit {
+  constructor(public service: ProductosyserviciosService) {}
   productosyServicios: ProductoyServicio[] = [];
-  constructor(public servicio: ProductosyserviciosService) {}
+  userState:any;
+
   ngOnInit(): void {
-    this.productosyServicios = this.servicio.getFakeData();
+    this.actualizarListaProductoyServicios();
+    this.userState = this.service.getUserState();
   }
   borrarProductoyservicio(idProd:string) {
-    this.productosyServicios = this.servicio.deleteFakeData(parseInt(idProd))
+    if(confirm('Estas seguro que deseas eliminar el producto ' + idProd)) {
+      this.service.deleteFakeData(idProd);
+      alert('El producto ' + idProd + ' ha sido eliminado correctamente!')
+      this.actualizarListaProductoyServicios();
+    } else {
+      alert('El producto ' + idProd + ' no ha sido eliminado')
+    }
+  }
+  actualizarListaProductoyServicios() {
+    this.productosyServicios = this.service.getFakeData();
+  }
+  handleImageError(productoyservicio:any) {
+    productoyservicio.Imagen = '../../../../assets/img/logoGenerico.png'
   }
 }
