@@ -17,6 +17,7 @@ export class ProveedoresService {
     Email: '',
     SitioWeb: '',
     Imagen: '',
+    Activo:true,
     Direccion: {
       Calle: '',
       Numero: '',
@@ -60,8 +61,10 @@ export class ProveedoresService {
     }
   }
   public deleteFakeData(id: string) {
-    this.lista = this.lista.filter(item => item.Codigo !== id)
-    return this.lista;
+    const index = this.lista.findIndex(item => item.Codigo === id);
+    this.lista[index].Activo = false;
+    // this.lista = this.lista.filter(item => item.Codigo !== id)
+    // return this.lista;
   }
   public getProvData(id: string) {
     const num = this.lista.findIndex(item => item.Codigo === id);

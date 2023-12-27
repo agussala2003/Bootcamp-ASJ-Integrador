@@ -1,12 +1,12 @@
 <div class="bg-dark h-100 d-flex justify-content-center">
     <div *ngIf="userState == true" class="container py-5 p-md-5">
       <div class="row">
-        <div class="col-12 col-md-6 d-flex align-items-center">
+        <div class="col-12 col-md-9 d-flex align-items-center">
           <a class="text-light text-decoration-none" routerLink="/productos-servicios">Productos y Servicios</a>
           <i class='bx bx-chevron-right text-light fs-4' ></i>
           <p class="m-0 text-light text-md-nowrap ">Detalles <span *ngIf="this.service.datosProd.Sku != ''">Producto {{this.service.datosProd.Sku}}</span></p>
         </div>
-        <div class="col-12 col-md-6 d-flex justify-content-md-end my-3 ">
+        <div class="col-12 col-md-3 d-flex justify-content-md-end my-3 ">
           <a routerLink="/productos-servicios" class="btn btn-primary">Volver a la lista</a>
         </div>
       </div>
@@ -102,6 +102,7 @@
     </div>
     <div *ngIf="userState == null" class="container py-5 p-md-5">
       <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
+      <app-navigation-home></app-navigation-home>
     </div>
     </div>
     

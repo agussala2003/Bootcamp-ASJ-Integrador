@@ -2,12 +2,12 @@
   <div *ngIf="userState == true" class="container py-5 p-md-5">
     <div class="row">
       <div class="row">
-        <div class="col-12 col-md-6 d-flex align-items-center">
+        <div class="col-12 col-md-9 d-flex align-items-center">
           <a class="text-light text-decoration-none" routerLink="/ordenes">Ordenes</a>
           <i class='bx bx-chevron-right text-light fs-4' ></i>
           <p class="m-0 text-light text-md-nowrap">Formulario <span *ngIf="this.service.datosOrd.Orden != ''">Orden {{this.service.datosOrd.Orden}}</span></p>
         </div>
-        <div class="col-12 col-md-6 d-flex justify-content-start justify-content-md-end my-3 ">
+        <div class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end my-3 ">
           <a routerLink="/ordenes" class="btn btn-primary">Volver a la lista</a>
         </div>
       </div>
@@ -27,6 +27,7 @@
           placeholder="Ingese su numero de orden"
           class="form-control"
           min="1"
+          (keyup)="ordenExists()"
         />
         <div *ngIf="formOrd.controls['orden']?.hasError('required')" class="col-auto">
           <span class="form-text text-light">El dato es obligatorio</span>
@@ -34,18 +35,23 @@
         <div *ngIf="formOrd.controls['orden']?.hasError('min')" class="col-auto">
           <span class="form-text text-light">Mayor a 1</span>
         </div>
+        <div *ngIf="this.isActiveOrden" class="col-auto">
+          <span class="form-text text-light"> Ingresa una orden que no exista </span>
+        </div>
       </div>
       <div class="col-12 col-md-3 mb-2">
         <label for="seleccCodProv" class="form-label text-light"
           >Codigo Proveedor:</label
         >
         <select
+          [disabled]="this.isProductsInOrden"
           [(ngModel)]="this.service.datosOrd.Proveedor"
           for="seleccCodProv"
           class="form-select"
           name="seleccCodProv"
           id="seleccCodProv"
           aria-label="Default select example"
+          (click)="prod = ''"
         >
           <option value="" selected disabled>Selecciona un proveedor</option>
           <option *ngFor="let prov of proveedores" value="{{prov.RazonSocial}}">{{prov.RazonSocial}}</option>
@@ -135,17 +141,17 @@
       </div>
       <div class="col-12 mt-2">
         <button
-        [disabled]="!formOrd.valid || this.service.datosOrd.Productos.length == 0"
+        [disabled]="!formOrd.valid || this.service.datosOrd.Productos.length == 0 || this.isActiveOrden"
           type="submit"
           class="btn btn-success"
         >
-          Agregar / Actualizar
+          {{agregarActualizar}}
         </button>
       </div> 
       <div class="col-12 mt-2">
         <div *ngIf="this.service.datosOrd.Productos.length > 0">
           <h4 class="mt-1 text-light">Productos en la orden</h4>
-            <p  class="text-light d-flex " *ngFor="let productoComp of this.service.datosOrd.Productos;index as i">{{productoComp.Sku + ' - ' + productoComp.Cantidad + ' - ' + productoComp.Subtotal}} <i (click)="deleteProd(i)" class='ms-3 bx bx-x text-light fs-4'></i></p>
+            <p class="text-light d-flex " *ngFor="let productoComp of this.service.datosOrd.Productos;index as i">{{productoComp.Sku + ' - ' + productoComp.Cantidad + ' - $' + productoComp.Subtotal}} <i (click)="deleteProd(i)" class='ms-3 bx bx-x text-light fs-4'></i></p>
         </div>
       </div>      
     </div>
@@ -153,5 +159,6 @@
   </div>
   <div *ngIf="userState == null" class="container py-5 p-md-5">
     <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
+    <app-navigation-home></app-navigation-home>
   </div>
 </div>

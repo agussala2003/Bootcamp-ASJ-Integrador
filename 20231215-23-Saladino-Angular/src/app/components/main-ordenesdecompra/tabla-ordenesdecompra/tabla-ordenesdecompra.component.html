@@ -1,12 +1,12 @@
 <div class="bg-dark">
   <div *ngIf="userState == true" class="container py-5 p-md-5">
     <div class="row">
-      <div class="col-12 col-md-6 d-flex align-items-center">
+      <div class="col-12 col-md-8 d-flex align-items-center">
         <a class="text-light text-decoration-none" routerLink="/ordenes">Ordenes</a>
         <i class='bx bx-chevron-right text-light fs-4' ></i>
         <p class="m-0 text-light text-md-nowrap">Tabla</p>
       </div>
-      <div class="col-12 col-md-6 d-flex justify-content-start justify-content-md-end my-3 ">
+      <div class="col-12 col-md-4 d-flex justify-content-start justify-content-md-end my-3 ">
         <a routerLink="/ordenes/form" class="btn btn-primary"
           >Agregar Orden de compra</a
         >
@@ -46,7 +46,7 @@
                 <i [ngClass]="orden.Activo ? '' : 'd-none' " (click)="borrarOrden(orden.Orden)" class="btn btn-danger bx bx-trash me-2"></i>
                 <!-- <i [ngClass]="orden.Activo ? 'd-none' : '' " (click)="borrarOrden(orden.Orden)" class="btn btn-success bx bx-check me-2"></i> -->
                 <i [ngClass]="orden.Activo ? '' : 'd-none' " [routerLink]="['/ordenes/form/',orden.Orden]" class="btn btn-primary bx bx-edit-alt me-2"></i>
-                <i [routerLink]="['/ordenes/detalle/',orden.Orden]" class="btn btn-success bx bx-detail"></i>
+                <i [routerLink]="['/ordenes/detalle/',orden.Orden]" class="btn btn-success bx bx-info-circle"></i>
               </div>
             </td>
           </tr>
@@ -59,5 +59,6 @@
   </div>
   <div *ngIf="userState == null" class="container py-5 p-md-5">
     <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
+    <app-navigation-home></app-navigation-home>
   </div>
 </div>

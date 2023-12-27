@@ -1,12 +1,12 @@
 <div class="bg-dark">
   <div *ngIf="userState == true" class="container py-5 p-md-5">
     <div class="row">
-      <div class="col-12 col-md-6 d-flex align-items-center">
+      <div class="col-12 col-md-9 d-flex align-items-center">
         <a class="text-light text-decoration-none" routerLink="/proveedores">Proveedores</a>
         <i class='bx bx-chevron-right text-light fs-4' ></i>
         <p class="m-0 text-light">Tabla</p>
       </div>
-      <div class="col-12 col-md-6 d-flex justify-content-md-end my-3">
+      <div class="col-12 col-md-3 d-flex justify-content-md-end my-3">
         <a routerLink="/proveedores/form" class="btn btn-primary"
           >Agregar Proveedor</a
         >
@@ -25,7 +25,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let proveedor of proveedores">
-            <td>
+            <td >
               <div class="d-flex align-items-center">
                 <img
                   src="{{ proveedor.Imagen }}"
@@ -45,9 +45,9 @@
               </p>
             </td>
             <td>
-              <p class="fw-normal mb-1 text-nowrap"><a target="_blank" href="tel:{{ proveedor.Telefono }}">{{ proveedor.Telefono }}</a></p>
-              <p class="fw-normal mb-1 text-nowrap"><a target="_blank" href="mailto:{{ proveedor.Email }}">{{ proveedor.Email }}</a></p>
-              <p class="fw-normal mb-1 text-nowrap"><a target="_blank" href="{{ proveedor.SitioWeb }}">{{ proveedor.SitioWeb }}</a></p>
+              <p class="fw-normal mb-1 text-nowrap">{{ proveedor.Telefono }}</p>
+              <p class="fw-normal mb-1 text-nowrap">{{ proveedor.Email }}</p>
+              <p class="fw-normal mb-1 text-nowrap"><a target="_blank" href="https://agussala2003.github.io/portfolio/">{{ proveedor.SitioWeb }}</a></p>
             </td>
             <td>
               <p class="fw-normal mb-1 text-nowrap">
@@ -58,7 +58,7 @@
               <div class="d-flex">
                 <i (click)="borrarProveedor(proveedor.Codigo)" class="btn btn-danger bx bx-trash me-2"></i>
                 <i [routerLink]="['/proveedores/form/',proveedor.Codigo]" class="btn btn-primary bx bx-edit-alt me-2"></i>
-                <i [routerLink]="['/proveedores/detalle/',proveedor.Codigo]" class="btn btn-success bx bx-detail"></i>
+                <i [routerLink]="['/proveedores/detalle/',proveedor.Codigo]" class="btn btn-success bx bx-info-circle"></i>
               </div>
             </td>
           </tr>
@@ -71,5 +71,6 @@
   </div>
   <div *ngIf="userState == null" class="container py-5 p-md-5">
     <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
+    <app-navigation-home></app-navigation-home>
   </div>
 </div>

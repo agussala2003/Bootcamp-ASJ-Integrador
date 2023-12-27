@@ -6,6 +6,7 @@ export type Proveedor = {
   Email: string;
   SitioWeb: string;
   Imagen:string;
+  Activo:boolean;
   Direccion: {
     Calle: string;
     Numero:string;

@@ -27,6 +27,7 @@ export class TablaProveedoresComponent implements OnInit {
   }
   actualizarListaProveedores() {
     this.proveedores = this.service.getFakeData();
+    this.proveedores = this.proveedores.filter((item:Proveedor) => item.Activo === true);
   }
   handleImageError(proveedor:any) {
     proveedor.Imagen = '../../../../assets/img/logoGenerico.png'

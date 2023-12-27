@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductoyServicio } from '../../../models/ProductoyServicio';
 import { ProductosyserviciosService } from '../../../services/productosyservicios.service';
+import { ProveedoresService } from '../../../services/proveedores.service';
+import { Proveedor } from '../../../models/Proveedor';
 
 @Component({
   selector: 'app-tabla-productosyservicios',
@@ -8,9 +10,10 @@ import { ProductosyserviciosService } from '../../../services/productosyservicio
   styleUrl: './tabla-productosyservicios.component.css',
 })
 export class TablaProductosyserviciosComponent implements OnInit {
-  constructor(public service: ProductosyserviciosService) {}
+  constructor(public service: ProductosyserviciosService,public serviceProveedor: ProveedoresService) {}
   productosyServicios: ProductoyServicio[] = [];
   userState:any;
+  proveedores: Proveedor[] = [];
 
   ngOnInit(): void {
     this.actualizarListaProductoyServicios();
@@ -26,8 +29,21 @@ export class TablaProductosyserviciosComponent implements OnInit {
     }
   }
   actualizarListaProductoyServicios() {
+    // Obtener datos falsos
     this.productosyServicios = this.service.getFakeData();
+    this.proveedores = this.serviceProveedor.getFakeData();
+    this.productosyServicios = this.productosyServicios.filter((producto: ProductoyServicio) => producto.Activo);
+    // Filtramos para que no nos muestre productos que tengan a sus proveedores inactivos
+    const proveedoresInactivos = this.proveedores.filter((proveedor: Proveedor) => !proveedor.Activo);
+    if (proveedoresInactivos.length > 0) {
+      for (let i = 0; i < proveedoresInactivos.length; i++) {
+          const razonSocialProveedorInactivo = proveedoresInactivos[i].RazonSocial;
+          this.productosyServicios = this.productosyServicios.filter((producto: ProductoyServicio) => {
+              return producto.Proveedor !== razonSocialProveedorInactivo;
+          });
+      }
   }
+}
   handleImageError(productoyservicio:any) {
     productoyservicio.Imagen = '../../../../assets/img/logoGenerico.png'
   }

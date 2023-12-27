@@ -38,7 +38,6 @@ export class OrdenesService {
   public deleteFakeData(id: string) {
     const index = this.lista.findIndex(item => item.Orden === id);
     this.lista[index].Activo = false;
-    return this.lista;
   }
   public getProdData(id: string) {
     const num = this.lista.findIndex(item => item.Orden === id);

@@ -21,6 +21,7 @@ import { LoginComponent } from './components/login/login.component';
 import { DetalleProdComponent } from './components/main-productosyservicios/detalle-prod/detalle-prod.component';
 import { AtoZPipe } from './pipes/ato-z.pipe';
 import { DetalleOrdenesComponent } from './components/main-ordenesdecompra/detalle-ordenes/detalle-ordenes.component';
+import { NavigationHomeComponent } from './components/navigation-home/navigation-home.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { DetalleOrdenesComponent } from './components/main-ordenesdecompra/detal
     LoginComponent,
     DetalleProdComponent,
     AtoZPipe,
-    DetalleOrdenesComponent
+    DetalleOrdenesComponent,
+    NavigationHomeComponent
   ],
   imports: [
     BrowserModule,

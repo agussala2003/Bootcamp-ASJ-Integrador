@@ -1,12 +1,12 @@
 <div class="bg-dark h-100 d-flex justify-content-center">
     <div *ngIf="userState == true" class="container py-5 p-md-5">
       <div class="row">
-        <div class="col-12 col-md-6 d-flex align-items-center">
+        <div class="col-12 col-md-9 d-flex align-items-center">
           <a class="text-light text-decoration-none" routerLink="/ordenes">Ordenes</a>
           <i class='bx bx-chevron-right text-light fs-4' ></i>
           <p class="m-0 text-light text-md-nowrap ">Detalles <span *ngIf="this.service.datosOrd.Orden != ''">Orden {{this.service.datosOrd.Orden}}</span></p>
         </div>
-        <div class="col-12 col-md-6 d-flex justify-content-md-end my-3 ">
+        <div class="col-12 col-md-3 d-flex justify-content-md-end my-3 ">
           <a routerLink="/ordenes" class="btn btn-primary">Volver a la lista</a>
         </div>
       </div>
@@ -133,7 +133,7 @@
                         <div class="card-body">
                           <div class="d-flex">
                             <div class="text-start overflow-y-auto">
-                              <h5 class="text-nowrap">{{prodComp.Subtotal}}</h5>
+                              <h5 class="text-nowrap">${{prodComp.Subtotal}}</h5>
                               <span>Subtotal</span>
                             </div>
                           </div>
@@ -148,7 +148,7 @@
                     <div class="card-body">
                       <div class="d-flex">
                         <div class="text-start overflow-y-auto">
-                          <h5 class="text-nowrap">{{this.service.datosOrd.Total}}</h5>
+                          <h5 class="text-nowrap">${{this.service.datosOrd.Total}}</h5>
                           <span>Total</span>
                         </div>
                       </div>
@@ -161,6 +161,7 @@
     </div>
     <div *ngIf="userState == null" class="container py-5 p-md-5">
       <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
+      <app-navigation-home></app-navigation-home>
     </div>
     </div>
     

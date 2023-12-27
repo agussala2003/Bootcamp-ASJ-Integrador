@@ -14,7 +14,7 @@ export const ordenes: Orden[] = [
       }
     ],
     Activo: true,
-    Total: '999',
+    Total: '1499.97',
   },
   {
     Orden: '2',
@@ -30,7 +30,7 @@ export const ordenes: Orden[] = [
       },
     ],
     Activo: true,
-    Total: '999',
+    Total: '389.97',
   },
   {
     Orden: '3',
@@ -46,6 +46,6 @@ export const ordenes: Orden[] = [
       },
     ],
     Activo: true,
-    Total: '999',
+    Total: '239.97',
   },
 ];

@@ -8,6 +8,7 @@ export const proveedores: Proveedor[] = [
     Email: 'Empresa@gmail.com',
     SitioWeb: 'Empresa.com',
     Imagen: 'lalala.com',
+    Activo:true,
     Direccion: {
       Calle: 'Av. Principal',
       Numero: '123',
@@ -36,6 +37,7 @@ export const proveedores: Proveedor[] = [
     Email: 'Compañía@gmail.com',
     SitioWeb: 'Compañía.com',
     Imagen: 'lalala.com',
+    Activo:true,
     Direccion: {
       Calle: 'Calle Secundaria',
       Numero: '456',
@@ -64,6 +66,7 @@ export const proveedores: Proveedor[] = [
     Email: 'Tienda@gmail.com',
     SitioWeb: 'Tienda.com',
     Imagen: 'lalala.com',
+    Activo:true,
     Direccion: {
       Calle: 'Plaza Central',
       Numero: '789',

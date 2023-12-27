@@ -6,4 +6,5 @@ export type ProductoyServicio = {
   Descripcion: string;
   Precio: string;
   Imagen:string;
+  Activo:boolean;
 };

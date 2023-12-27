@@ -87,7 +87,7 @@ const routes: Routes = [
   {
     path: '**',
     pathMatch: 'full',
-    redirectTo: 'inicio' //Aqui va el componente
+    redirectTo: 'login' //Aqui va el componente
   }
 ];
 

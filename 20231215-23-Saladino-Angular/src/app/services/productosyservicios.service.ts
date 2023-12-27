@@ -16,7 +16,8 @@ export class ProductosyserviciosService {
     Producto: '',
     Descripcion: '',
     Precio: '',
-    Imagen: ''
+    Imagen: '',
+    Activo:true
   }
   public getFakeData() {
     return this.lista;
@@ -35,8 +36,8 @@ export class ProductosyserviciosService {
     }
   }
   public deleteFakeData(id: string) {
-    this.lista = this.lista.filter(item => item.Sku !== id)
-    return this.lista;
+    const index = this.lista.findIndex(item => item.Sku === id);
+    this.lista[index].Activo = false;
   }
   public getProdData(id: string) {
     const num = this.lista.findIndex(item => item.Sku === id);

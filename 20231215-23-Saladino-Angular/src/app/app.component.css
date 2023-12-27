@@ -6,3 +6,38 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+/* Estilos burguer */
+
+.btBurguer div span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background: #fff;
+    margin-top: 6px;
+    transform-origin: 0px 100%;
+    transition: all .3s
+}
+ .btBurguer {
+    cursor: pointer
+}
+.btBurguer div .activeBars1 {
+    transform: rotate(45deg) translate(-2px,1px);
+    -webkit-transform: rotate(45deg) translate(-2px,1px);
+    -moz-transform: rotate(45deg) translate(-2px,1px);
+    -ms-transform: rotate(45deg) translate(-2px,1px);
+    -o-transform: rotate(45deg) translate(-2px,1px)
+}
+
+.btBurguer div .activeBars2 {
+    opacity: 0;
+    margin-left: -30px
+}
+
+.btBurguer div .activeBars3 {
+    transform: rotate(-45deg) translate(-1px);
+    -webkit-transform: rotate(-45deg) translate(-1px,0px);
+    -moz-transform: rotate(-45deg) translate(-1px,0px);
+    -ms-transform: rotate(-45deg) translate(-1px,0px);
+    -o-transform: rotate(-45deg) translate(-1px,0px)
+}

@@ -14,73 +14,120 @@ import { Proveedor } from '../../../models/Proveedor';
   styleUrl: './form-ordenesdecompra.component.css',
 })
 export class FormOrdenesdecompraComponent implements OnInit {
-  constructor(public service: OrdenesService,public servicioProducto:ProductosyserviciosService,public servicioProveedor:ProveedoresService,public router: ActivatedRoute,public router2:Router) {}
-  idOrden:string = '';
-  userState:any;
-  proveedores:Proveedor[] = [];
-  productos:ProductoyServicio[] = [];
-  prod:any = '';
-  cant:any = '';
-  flagCode:boolean = true;
+  constructor(
+    public service: OrdenesService,
+    public servicioProducto: ProductosyserviciosService,
+    public servicioProveedor: ProveedoresService,
+    public router: ActivatedRoute,
+    public router2: Router
+  ) {}
+
+  idOrden: string = '';
+  userState: any;
+  proveedores: Proveedor[] = [];
+  productos: ProductoyServicio[] = [];
+  prod: any = '';
+  cant: any = '';
+  flagCode: boolean = true;
+  isActiveOrden: any = false;
+  isProductsInOrden:any = false;
+  agregarActualizar: string = '';
+
   ngOnInit(): void {
-    this.router.params.subscribe(data => {
+    this.router.params.subscribe((data) => {
       this.idOrden = data['idOrden'];
-      if(this.idOrden !== undefined) {
+      if (this.idOrden !== undefined) {
+        // Verificamos si estamos editando uno
         this.service.getProdData(this.idOrden);
         alert('Vas a editar el producto ' + this.idOrden);
+        this.isProductsInOrden = true;
         this.flagCode = false;
+        this.agregarActualizar = 'Actualizar'
       } else {
+        // Verificamos si estamos creando uno
         this.flagCode = true;
+        this.agregarActualizar = 'Agregar'
         resetearLista(this.service.datosOrd);
       }
-    })
+    });
+    // Verficamos el estado del usuario
     this.userState = this.service.getUserState();
+    // Obtenemos los proveedores
     this.proveedores = this.servicioProveedor.getFakeData();
+    this.proveedores = this.proveedores.filter((proveedor: Proveedor) => proveedor.Activo);
   }
-  agregarOrden(form:NgForm) {
-      this.service.uploadFakeData();
-      form.reset();
-      this.router2.navigate(['/ordenes']);
+  agregarOrden(form: NgForm) {
+    this.calcularTotal();
+    this.service.uploadFakeData();
+    form.reset();
+    this.router2.navigate(['/ordenes']);
   }
-  searchProds(proveedor:string) {
-    const arrProd:ProductoyServicio[] = this.servicioProducto.getFakeData()
-    this.productos = arrProd.filter((item:ProductoyServicio) => item.Proveedor === proveedor);
+  // Buscamos los productos que ofrece un proveedor
+  searchProds(proveedor: string) {
+    const arrProd: ProductoyServicio[] = this.servicioProducto.getFakeData();
+    this.productos = arrProd.filter((item: ProductoyServicio) => item.Activo === true);
+    this.productos = this.productos.filter((item: ProductoyServicio) => item.Proveedor === proveedor);
   }
+  // Se agrega un producto a la orden
   agregarProd() {
-    const searchArr: ProductoyServicio[] = this.productos.filter((item: ProductoyServicio) => item.Sku === this.prod);
+    // Obtenemos el array para luego obtener el precio
+    const searchArr: ProductoyServicio[] = this.productos.filter(
+      (item: ProductoyServicio) => item.Sku === this.prod
+    );
     const nuevoProducto: CalcOrden = {
       Sku: this.prod,
       Cantidad: this.cant,
-      Subtotal: searchArr[0].Precio
+      Subtotal: searchArr[0].Precio,
     };
+    // Enviamos los productos
     this.service.datosOrd.Productos.push(nuevoProducto);
     console.log('Listado de Productos:');
-    this.service.datosOrd.Productos.forEach(producto => {
-      console.log(`SKU: ${producto.Sku}, Cantidad: ${producto.Cantidad}, Subtotal: ${producto.Subtotal}`);
+    this.service.datosOrd.Productos.forEach((producto) => {
+      console.log(
+        `SKU: ${producto.Sku}, Cantidad: ${producto.Cantidad}, Subtotal: ${producto.Subtotal}`
+      );
     });
+    this.validacionProveedor();
     this.calcularTotal();
   }
-  deleteProd(i:number) {
-    if(this.service.datosOrd.Productos.length > 1) {
-      this.service.datosOrd.Productos.splice(i,1)
-    } else {
-      alert('Debes tener al menos 1 producto cargado')
-    }
+  // Sacamos el producto en la orden
+  deleteProd(i: number) {
+    this.service.datosOrd.Productos.splice(i, 1);
+    this.validacionProveedor()
   }
+  // Se calcula el total
   calcularTotal() {
-    const totalCalculado = this.service.datosOrd.Productos.reduce((total, producto) => {
-      const cantidad = parseInt(producto.Cantidad, 10);
-      const subtotal = parseFloat(producto.Subtotal);
-      if (!isNaN(cantidad) && !isNaN(subtotal)) {
-        return total + cantidad * subtotal;
-      }
-      return total;
-    }, 0);
+    const totalCalculado = this.service.datosOrd.Productos.reduce(
+      (total, producto) => {
+        const cantidad = parseInt(producto.Cantidad, 10);
+        const subtotal = parseFloat(producto.Subtotal);
+        if (!isNaN(cantidad) && !isNaN(subtotal)) {
+          return total + cantidad * subtotal;
+        }
+        return total;
+      },
+      0
+    );
     this.service.datosOrd.Total = totalCalculado.toFixed(2);
     console.log('Total Calculado:', this.service.datosOrd.Total);
-  }  
+  }
+  // Verificamos si la orden ya existe 
+  ordenExists() {
+    if (this.idOrden === undefined) {
+      const ords = this.service.getFakeData();
+      this.isActiveOrden = ords.find(
+        (item: Orden) => item.Orden === this.service.datosOrd.Orden
+      );
+      return this.isActiveOrden;
+    }
+  }
+  // Validacion para que sea solo 1 proveedor
+  validacionProveedor() {
+    this.service.datosOrd.Productos.length > 0 ? this.isProductsInOrden = true : this.isProductsInOrden = false
+  }
 }
-function resetearLista (lista:Orden){
+
+function resetearLista(lista: Orden) {
   lista.Emision = '';
   lista.Entrega = '';
   lista.InfoRecepcion = '';
