@@ -1,5 +1,5 @@
 export type Proveedor = {
-  Codigo: string;
+  id: string;
   RazonSocial: string;
   Rubro: string;
   Telefono: string;

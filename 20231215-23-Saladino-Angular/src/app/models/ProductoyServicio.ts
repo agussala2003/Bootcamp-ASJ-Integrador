@@ -1,6 +1,6 @@
 export type ProductoyServicio = {
   Proveedor: string;
-  Sku: string;
+  id: string;
   Categoria: string;
   Producto: string;
   Descripcion: string;

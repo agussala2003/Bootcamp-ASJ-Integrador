@@ -3,6 +3,7 @@ import { ProductoyServicio } from '../../../models/ProductoyServicio';
 import { ProductosyserviciosService } from '../../../services/productosyservicios.service';
 import { ProveedoresService } from '../../../services/proveedores.service';
 import { Proveedor } from '../../../models/Proveedor';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-tabla-productosyservicios',
@@ -19,31 +20,43 @@ export class TablaProductosyserviciosComponent implements OnInit {
     this.actualizarListaProductoyServicios();
     this.userState = this.service.getUserState();
   }
-  borrarProductoyservicio(idProd:string) {
-    if(confirm('Estas seguro que deseas eliminar el producto ' + idProd)) {
-      this.service.deleteFakeData(idProd);
-      alert('El producto ' + idProd + ' ha sido eliminado correctamente!')
-      this.actualizarListaProductoyServicios();
+  borrarProductoyservicio(idProd: string) {
+    if (confirm('¿Estás seguro de que deseas eliminar el producto ' + idProd)) {
+      this.service.deleteFakeData(idProd).subscribe(
+        () => {
+          console.log(idProd);
+          alert('El producto ' + idProd + ' ha sido eliminado correctamente!');
+          this.actualizarListaProductoyServicios();
+        },
+        (error) => {
+          console.error('Error al eliminar el producto:', error);
+        }
+      );
     } else {
-      alert('El producto ' + idProd + ' no ha sido eliminado')
+      alert('El producto ' + idProd + ' no ha sido eliminado');
     }
   }
+  
   actualizarListaProductoyServicios() {
-    // Obtener datos falsos
-    this.productosyServicios = this.service.getFakeData();
-    this.proveedores = this.serviceProveedor.getFakeData();
-    this.productosyServicios = this.productosyServicios.filter((producto: ProductoyServicio) => producto.Activo);
-    // Filtramos para que no nos muestre productos que tengan a sus proveedores inactivos
-    const proveedoresInactivos = this.proveedores.filter((proveedor: Proveedor) => !proveedor.Activo);
-    if (proveedoresInactivos.length > 0) {
-      for (let i = 0; i < proveedoresInactivos.length; i++) {
+    forkJoin([
+      this.service.getFakeData(),
+      this.serviceProveedor.getFakeData(),
+    ]).subscribe(([productos, proveedores]) => {
+      this.productosyServicios = productos.filter((producto: ProductoyServicio) => producto.Activo);
+
+      // Filtramos para que no nos muestre productos que tengan a sus proveedores inactivos
+      const proveedoresInactivos = proveedores.filter((proveedor: Proveedor) => !proveedor.Activo);
+
+      if (proveedoresInactivos.length > 0) {
+        for (let i = 0; i < proveedoresInactivos.length; i++) {
           const razonSocialProveedorInactivo = proveedoresInactivos[i].RazonSocial;
-          this.productosyServicios = this.productosyServicios.filter((producto: ProductoyServicio) => {
-              return producto.Proveedor !== razonSocialProveedorInactivo;
-          });
+          this.productosyServicios = this.productosyServicios.filter(
+            (producto: ProductoyServicio) => producto.Proveedor !== razonSocialProveedorInactivo
+          );
+        }
       }
+    });
   }
-}
   handleImageError(productoyservicio:any) {
     productoyservicio.Imagen = '../../../../assets/img/logoGenerico.png'
   }

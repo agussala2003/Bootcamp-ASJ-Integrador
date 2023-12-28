@@ -16,19 +16,26 @@ export class TablaProveedoresComponent implements OnInit {
     this.actualizarListaProveedores();
     this.userState = this.service.getUserState();
   }
+  //Funcion para hacer un borrado logico del proveedor
   borrarProveedor(idProv: string) {
     if(confirm('Estas seguro que deseas eliminar el proveedor ' + idProv)) {
-      this.service.deleteFakeData(idProv);
+      this.service.deleteFakeData(idProv).subscribe((data) => {
+        console.log('Se elimino el proveedor' + data)
+      });
       alert('El proveedor ' + idProv + ' ha sido eliminado correctamente!')
       this.actualizarListaProveedores();
     } else {
       alert('El proveedor ' + idProv + ' no ha sido eliminado')
     }
   }
+  //Funcion obtener constantemente los proveedores
   actualizarListaProveedores() {
-    this.proveedores = this.service.getFakeData();
-    this.proveedores = this.proveedores.filter((item:Proveedor) => item.Activo === true);
+    this.service.getFakeData().subscribe((data:Proveedor[]) => {
+      this.proveedores = data
+      this.proveedores = this.proveedores.filter((item:Proveedor) => item.Activo === true);
+    });
   }
+  //Funcion para poner otra imagen si sale error
   handleImageError(proveedor:any) {
     proveedor.Imagen = '../../../../assets/img/logoGenerico.png'
   }

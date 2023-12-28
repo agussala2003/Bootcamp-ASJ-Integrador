@@ -53,26 +53,32 @@ export class FormOrdenesdecompraComponent implements OnInit {
     // Verficamos el estado del usuario
     this.userState = this.service.getUserState();
     // Obtenemos los proveedores
-    this.proveedores = this.servicioProveedor.getFakeData();
-    this.proveedores = this.proveedores.filter((proveedor: Proveedor) => proveedor.Activo);
+    this.servicioProveedor.getFakeData().subscribe((data:Proveedor[]) => {
+      this.proveedores = data;
+      this.proveedores = this.proveedores.filter((proveedor: Proveedor) => proveedor.Activo);
+    })
   }
   agregarOrden(form: NgForm) {
     this.calcularTotal();
-    this.service.uploadFakeData();
+    this.service.uploadFakeData().subscribe((data) => {
+      console.log('Agregaste o actualizaste' + data)
+    });
     form.reset();
     this.router2.navigate(['/ordenes']);
   }
   // Buscamos los productos que ofrece un proveedor
   searchProds(proveedor: string) {
-    const arrProd: ProductoyServicio[] = this.servicioProducto.getFakeData();
-    this.productos = arrProd.filter((item: ProductoyServicio) => item.Activo === true);
-    this.productos = this.productos.filter((item: ProductoyServicio) => item.Proveedor === proveedor);
+    this.servicioProducto.getFakeData().subscribe((data:ProductoyServicio[]) => {
+      const arrProd: ProductoyServicio[] = data
+      this.productos = arrProd.filter((item: ProductoyServicio) => item.Activo === true);
+      this.productos = this.productos.filter((item: ProductoyServicio) => item.Proveedor === proveedor);
+    });
   }
   // Se agrega un producto a la orden
   agregarProd() {
     // Obtenemos el array para luego obtener el precio
     const searchArr: ProductoyServicio[] = this.productos.filter(
-      (item: ProductoyServicio) => item.Sku === this.prod
+      (item: ProductoyServicio) => item.id === this.prod
     );
     const nuevoProducto: CalcOrden = {
       Sku: this.prod,
@@ -114,13 +120,17 @@ export class FormOrdenesdecompraComponent implements OnInit {
   // Verificamos si la orden ya existe 
   ordenExists() {
     if (this.idOrden === undefined) {
-      const ords = this.service.getFakeData();
-      this.isActiveOrden = ords.find(
-        (item: Orden) => item.Orden === this.service.datosOrd.Orden
-      );
-      return this.isActiveOrden;
+      this.service.getFakeData().subscribe((data:Orden[]) => {
+        const ords = data
+        this.isActiveOrden = ords.find(
+          (item: Orden) => item.id === this.service.datosOrd.id
+        );
+        return this.isActiveOrden;
+      });
     }
   }
+  //
+  
   // Validacion para que sea solo 1 proveedor
   validacionProveedor() {
     this.service.datosOrd.Productos.length > 0 ? this.isProductsInOrden = true : this.isProductsInOrden = false
@@ -131,7 +141,7 @@ function resetearLista(lista: Orden) {
   lista.Emision = '';
   lista.Entrega = '';
   lista.InfoRecepcion = '';
-  lista.Orden = '';
+  lista.id = '';
   lista.Productos = [];
   lista.Proveedor = '';
   lista.Activo = true;

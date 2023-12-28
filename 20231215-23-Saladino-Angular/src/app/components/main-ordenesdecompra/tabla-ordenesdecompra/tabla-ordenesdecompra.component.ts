@@ -18,7 +18,9 @@ export class TablaOrdenesdecompraComponent implements OnInit {
   }
   borrarOrden(idOrden:string) {
     if(confirm('Estas seguro que deseas eliminar el producto ' + idOrden)) {
-      this.service.deleteFakeData(idOrden);
+      this.service.deleteFakeData(idOrden).subscribe((data) => {
+        console.log('Borraste' + data)
+      });
       alert('El producto ' + idOrden + ' ha sido eliminado correctamente!')
       this.actualizarOrdenes();
     } else {
@@ -40,6 +42,8 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     return total.toFixed(2);
   }
   actualizarOrdenes() {
-    this.ordenes = this.service.getFakeData();
+    this.service.getFakeData().subscribe((data:Orden[]) => {
+      this.ordenes = data
+    });
   }
 }

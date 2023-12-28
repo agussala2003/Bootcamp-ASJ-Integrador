@@ -27,7 +27,7 @@
           <tr *ngFor="let orden of ordenes">
             <td>
               <p  [ngClass]="orden.Activo ? '' : 'text-decoration-line-through' " class="fw-normal mb-1 text-nowrap text-center">
-                {{ orden.Orden }}
+                {{ orden.id }}
               </p>
             </td>
             <td>
@@ -43,10 +43,10 @@
             </td>
             <td>
               <div class="d-flex">
-                <i [ngClass]="orden.Activo ? '' : 'd-none' " (click)="borrarOrden(orden.Orden)" class="btn btn-danger bx bx-trash me-2"></i>
+                <i [ngClass]="orden.Activo ? '' : 'd-none' " (click)="borrarOrden(orden.id)" class="btn btn-danger bx bx-trash me-2"></i>
                 <!-- <i [ngClass]="orden.Activo ? 'd-none' : '' " (click)="borrarOrden(orden.Orden)" class="btn btn-success bx bx-check me-2"></i> -->
-                <i [ngClass]="orden.Activo ? '' : 'd-none' " [routerLink]="['/ordenes/form/',orden.Orden]" class="btn btn-primary bx bx-edit-alt me-2"></i>
-                <i [routerLink]="['/ordenes/detalle/',orden.Orden]" class="btn btn-success bx bx-info-circle"></i>
+                <i [ngClass]="orden.Activo ? '' : 'd-none' " [routerLink]="['/ordenes/form/',orden.id]" class="btn btn-primary bx bx-edit-alt me-2"></i>
+                <i [routerLink]="['/ordenes/detalle/',orden.id]" class="btn btn-success bx bx-info-circle"></i>
               </div>
             </td>
           </tr>

@@ -1,5 +1,5 @@
 export type Orden = {
-  Orden: string;
+  id: string;
   Emision: string;
   Entrega: string;
   InfoRecepcion: string;

@@ -4,7 +4,7 @@
       <div class="col-12 col-md-9 d-flex align-items-center">
         <a class="text-light text-decoration-none" routerLink="/productos-servicios">Productos y Servicios</a>
         <i class='bx bx-chevron-right text-light fs-4' ></i>
-        <p class="m-0 text-light text-md-nowrap">Formulario <span *ngIf="this.service.datosProd.Sku != ''">Producto {{this.service.datosProd.Sku}}</span></p>
+        <p class="m-0 text-light text-md-nowrap">Formulario <span *ngIf="this.service.datosProd.id != ''">Producto {{this.service.datosProd.id}}</span></p>
       </div>
       <div class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end my-3 ">
         <a routerLink="/productos-servicios" class="btn btn-primary">Volver a la lista</a>
@@ -16,7 +16,7 @@
         <label for="sku" class="form-label text-light">Codigo / Sku:</label>
         <input
           [disabled]="!flagCode"
-          [(ngModel)]="this.service.datosProd.Sku"
+          [(ngModel)]="this.service.datosProd.id"
           required
           type="text"
           id="sku"
@@ -51,7 +51,7 @@
           required
         >
           <option selected disabled>Selecciona un proveedor</option>
-          <option *ngFor="let prov of proveedores" value="{{prov.RazonSocial}}">{{prov.Codigo + ' - ' + prov.RazonSocial}}</option>
+          <option *ngFor="let prov of proveedores" value="{{prov.RazonSocial}}">{{prov.id + ' - ' + prov.RazonSocial}}</option>
         </select>
         <div *ngIf="formProdyServ.controls['seleccCodProv']?.hasError('required')" class="col-auto">
           <span class="form-text text-light">El dato es obligatorio</span>

@@ -54,22 +54,28 @@ export class FormProductosyserviciosComponent implements OnInit {
     //Obtenemos el estado del usuario
     this.userState = this.service.getUserState();
     //Obtenemos los proveedores ACTIVOS para poder ser seleccionados
-    this.proveedores = this.servicioProveedor.getFakeData();
+    this.servicioProveedor.getFakeData().subscribe((data:Proveedor[]) => {
+      this.proveedores = data;
+    })
     this.proveedores = this.proveedores.filter((proveedor: Proveedor) => proveedor.Activo);
   }
   agregarProductoyservicio(form: NgForm) {
-    this.service.uploadFakeData();
+    this.service.uploadFakeData().subscribe((data) => {
+      console.log('Agregaste o actualizate' + data)
+    });
     form.reset();
     this.router2.navigate(['/productos-servicios']);
   }
   // Validamos si ya existe el SKU al momento de ingresar uno 
   skuExists() {
     if (this.idProdServ === undefined) {
-      const prods = this.service.getFakeData();
-      this.isActiveSku = prods.find(
-        (item: ProductoyServicio) => item.Sku === this.service.datosProd.Sku
-      );
-      return this.isActiveSku;
+      this.service.getFakeData().subscribe((data:ProductoyServicio[]) => {
+        const prods = data;
+        this.isActiveSku = prods.find(
+          (item: ProductoyServicio) => item.id === this.service.datosProd.id
+        );
+        return this.isActiveSku;
+      })
     }
   }
 }
@@ -80,5 +86,5 @@ function resetearLista(lista: ProductoyServicio) {
   lista.Precio = '';
   lista.Producto = '';
   lista.Proveedor = '';
-  lista.Sku = '';
+  lista.id = '';
 }

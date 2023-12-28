@@ -61,18 +61,23 @@ export class FormProveedoresComponent implements OnInit {
   }
   // Se agrega el proveedor
   agregarProveedor(form: NgForm) {
-    this.service.uploadFakeData();
+    this.service.uploadFakeData().subscribe((data) => {
+      console.log('Agregaste o actualizaste', data)
+    });
     form.reset();
     this.router2.navigate(['/proveedores']);
   }
   // Se valida que al momento de ingresar uno nuevo no sea uno que ya existe
   codProvExists(): any {
     if (this.idProv === undefined) {
-      const provs = this.service.getFakeData();
-      this.existsCode = provs.find(
-        (item: Proveedor) => item.Codigo === this.service.datosProv.Codigo
-      );
-      return this.existsCode;
+      this.service.getFakeData().subscribe((data:Proveedor[]) => {
+        console.log(data)
+        const provs:Proveedor[] = data
+        this.existsCode = provs.find(
+          (item: Proveedor) => item.id === this.service.datosProv.id
+        );
+        return this.existsCode;
+      })
     }
   }
   // Validamos que sea un cuit
@@ -131,7 +136,7 @@ export class FormProveedoresComponent implements OnInit {
 }
 
 function resetearLista(lista: Proveedor) {
-  lista.Codigo = '';
+  lista.id = '';
   lista.RazonSocial = '';
   lista.Rubro = '';
   lista.Telefono = '';

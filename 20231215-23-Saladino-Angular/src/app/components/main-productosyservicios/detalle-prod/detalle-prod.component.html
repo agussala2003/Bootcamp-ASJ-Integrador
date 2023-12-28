@@ -4,7 +4,7 @@
         <div class="col-12 col-md-9 d-flex align-items-center">
           <a class="text-light text-decoration-none" routerLink="/productos-servicios">Productos y Servicios</a>
           <i class='bx bx-chevron-right text-light fs-4' ></i>
-          <p class="m-0 text-light text-md-nowrap ">Detalles <span *ngIf="this.service.datosProd.Sku != ''">Producto {{this.service.datosProd.Sku}}</span></p>
+          <p class="m-0 text-light text-md-nowrap ">Detalles <span *ngIf="this.service.datosProd.id != ''">Producto {{this.service.datosProd.id}}</span></p>
         </div>
         <div class="col-12 col-md-3 d-flex justify-content-md-end my-3 ">
           <a routerLink="/productos-servicios" class="btn btn-primary">Volver a la lista</a>
@@ -19,7 +19,7 @@
                     <div class="card-body">
                       <div class="d-flex">
                         <div class="text-start overflow-y-auto">
-                          <h5 class="text-nowrap">{{this.service.datosProd.Sku}}</h5>
+                          <h5 class="text-nowrap">{{this.service.datosProd.id}}</h5>
                           <span>Sku</span>
                         </div>
                       </div>

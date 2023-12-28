@@ -37,7 +37,7 @@
                   />
                   <div class="ms-3">
                     <p class="fw-normal mb-1 text-nowrap text-center">
-                      {{ item.Sku }}
+                      {{ item.id }}
                     </p>
                   </div>
                 </div>
@@ -58,9 +58,9 @@
             </td>
             <td>
               <div class="d-flex">
-                <i (click)="borrarProductoyservicio(item.Sku)" class="btn btn-danger bx bx-trash me-2"></i>
-                <i [routerLink]="['/productos-servicios/form/',item.Sku]" class="btn btn-primary bx bx-edit-alt me-2"></i>
-                <i [routerLink]="['/productos-servicios/detalle/',item.Sku]" class="btn btn-success bx bx-info-circle"></i>
+                <i (click)="borrarProductoyservicio(item.id)" class="btn btn-danger bx bx-trash me-2"></i>
+                <i [routerLink]="['/productos-servicios/form/',item.id]" class="btn btn-primary bx bx-edit-alt me-2"></i>
+                <i [routerLink]="['/productos-servicios/detalle/',item.id]" class="btn btn-success bx bx-info-circle"></i>
               </div>
             </td>
           </tr>

@@ -11,6 +11,8 @@ export class DetalleComponent implements OnInit{
   constructor(public router: ActivatedRoute, public service: ProveedoresService){}
   idProv:string = '';
   userState:any;
+
+  //Obtenenos los datos del proveedor
   ngOnInit(): void {
     this.router.params.subscribe(data => {
       this.idProv = data['idProv'];

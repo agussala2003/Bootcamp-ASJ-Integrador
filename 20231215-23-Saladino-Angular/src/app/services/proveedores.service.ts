@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { proveedores } from '../../data/proveedores';
+// import { proveedores } from '../../data/proveedores';
 import { Proveedor } from '../models/Proveedor';
-const data:Proveedor[] = proveedores;
+import { Observable, tap } from 'rxjs';
+// const data:Proveedor[] = proveedores;
 @Injectable({
   providedIn: 'root',
 })
 export class ProveedoresService {
   constructor(private http: HttpClient) {}
-  lista: Proveedor[] = data;
+  lista: Proveedor[] = [];
   datosProv:Proveedor = {
-    Codigo: '',
+    id: '',
     RazonSocial: '',
     Rubro: '',
     Telefono: '',
@@ -38,11 +39,16 @@ export class ProveedoresService {
       Rol: '',
     }
   }
-  public getFakeData() {
-    return this.lista;
+  public getFakeData(): Observable<Proveedor[]> {
+    return this.http.get<Proveedor[]>('http://localhost:3000/proveedores')
+      .pipe(
+        tap((proveedores) => {
+          this.lista = proveedores;
+        })
+      );
   }
-  public uploadFakeData() {
-    const index = this.lista.findIndex(item => item.Codigo === this.datosProv.Codigo);
+  public uploadFakeData(): Observable<Proveedor> {
+    const index = this.lista.findIndex((item) => item.id === this.datosProv.id);
     const nuevoProveedor: Proveedor = { ...this.datosProv };
     nuevoProveedor.Direccion = { ...this.datosProv.Direccion };
     nuevoProveedor.DatosFiscales = { ...this.datosProv.DatosFiscales };
@@ -53,21 +59,21 @@ export class ProveedoresService {
       this.lista[index] = nuevoProveedor;
       this.lista[index].Direccion = nuevoProveedor.Direccion;
       this.lista[index].DatosFiscales = nuevoProveedor.DatosFiscales;
-      this.lista[index].DatosContacto =  nuevoProveedor.DatosContacto;
+      this.lista[index].DatosContacto = nuevoProveedor.DatosContacto;
+      return this.http.patch<Proveedor>(`http://localhost:3000/proveedores/${this.lista[index].id}`, this.lista[index]);
     } else {
       // Si no existe, agrega el nuevo elemento
       alert('No existe. Agregando...');
-      this.lista.push(nuevoProveedor);
+      return this.http.post<Proveedor>('http://localhost:3000/proveedores', nuevoProveedor);
     }
-  }
-  public deleteFakeData(id: string) {
-    const index = this.lista.findIndex(item => item.Codigo === id);
+  }  
+  public deleteFakeData(id: string):Observable<Proveedor> {
+    const index = this.lista.findIndex(item => item.id === id);
     this.lista[index].Activo = false;
-    // this.lista = this.lista.filter(item => item.Codigo !== id)
-    // return this.lista;
+    return this.http.patch<Proveedor>(`http://localhost:3000/proveedores/${this.lista[index].id}`, this.lista[index])
   }
   public getProvData(id: string) {
-    const num = this.lista.findIndex(item => item.Codigo === id);
+    const num = this.lista.findIndex(item => item.id === id);
     if (num !== -1) {
       this.datosProv = { ...this.lista[num] };
       this.datosProv.Direccion = { ...this.lista[num].Direccion };

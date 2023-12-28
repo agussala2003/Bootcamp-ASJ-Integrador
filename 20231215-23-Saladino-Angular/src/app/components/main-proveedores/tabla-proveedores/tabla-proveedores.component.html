@@ -35,7 +35,7 @@
                   (error)="handleImageError(proveedor)"
                 />
                 <div class="ms-3">
-                  <p class="fw-normal mb-1 text-nowrap text-center">{{ proveedor.Codigo }}</p>
+                  <p class="fw-normal mb-1 text-nowrap text-center">{{ proveedor.id }}</p>
                 </div>
               </div>
             </td>
@@ -56,9 +56,9 @@
             </td>
             <td>
               <div class="d-flex">
-                <i (click)="borrarProveedor(proveedor.Codigo)" class="btn btn-danger bx bx-trash me-2"></i>
-                <i [routerLink]="['/proveedores/form/',proveedor.Codigo]" class="btn btn-primary bx bx-edit-alt me-2"></i>
-                <i [routerLink]="['/proveedores/detalle/',proveedor.Codigo]" class="btn btn-success bx bx-info-circle"></i>
+                <i (click)="borrarProveedor(proveedor.id)" class="btn btn-danger bx bx-trash me-2"></i>
+                <i [routerLink]="['/proveedores/form/',proveedor.id]" class="btn btn-primary bx bx-edit-alt me-2"></i>
+                <i [routerLink]="['/proveedores/detalle/',proveedor.id]" class="btn btn-success bx bx-info-circle"></i>
               </div>
             </td>
           </tr>
