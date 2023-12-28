@@ -1,0 +1,11 @@
+#btnaggprod {
+  height: min-content;
+  margin-top: 1.9rem !important;
+}
+.bx-x {
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.bx-x:hover {
+  transform: scale(1.5);
+}

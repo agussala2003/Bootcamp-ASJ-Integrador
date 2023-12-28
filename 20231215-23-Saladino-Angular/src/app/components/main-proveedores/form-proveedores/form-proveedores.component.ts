@@ -15,7 +15,7 @@ export class FormProveedoresComponent implements OnInit {
     public router: ActivatedRoute,
     public router2: Router
   ) {}
-  
+
   idProv: string = '';
   paises: any[] = [];
   provincias: any[] = [];
@@ -23,7 +23,7 @@ export class FormProveedoresComponent implements OnInit {
   flagCode: boolean = true;
   existsCode: any = false;
   isCuit: any = true;
-  agregarActualizar:string = '';
+  agregarActualizar: string = '';
 
   ngOnInit(): void {
     this.router.params.subscribe((data) => {
@@ -32,12 +32,14 @@ export class FormProveedoresComponent implements OnInit {
         // Verifico si estamos editando
         this.service.getProvData(this.idProv);
         alert('Vas a editar el proveedor ' + this.idProv);
+        // Cambiamos estas variables para el momento de actualizar
         this.flagCode = false;
-        this.agregarActualizar = 'Actualizar'
+        this.agregarActualizar = 'Actualizar';
       } else {
         // Verifico si estamos es uno nuevo
+        // Cambiamos estas variables para el momento de agregar
         this.flagCode = true;
-        this.agregarActualizar = 'Agregar'
+        this.agregarActualizar = 'Agregar';
         resetearLista(this.service.datosProv);
       }
     });
@@ -62,22 +64,23 @@ export class FormProveedoresComponent implements OnInit {
   // Se agrega el proveedor
   agregarProveedor(form: NgForm) {
     this.service.uploadFakeData().subscribe((data) => {
-      console.log('Agregaste o actualizaste', data)
+      console.log('Agregaste o actualizaste', data);
     });
     form.reset();
+    // Navegamos sin resetear
     this.router2.navigate(['/proveedores']);
   }
   // Se valida que al momento de ingresar uno nuevo no sea uno que ya existe
   codProvExists(): any {
     if (this.idProv === undefined) {
-      this.service.getFakeData().subscribe((data:Proveedor[]) => {
-        console.log(data)
-        const provs:Proveedor[] = data
+      this.service.getFakeData().subscribe((data: Proveedor[]) => {
+        console.log(data);
+        const provs: Proveedor[] = data;
         this.existsCode = provs.find(
           (item: Proveedor) => item.id === this.service.datosProv.id
         );
         return this.existsCode;
-      })
+      });
     }
   }
   // Validamos que sea un cuit

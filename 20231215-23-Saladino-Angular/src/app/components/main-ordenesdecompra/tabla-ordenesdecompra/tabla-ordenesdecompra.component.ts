@@ -9,30 +9,36 @@ import { OrdenesService } from '../../../services/ordenes.service';
 })
 export class TablaOrdenesdecompraComponent implements OnInit {
   constructor(public service: OrdenesService) {}
+
   ordenes: Orden[] = [];
-  userState:any;
+  userState: any;
   total: string = '';
+
   ngOnInit(): void {
     this.actualizarOrdenes();
     this.userState = this.service.getUserState();
   }
-  borrarOrden(idOrden:string) {
-    if(confirm('Estas seguro que deseas eliminar el producto ' + idOrden)) {
+
+  // Cancelamos la orden
+  borrarOrden(idOrden: string) {
+    if (confirm('¿Estas seguro que deseas eliminar la orden ' + idOrden + '?')) {
       this.service.deleteFakeData(idOrden).subscribe((data) => {
-        console.log('Borraste' + data)
+        console.log('Borraste' + data);
       });
-      alert('El producto ' + idOrden + ' ha sido eliminado correctamente!')
+      alert('La orden ' + idOrden + ' ha sido eliminado correctamente!');
       this.actualizarOrdenes();
     } else {
-      alert('El producto ' + idOrden + ' no ha sido eliminado')
+      alert('La orden ' + idOrden + ' no ha sido eliminado');
     }
   }
-  calcTotal(lista:Orden) {
+
+  // Calculamos el total de la orden
+  calcTotal(lista: Orden) {
     if (!lista.Productos || lista.Productos.length === 0) {
       return 0;
     }
     let total = 0;
-    lista.Productos.forEach(producto => {
+    lista.Productos.forEach((producto) => {
       const cantidad = parseInt(producto.Cantidad, 10);
       const subtotal = parseFloat(producto.Subtotal);
       if (!isNaN(cantidad) && !isNaN(subtotal)) {
@@ -41,9 +47,11 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     });
     return total.toFixed(2);
   }
+
+  //Actualizamos las ordenes
   actualizarOrdenes() {
-    this.service.getFakeData().subscribe((data:Orden[]) => {
-      this.ordenes = data
+    this.service.getFakeData().subscribe((data: Orden[]) => {
+      this.ordenes = data;
     });
   }
 }

@@ -1,18 +1,29 @@
 <div class="bg-dark">
   <div *ngIf="userState == true" class="container py-5 p-md-5">
+    <!-- Ruteo -->
     <div class="row">
+      <!-- Breadcrumb -->
       <div class="col-12 col-md-8 d-flex align-items-center">
-        <a class="text-light text-decoration-none" routerLink="/ordenes">Ordenes</a>
-        <i class='bx bx-chevron-right text-light fs-4' ></i>
+        <a class="text-light text-decoration-none" routerLink="/ordenes"
+          >Ordenes</a
+        >
+        <i class="bx bx-chevron-right text-light fs-4"></i>
         <p class="m-0 text-light text-md-nowrap">Tabla</p>
       </div>
-      <div class="col-12 col-md-4 d-flex justify-content-start justify-content-md-end my-3 ">
+      <!-- Breadcrumb -->
+      <div
+        class="col-12 col-md-4 d-flex justify-content-start justify-content-md-end my-3"
+      >
         <a routerLink="/ordenes/form" class="btn btn-primary"
           >Agregar Orden de compra</a
         >
       </div>
     </div>
-    <div *ngIf="ordenes.length > 0" class="table-responsive rounded-3 mt-5 mb-3">
+    <!-- Ruteo -->
+    <div
+      *ngIf="ordenes.length > 0"
+      class="table-responsive rounded-3 mt-5 mb-3"
+    >
       <table class="table align-middle mb-0 bg-white">
         <thead class="bg-light">
           <tr>
@@ -26,39 +37,74 @@
         <tbody>
           <tr *ngFor="let orden of ordenes">
             <td>
-              <p  [ngClass]="orden.Activo ? '' : 'text-decoration-line-through' " class="fw-normal mb-1 text-nowrap text-center">
+              <p
+                [ngClass]="orden.Activo ? '' : 'text-decoration-line-through'"
+                class="fw-normal mb-1 text-nowrap text-center"
+              >
                 {{ orden.id }}
               </p>
             </td>
             <td>
-              <p [ngClass]="orden.Activo ? '' : 'text-decoration-line-through' " class="fw-normal mb-1 text-nowrap">{{ orden.Emision }}</p>
+              <p
+                [ngClass]="orden.Activo ? '' : 'text-decoration-line-through'"
+                class="fw-normal mb-1 text-nowrap"
+              >
+                {{ orden.Emision }}
+              </p>
             </td>
             <td>
-              <p [ngClass]="orden.Activo ? '' : 'text-decoration-line-through' " class="fw-normal mb-1 text-nowrap">{{ orden.Entrega }}</p>
+              <p
+                [ngClass]="orden.Activo ? '' : 'text-decoration-line-through'"
+                class="fw-normal mb-1 text-nowrap"
+              >
+                {{ orden.Entrega }}
+              </p>
             </td>
             <td>
-              <p [ngClass]="orden.Activo ? '' : 'text-decoration-line-through' " class="fw-normal mb-1 text-nowrap text-center">
-                ${{calcTotal(orden)}}
+              <p
+                [ngClass]="orden.Activo ? '' : 'text-decoration-line-through'"
+                class="fw-normal mb-1 text-nowrap text-center"
+              >
+                ${{ calcTotal(orden) }}
               </p>
             </td>
             <td>
               <div class="d-flex">
-                <i [ngClass]="orden.Activo ? '' : 'd-none' " (click)="borrarOrden(orden.id)" class="btn btn-danger bx bx-trash me-2"></i>
+                <i
+                  [ngClass]="orden.Activo ? '' : 'd-none'"
+                  (click)="borrarOrden(orden.id)"
+                  class="btn btn-danger bx bx-trash me-2"
+                ></i>
                 <!-- <i [ngClass]="orden.Activo ? 'd-none' : '' " (click)="borrarOrden(orden.Orden)" class="btn btn-success bx bx-check me-2"></i> -->
-                <i [ngClass]="orden.Activo ? '' : 'd-none' " [routerLink]="['/ordenes/form/',orden.id]" class="btn btn-primary bx bx-edit-alt me-2"></i>
-                <i [routerLink]="['/ordenes/detalle/',orden.id]" class="btn btn-success bx bx-info-circle"></i>
+                <i
+                  [ngClass]="orden.Activo ? '' : 'd-none'"
+                  [routerLink]="['/ordenes/form/', orden.id]"
+                  class="btn btn-primary bx bx-edit-alt me-2"
+                ></i>
+                <i
+                  [routerLink]="['/ordenes/detalle/', orden.id]"
+                  class="btn btn-success bx bx-info-circle"
+                ></i>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <!-- Mostramos un mensaje si no hay ordenes -->
     <div *ngIf="ordenes.length == 0">
-      <h3 class="text-light text-center">No tiene proveedores en tu lista! Por favor agregar alguno</h3>
+      <h3 class="text-light text-center">
+        No tiene ordenes en tu lista! Por favor agregar alguno
+      </h3>
     </div>
+    <!-- Mostramos un mensaje si no hay ordenes -->
   </div>
+  <!-- Verificamos el estado del usuario -->
   <div *ngIf="userState == null" class="container py-5 p-md-5">
-    <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
+    <h3 class="text-light text-center">
+      Necesitas un nivel de usuario mas alto
+    </h3>
     <app-navigation-home></app-navigation-home>
   </div>
+  <!-- Verificamos el estado del usuario -->
 </div>

@@ -1,17 +1,21 @@
 <div class="bg-dark">
   <div *ngIf="userState == true" class="container py-5 p-md-5">
+    <!-- Ruteo -->
     <div class="row">
+      <!-- Breadcrumb -->
       <div class="col-12 col-md-9 d-flex align-items-center">
         <a class="text-light text-decoration-none" routerLink="/proveedores">Proveedores</a>
         <i class='bx bx-chevron-right text-light fs-4' ></i>
         <p class="m-0 text-light">Tabla</p>
       </div>
+      <!-- Breadcrumb -->
       <div class="col-12 col-md-3 d-flex justify-content-md-end my-3">
         <a routerLink="/proveedores/form" class="btn btn-primary"
           >Agregar Proveedor</a
         >
       </div>
     </div>
+    <!-- Ruteo -->
     <div *ngIf="proveedores.length > 0" class="table-responsive rounded-3 mt-5 mb-3">
       <table class="table align-middle mb-0 bg-white">
         <thead class="bg-light">
@@ -65,12 +69,16 @@
         </tbody>
       </table>
     </div>
+    <!-- Mostramos un mensaje si no tiene productos -->
     <div *ngIf="proveedores.length == 0">
       <h3 class="text-light text-center">No tiene proveedores en tu lista! Por favor agregar alguno</h3>
     </div>
+    <!-- Mostramos un mensaje si no tiene productos -->
   </div>
+  <!-- Validamos si el usuario esta logueado -->
   <div *ngIf="userState == null" class="container py-5 p-md-5">
     <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
     <app-navigation-home></app-navigation-home>
   </div>
+  <!-- Validamos si el usuario esta logueado -->
 </div>

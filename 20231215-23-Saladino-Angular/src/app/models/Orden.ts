@@ -10,6 +10,7 @@ export type Orden = {
 };
 export interface CalcOrden {
   Sku:string;
+  Nombre:string;
   Cantidad:string;
   Subtotal:string;
 }

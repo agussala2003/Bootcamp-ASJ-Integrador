@@ -30,9 +30,11 @@ export class FormProductosyserviciosComponent implements OnInit {
     'Moda',
     'Hogar',
   ];
+
   flagCode: boolean = true;
   isActiveSku: any = false;
-  agregarActualizar:string = '';
+  agregarActualizar: string = '';
+  isNumberCode: boolean = true;
 
   ngOnInit(): void {
     this.router.params.subscribe((data) => {
@@ -42,11 +44,11 @@ export class FormProductosyserviciosComponent implements OnInit {
         this.service.getProdData(this.idProdServ);
         alert('Vas a editar el producto ' + this.idProdServ);
         this.flagCode = false;
-        this.agregarActualizar = 'Actualizar'
+        this.agregarActualizar = 'Actualizar';
       } else {
         // Verificamos si es uno nuevo
         this.flagCode = true;
-        this.agregarActualizar = 'Agregar'
+        this.agregarActualizar = 'Agregar';
         // Se resetea la lista cada vez que se quiera ingresar uno nuevo
         resetearLista(this.service.datosProd);
       }
@@ -54,28 +56,38 @@ export class FormProductosyserviciosComponent implements OnInit {
     //Obtenemos el estado del usuario
     this.userState = this.service.getUserState();
     //Obtenemos los proveedores ACTIVOS para poder ser seleccionados
-    this.servicioProveedor.getFakeData().subscribe((data:Proveedor[]) => {
+    this.servicioProveedor.getFakeData().subscribe((data: Proveedor[]) => {
       this.proveedores = data;
-    })
-    this.proveedores = this.proveedores.filter((proveedor: Proveedor) => proveedor.Activo);
+      this.proveedores = this.proveedores.filter(
+        (proveedor: Proveedor) => proveedor.Activo
+      );
+    });
   }
+  // Agregamos un producto o servicio
   agregarProductoyservicio(form: NgForm) {
     this.service.uploadFakeData().subscribe((data) => {
-      console.log('Agregaste o actualizate' + data)
+      console.log('Agregaste o actualizate' + data);
     });
     form.reset();
     this.router2.navigate(['/productos-servicios']);
   }
-  // Validamos si ya existe el SKU al momento de ingresar uno 
+  // Validamos si ya existe el SKU al momento de ingresar uno
   skuExists() {
     if (this.idProdServ === undefined) {
-      this.service.getFakeData().subscribe((data:ProductoyServicio[]) => {
-        const prods = data;
-        this.isActiveSku = prods.find(
-          (item: ProductoyServicio) => item.id === this.service.datosProd.id
-        );
-        return this.isActiveSku;
-      })
+        // Agregar la validación de que el código sea numérico
+        if (!/^\d+$/.test(this.service.datosProd.id)) {
+            // El código no es numérico, puedes manejar la lógica correspondiente aquí
+            console.log('El código debe ser numérico');
+            this.isNumberCode = false;
+        } else {
+          this.isNumberCode = true;
+        }
+        this.service.getFakeData().subscribe((data: ProductoyServicio[]) => {
+            const prods = data;
+            this.isActiveSku = prods.find(
+                (item: ProductoyServicio) => item.id === this.service.datosProd.id
+            );
+        });
     }
   }
 }

@@ -1,15 +1,19 @@
 <div class="bg-dark">
   <div *ngIf="userState == true" class="container py-5 p-md-5">
+    <!-- Ruteo -->
     <div class="row">
+      <!-- Breadcrumb -->
       <div class="col-12 col-md-9 d-flex align-items-center">
         <a class="text-light text-decoration-none" routerLink="/productos-servicios">Productos y Servicios</a>
         <i class='bx bx-chevron-right text-light fs-4' ></i>
         <p class="m-0 text-light text-md-nowrap">Formulario <span *ngIf="this.service.datosProd.id != ''">Producto {{this.service.datosProd.id}}</span></p>
       </div>
+      <!-- Breadcrumb -->
       <div class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end my-3 ">
         <a routerLink="/productos-servicios" class="btn btn-primary">Volver a la lista</a>
       </div>
     </div>
+    <!-- Ruteo -->
     <form #formProdyServ="ngForm" (ngSubmit)="agregarProductoyservicio(formProdyServ)">
     <div class="row">
       <div class="col-12 col-md-3 mb-2">
@@ -24,14 +28,17 @@
           placeholder="Ingese Codigo / Sku"
           class="form-control text-uppercase"
           minlength="8"
-          maxlength="12"
+          maxlength="8"
           (keyup)="skuExists()"
         />
         <div *ngIf="formProdyServ.controls['sku']?.hasError('required')" class="col-auto">
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
         <div *ngIf="formProdyServ.controls['sku']?.hasError('minlength')" class="col-auto">
-          <span class="form-text text-light">Alphanumerico de 8 o mas digitos</span>
+          <span class="form-text text-light">Codigo de 8 o mas digitos</span>
+        </div>
+        <div *ngIf="!this.isNumberCode" class="col-auto">
+          <span class="form-text text-light">Debe ser numerico</span>
         </div>
         <div *ngIf="this.isActiveSku" class="col-auto">
           <span class="form-text text-light"> Ingresa un codigo que no exista </span>
@@ -42,6 +49,7 @@
           >Codigo Proveedor:</label
         >
         <select
+          [disabled]="!flagCode"
           [(ngModel)]="this.service.datosProd.Proveedor"
           for="seleccCodProv"
           id="seleccCodProv"
@@ -151,7 +159,7 @@
     <div class="row">
       <div class="col-12 mt-2">
         <button
-          [disabled]="!formProdyServ.valid || this.isActiveSku"
+          [disabled]="!formProdyServ.valid || this.isActiveSku || !this.isNumberCode"
           type="submit"
           class="btn btn-success">
          {{agregarActualizar}}
@@ -160,8 +168,10 @@
     </div>
   </form>
   </div>
+  <!-- Verificamos el estado del usuario -->
   <div *ngIf="userState == null" class="container py-5 p-md-5">
     <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
     <app-navigation-home></app-navigation-home>
   </div>
+  <!-- Verificamos el estado del usuario -->
 </div>

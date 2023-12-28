@@ -1,164 +1,262 @@
 <div class="bg-dark">
   <div *ngIf="userState == true" class="container py-5 p-md-5">
+    <!-- Ruteo -->
     <div class="row">
       <div class="row">
+        <!-- Breadcrumb -->
         <div class="col-12 col-md-9 d-flex align-items-center">
-          <a class="text-light text-decoration-none" routerLink="/ordenes">Ordenes</a>
-          <i class='bx bx-chevron-right text-light fs-4' ></i>
-          <p class="m-0 text-light text-md-nowrap">Formulario <span *ngIf="this.service.datosOrd.id != ''">Orden {{this.service.datosOrd.id}}</span></p>
+          <a class="text-light text-decoration-none" routerLink="/ordenes"
+            >Ordenes</a
+          >
+          <i class="bx bx-chevron-right text-light fs-4"></i>
+          <p class="m-0 text-light text-md-nowrap">
+            Formulario
+            <span *ngIf="this.service.datosOrd.id != ''"
+              >Orden {{ this.service.datosOrd.id }}</span
+            >
+          </p>
         </div>
-        <div class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end my-3 ">
+        <!-- Breadcrumb -->
+        <div
+          class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end my-3"
+        >
           <a routerLink="/ordenes" class="btn btn-primary">Volver a la lista</a>
         </div>
       </div>
+      <!-- Ruteo -->
       <form #formOrd="ngForm" (ngSubmit)="agregarOrden(formOrd)">
-    <div class="row">
-      <div class="col-12 col-md-3 mb-2">
-        <label for="orden" class="form-label text-light"
-          >Numero de orden:</label
-        >
-        <input
-          [disabled]="!flagCode"
-          [(ngModel)]="this.service.datosOrd.id"
-          required
-          type="text"
-          id="orden"
-          name="orden"
-          placeholder="Ingese su numero de orden"
-          class="form-control"
-          min="1"
-          (keyup)="ordenExists()"
-        />
-        <div *ngIf="formOrd.controls['orden']?.hasError('required')" class="col-auto">
-          <span class="form-text text-light">El dato es obligatorio</span>
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <div class="row">
+              <div class="col-12 col-md-6 mb-2">
+                <label for="orden" class="form-label text-light"
+                  >Numero de orden:</label
+                >
+                <input
+                  [disabled]="!flagCode"
+                  [(ngModel)]="this.service.datosOrd.id"
+                  required
+                  type="text"
+                  id="orden"
+                  name="orden"
+                  placeholder="Ingese su numero de orden"
+                  class="form-control"
+                  minlength="1"
+                  maxlength="12"
+                  (keyup)="ordenExists()"
+                />
+                <div
+                  *ngIf="formOrd.controls['orden']?.hasError('required')"
+                  class="col-auto"
+                >
+                  <span class="form-text text-light"
+                    >El dato es obligatorio</span
+                  >
+                </div>
+                <div
+                  *ngIf="formOrd.controls['orden']?.hasError('minlenght')"
+                  class="col-auto"
+                >
+                  <span class="form-text text-light">Mayor a 1</span>
+                </div>
+                <div *ngIf="!this.isNumberCode" class="col-auto">
+                  <span class="form-text text-light">Debe ser numerico</span>
+                </div>
+                <div *ngIf="this.isActiveOrden" class="col-auto">
+                  <span class="form-text text-light">
+                    Ingresa una orden que no exista
+                  </span>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 mb-2">
+                <label for="seleccCodProv" class="form-label text-light"
+                  >Codigo Proveedor:</label
+                >
+                <select
+                  [disabled]="this.isProductsInOrden"
+                  [(ngModel)]="this.service.datosOrd.Proveedor"
+                  for="seleccCodProv"
+                  class="form-select"
+                  name="seleccCodProv"
+                  id="seleccCodProv"
+                  aria-label="Default select example"
+                  (click)="prod = ''"
+                >
+                  <option value="" selected disabled>
+                    Selecciona un proveedor
+                  </option>
+                  <option
+                    *ngFor="let prov of proveedores"
+                    value="{{ prov.RazonSocial }}"
+                  >
+                    {{ prov.RazonSocial }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-12 col-md-5 mb-2">
+                <label for="seleccCodProd" class="form-label text-light"
+                  >Codigo / Sku:</label
+                >
+                <select
+                  (click)="searchProds(this.service.datosOrd.Proveedor)"
+                  [disabled]="this.service.datosOrd.Proveedor == ''"
+                  [(ngModel)]="prod"
+                  for="seleccCodProd"
+                  name="seleccCodProd"
+                  id="seleccCodProd"
+                  class="form-select"
+                  aria-label="Default select example"
+                  required
+                >
+                  <option value="" selected>Selecciona un Cod. / Sku</option>
+                  <option *ngFor="let prod of productos" value="{{ prod.id }}">
+                    {{ prod.Producto + " - " + "$" + prod.Precio }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="this.service.datosOrd.Proveedor == ''"
+                  class="col-auto"
+                >
+                  <span class="form-text text-light"
+                    >Debes elegir un proveedor</span
+                  >
+                </div>
+              </div>
+              <div class="col-12 col-md-4 mb-2">
+                <label for="cantidad" class="form-label text-light"
+                  >Cantidad:</label
+                >
+                <input
+                  [(ngModel)]="cant"
+                  min="1"
+                  required
+                  type="number"
+                  id="cantidad"
+                  name="cantidad"
+                  placeholder="Ingese cantidad"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-12 col-md-3 mb-2 d-flex justify-content-end">
+                <button
+                  id="btnaggprod"
+                  name="btn"
+                  [disabled]="
+                    cant == '' || prod == '' || cant == null || prod == null
+                  "
+                  (click)="agregarProd()"
+                  type="button"
+                  class="btn btn-primary mt-1 w-100"
+                >
+                  Agregar
+                </button>
+              </div>
+              <div class="col-12 col-md-6 mb-2">
+                <label for="emision" class="form-label text-light text-nowrap"
+                  >Fecha de emision:</label
+                >
+                <input
+                  [(ngModel)]="this.service.datosOrd.Emision"
+                  required
+                  type="date"
+                  id="emision"
+                  name="emision"
+                  placeholder="Ingese fecha de emision"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-12 col-md-6 mb-2">
+                <label for="entrega" class="form-label text-light text-nowrap"
+                  >Fecha de entrega:</label
+                >
+                <input
+                  [(ngModel)]="this.service.datosOrd.Entrega"
+                  required
+                  type="date"
+                  id="entrega"
+                  name="entrega"
+                  placeholder="Ingese fecha de entrega"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-12 mb-2">
+                <label for="infoRecepcion" class="form-label text-light"
+                  >Informacion de recepcion:</label
+                >
+                <input
+                  [(ngModel)]="this.service.datosOrd.InfoRecepcion"
+                  required
+                  type="text"
+                  id="infoRecepcion"
+                  name="infoRecepcion"
+                  placeholder="Ingese informacion de recepcion"
+                  class="form-control"
+                />
+              </div>
+              <div class="col-12 mt-2">
+                <button
+                  [disabled]="
+                    !formOrd.valid ||
+                    this.service.datosOrd.Productos.length == 0 ||
+                    this.isActiveOrden ||
+                    !this.isNumberCode
+                  "
+                  type="submit"
+                  class="btn btn-success"
+                >
+                  {{ agregarActualizar }}
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Mostramos el listado de los productos que se van agregando -->
+          <div class="col-12 col-md-6">
+            <h4 class="mt-3 text-light text-center">
+              {{
+                this.service.datosOrd.Productos.length > 0
+                  ? "Productos en la orden"
+                  : "No tienes productos en la orden"
+              }}
+            </h4>
+            <div
+              class="mt-3"
+              *ngIf="this.service.datosOrd.Productos.length > 0"
+            >
+              <p
+                class="text-light d-flex justify-content-center"
+                *ngFor="
+                  let productoComp of this.service.datosOrd.Productos;
+                  index as i
+                "
+              >
+                {{
+                  productoComp.Nombre +
+                    " - " +
+                    productoComp.Cantidad +
+                    " - $" +
+                    productoComp.Subtotal
+                }}
+                <i
+                  (click)="deleteProd(i)"
+                  class="ms-3 bx bx-x text-light fs-4"
+                ></i>
+              </p>
+            </div>
+            <h5 class="mt-3 text-light text-end">
+              Total ${{ this.service.datosOrd.Total }}
+            </h5>
+          </div>
+          <!-- Mostramos el listado de los productos que se van agregando -->
         </div>
-        <div *ngIf="formOrd.controls['orden']?.hasError('min')" class="col-auto">
-          <span class="form-text text-light">Mayor a 1</span>
-        </div>
-        <div *ngIf="this.isActiveOrden" class="col-auto">
-          <span class="form-text text-light"> Ingresa una orden que no exista </span>
-        </div>
-      </div>
-      <div class="col-12 col-md-3 mb-2">
-        <label for="seleccCodProv" class="form-label text-light"
-          >Codigo Proveedor:</label
-        >
-        <select
-          [disabled]="this.isProductsInOrden"
-          [(ngModel)]="this.service.datosOrd.Proveedor"
-          for="seleccCodProv"
-          class="form-select"
-          name="seleccCodProv"
-          id="seleccCodProv"
-          aria-label="Default select example"
-          (click)="prod = ''"
-        >
-          <option value="" selected disabled>Selecciona un proveedor</option>
-          <option *ngFor="let prov of proveedores" value="{{prov.RazonSocial}}">{{prov.RazonSocial}}</option>
-        </select>
-      </div>
-      <div class="col-12 col-md-3 mb-2">
-        <label for="seleccCodProd" class="form-label text-light"
-          >Codigo / Sku:</label
-        >
-        <select
-          (click)="searchProds(this.service.datosOrd.Proveedor)"
-          [disabled]="this.service.datosOrd.Proveedor == ''"
-          [(ngModel)]="prod"
-          for="seleccCodProd"
-          name="seleccCodProd"
-          id="seleccCodProd"
-          class="form-select"
-          aria-label="Default select example"
-          required
-        >
-          <option value="" selected>Selecciona un Cod. / Sku</option>
-          <option *ngFor="let prod of productos" value="{{prod.id}}">{{prod.id + ' - ' + '$' + prod.Precio}}</option>
-        </select>
-        <div *ngIf="this.service.datosOrd.Proveedor == ''" class="col-auto">
-          <span class="form-text text-light">Debes elegir un proveedor</span>
-        </div>
-      </div>
-      <div class="col-12 col-md-3 mb-2">
-        <label for="cantidad" class="form-label text-light">Cantidad:</label>
-        <input
-          [(ngModel)]="cant"
-          min="1"
-          required
-          type="number"
-          id="cantidad"
-          name="cantidad"
-          placeholder="Ingese cantidad"
-          class="form-control"
-        />
-      </div>
-      <div class="row">
-        <div class="col-12 mb-2 d-flex justify-content-end ">
-            <button [disabled]="cant == '' || prod == '' || cant == null || prod == null" (click)="agregarProd()" type="button" class="btn btn-primary mt-1">Agregar</button>
-        </div>
-      </div>
-      <div class="col-12 col-md-3 mb-2">
-        <label for="emision" class="form-label text-light"
-          >Fecha de emision:</label
-        >
-        <input
-          [(ngModel)]="this.service.datosOrd.Emision"
-          required
-          type="date"
-          id="emision"
-          name="emision"
-          placeholder="Ingese fecha de emision"
-          class="form-control"
-        />
-      </div>
-      <div class="col-12 col-md-3 mb-2">
-        <label for="entrega" class="form-label text-light"
-          >Fecha de entrega:</label
-        >
-        <input
-          [(ngModel)]="this.service.datosOrd.Entrega"
-          required
-          type="date"
-          id="entrega"
-          name="entrega"
-          placeholder="Ingese fecha de entrega"
-          class="form-control"
-        />
-      </div>
-      <div class="col-12 col-md-6 mb-2">
-        <label for="infoRecepcion" class="form-label text-light"
-          >Informacion de recepcion:</label
-        >
-        <input
-          [(ngModel)]="this.service.datosOrd.InfoRecepcion"
-          required
-          type="text"
-          id="infoRecepcion"
-          name="infoRecepcion"
-          placeholder="Ingese informacion de recepcion"
-          class="form-control"
-        />
-      </div>
-      <div class="col-12 mt-2">
-        <button
-        [disabled]="!formOrd.valid || this.service.datosOrd.Productos.length == 0 || this.isActiveOrden"
-          type="submit"
-          class="btn btn-success"
-        >
-          {{agregarActualizar}}
-        </button>
-      </div> 
-      <div class="col-12 mt-2">
-        <div *ngIf="this.service.datosOrd.Productos.length > 0">
-          <h4 class="mt-1 text-light">Productos en la orden</h4>
-            <p class="text-light d-flex " *ngFor="let productoComp of this.service.datosOrd.Productos;index as i">{{productoComp.Sku + ' - ' + productoComp.Cantidad + ' - $' + productoComp.Subtotal}} <i (click)="deleteProd(i)" class='ms-3 bx bx-x text-light fs-4'></i></p>
-        </div>
-      </div>      
+      </form>
     </div>
-    </form>
-  </div>
-  <div *ngIf="userState == null" class="container py-5 p-md-5">
-    <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
-    <app-navigation-home></app-navigation-home>
+    <!-- Verificamos el estado del usuario -->
+    <div *ngIf="userState == null" class="container py-5 p-md-5">
+      <h3 class="text-light text-center">
+        Necesitas un nivel de usuario mas alto
+      </h3>
+      <app-navigation-home></app-navigation-home>
+    </div>
+    <!-- Verificamos el estado del usuario -->
   </div>
 </div>
