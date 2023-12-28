@@ -330,7 +330,7 @@
       <!-- Botones para realizar las acciones en el detalle -->
       <div class="d-flex">
         <a
-          (click)="borrarProveedor(this.service.datosProv.id)"
+          data-bs-toggle="modal" data-bs-target="#exampleModal" 
           class="btn btn-danger me-2"
           >Eliminar</a
         >
@@ -351,4 +351,23 @@
     <app-navigation-home></app-navigation-home>
   </div>
   <!-- Mensaje en caso de que el usuario no este logueado -->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+             Deseas eliminar el proveedor "{{this.service.datosProv.RazonSocial}}"?"
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarProveedor(this.service.datosProv.id)">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
 </div>

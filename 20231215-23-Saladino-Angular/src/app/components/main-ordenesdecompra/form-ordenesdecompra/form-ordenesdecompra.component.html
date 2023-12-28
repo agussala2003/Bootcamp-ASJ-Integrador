@@ -178,6 +178,9 @@
                   placeholder="Ingese fecha de entrega"
                   class="form-control"
                 />
+                <div class="col-auto" *ngIf="validateStringDates(this.service.datosOrd.Emision,this.service.datosOrd.Entrega)">
+                  <span class="form-text text-light">La fecha de entrega debe ser posterior a la emision</span>
+                </div>
               </div>
               <div class="col-12 mb-2">
                 <label for="infoRecepcion" class="form-label text-light"
@@ -195,17 +198,22 @@
               </div>
               <div class="col-12 mt-2">
                 <button
+                  data-bs-toggle="modal" data-bs-target="#exampleModal" 
                   [disabled]="
-                    !formOrd.valid ||
-                    this.service.datosOrd.Productos.length == 0 ||
+                    (!formOrd.valid &&
+                    this.service.datosOrd.Productos.length == 0) ||
                     this.isActiveOrden ||
-                    !this.isNumberCode
+                    !this.isNumberCode ||
+                    validateStringDates(this.service.datosOrd.Emision,this.service.datosOrd.Entrega)
                   "
-                  type="submit"
+                  type="button"
                   class="btn btn-success"
                 >
                   {{ agregarActualizar }}
                 </button>
+              </div>
+              <div *ngIf="!formOrd.valid || this.service.datosOrd.Productos.length == 0 || this.isActiveOrden || !this.isNumberCode || validateStringDates(this.service.datosOrd.Emision,this.service.datosOrd.Entrega)" class="col-12 mt-2">
+                <p class="text-light">Asegurate de que todos los campos esten completos correctamente y ten al menos un producto en la orden</p>
               </div>
             </div>
           </div>
@@ -248,6 +256,25 @@
           </div>
           <!-- Mostramos el listado de los productos que se van agregando -->
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Deseas {{agregarActualizar | lowercase}} la orden "{{this.service.datosOrd.id}}"?"
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal -->
       </form>
     </div>
     <!-- Verificamos el estado del usuario -->

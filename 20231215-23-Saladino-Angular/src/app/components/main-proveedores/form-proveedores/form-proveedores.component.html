@@ -592,14 +592,37 @@
       <div class="row">
         <div class="col-12 mt-2">
           <button
+            data-bs-toggle="modal" data-bs-target="#exampleModal" 
             [disabled]="!formProv.valid || this.existsCode || !this.isCuit"
-            type="submit"
+            type="button"
             class="btn btn-success"
           >
             {{ agregarActualizar }}
           </button>
         </div>
+        <div *ngIf="!formProv.valid || this.existsCode || !this.isCuit" class="col-12 mt-2">
+          <p class="text-light">Asegurate de tener todos los campos completos correctamente</p>
+        </div>
       </div>
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Deseas {{agregarActualizar | lowercase}} el proveedor "{{this.service.datosProv.RazonSocial}}"?"
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal -->
     </form>
   </div>
   <!-- Validamos si el usuario esta logueado -->

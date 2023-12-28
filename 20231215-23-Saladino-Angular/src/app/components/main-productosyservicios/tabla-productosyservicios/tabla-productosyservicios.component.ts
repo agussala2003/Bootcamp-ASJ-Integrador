@@ -25,20 +25,15 @@ export class TablaProductosyserviciosComponent implements OnInit {
   }
   // Borramos un producto o servicio
   borrarProductoyservicio(idProd: string) {
-    if (confirm('¿Estás seguro de que deseas eliminar el producto ' + idProd + '?')) {
-      this.service.deleteFakeData(idProd).subscribe(
-        () => {
-          console.log(idProd);
-          alert('El producto ' + idProd + ' ha sido eliminado correctamente!');
-          this.actualizarListaProductoyServicios();
-        },
-        (error) => {
-          console.error('Error al eliminar el producto:', error);
-        }
-      );
-    } else {
-      alert('El producto ' + idProd + ' no ha sido eliminado');
-    }
+    this.service.deleteFakeData(idProd).subscribe(
+      () => {
+        console.log(idProd);
+        this.actualizarListaProductoyServicios();
+      },
+      (error) => {
+        console.error('Error al eliminar el producto:', error);
+      }
+    );
   }
 
   // Actualizamos todos los productos

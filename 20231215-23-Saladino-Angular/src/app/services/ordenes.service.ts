@@ -34,7 +34,6 @@ export class OrdenesService {
     const newOrden: Orden = { ...this.datosOrd };
     if (index !== -1) {
       // Si existe, actualiza el elemento en la posición index
-      alert('Ya tienes uno con esa orden. Actualizando...');
       this.lista[index] = newOrden;
       return this.http.patch<Orden>(
         `http://localhost:3000/ordenes/${this.lista[index].id}`,
@@ -42,7 +41,6 @@ export class OrdenesService {
       );
     } else {
       // Si no existe, agrega el nuevo elemento
-      alert('No existe. Agregando...');
       return this.http.post<Orden>('http://localhost:3000/ordenes', newOrden);
     }
   }

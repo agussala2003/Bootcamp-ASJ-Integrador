@@ -21,15 +21,10 @@ export class TablaOrdenesdecompraComponent implements OnInit {
 
   // Cancelamos la orden
   borrarOrden(idOrden: string) {
-    if (confirm('¿Estas seguro que deseas eliminar la orden ' + idOrden + '?')) {
-      this.service.deleteFakeData(idOrden).subscribe((data) => {
-        console.log('Borraste' + data);
-      });
-      alert('La orden ' + idOrden + ' ha sido eliminado correctamente!');
-      this.actualizarOrdenes();
-    } else {
-      alert('La orden ' + idOrden + ' no ha sido eliminado');
-    }
+    this.service.deleteFakeData(idOrden).subscribe((data) => {
+      console.log('Borraste' + data);
+    });
+    this.actualizarOrdenes();
   }
 
   // Calculamos el total de la orden

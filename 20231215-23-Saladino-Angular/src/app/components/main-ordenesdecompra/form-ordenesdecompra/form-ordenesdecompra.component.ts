@@ -41,7 +41,6 @@ export class FormOrdenesdecompraComponent implements OnInit {
         // Verificamos si estamos editando uno
         this.service.getProdData(this.idOrden);
         console.log(this.service.datosOrd);
-        alert('Vas a editar el producto ' + this.idOrden);
         this.isProductsInOrden = true;
         this.flagCode = false;
         this.agregarActualizar = 'Actualizar';
@@ -150,8 +149,12 @@ export class FormOrdenesdecompraComponent implements OnInit {
       });
     }
   }
-  //
-
+  //Validacion de las fechas
+  validateStringDates(date :string , currentDate : string){
+    const dateDate = new Date(date);
+    const currentDateDate = new Date(currentDate);
+    return dateDate >= currentDateDate
+  }
   // Validacion para que sea solo 1 proveedor
   validacionProveedor() {
     this.service.datosOrd.Productos.length > 0

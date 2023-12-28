@@ -60,7 +60,7 @@
             </td>
             <td>
               <div class="d-flex">
-                <i (click)="borrarProveedor(proveedor.id)" class="btn btn-danger bx bx-trash me-2"></i>
+                <i (click)="this.service.getProvData(proveedor.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash me-2"></i>
                 <i [routerLink]="['/proveedores/form/',proveedor.id]" class="btn btn-primary bx bx-edit-alt me-2"></i>
                 <i [routerLink]="['/proveedores/detalle/',proveedor.id]" class="btn btn-success bx bx-info-circle"></i>
               </div>
@@ -81,4 +81,23 @@
     <app-navigation-home></app-navigation-home>
   </div>
   <!-- Validamos si el usuario esta logueado -->
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+           Deseas eliminar el proveedor "{{this.service.datosProv.RazonSocial}}"?"
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarProveedor(this.service.datosProv.id)">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
 </div>

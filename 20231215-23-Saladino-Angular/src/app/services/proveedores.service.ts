@@ -56,7 +56,6 @@ export class ProveedoresService {
     nuevoProveedor.DatosContacto = { ...this.datosProv.DatosContacto };
     if (index !== -1) {
       // Si existe, actualiza el elemento en la posición index
-      alert('Ya tienes uno de ese proveedor. Actualizando...');
       this.lista[index] = nuevoProveedor;
       this.lista[index].Direccion = nuevoProveedor.Direccion;
       this.lista[index].DatosFiscales = nuevoProveedor.DatosFiscales;
@@ -67,7 +66,6 @@ export class ProveedoresService {
       );
     } else {
       // Si no existe, agrega el nuevo elemento
-      alert('No existe. Agregando...');
       return this.http.post<Proveedor>(
         'http://localhost:3000/proveedores',
         nuevoProveedor

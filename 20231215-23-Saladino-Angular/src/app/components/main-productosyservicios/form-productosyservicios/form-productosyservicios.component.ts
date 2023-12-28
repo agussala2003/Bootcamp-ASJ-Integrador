@@ -42,7 +42,6 @@ export class FormProductosyserviciosComponent implements OnInit {
       if (this.idProdServ !== undefined) {
         // Verficamos si es uno editado
         this.service.getProdData(this.idProdServ);
-        alert('Vas a editar el producto ' + this.idProdServ);
         this.flagCode = false;
         this.agregarActualizar = 'Actualizar';
       } else {

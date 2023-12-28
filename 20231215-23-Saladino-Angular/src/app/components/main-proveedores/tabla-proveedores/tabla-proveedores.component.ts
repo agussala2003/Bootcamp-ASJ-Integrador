@@ -18,15 +18,10 @@ export class TablaProveedoresComponent implements OnInit {
   }
   //Funcion para hacer un borrado logico del proveedor
   borrarProveedor(idProv: string) {
-    if (confirm('¿Estas seguro que deseas eliminar el proveedor ' + idProv + '?')) {
-      this.service.deleteFakeData(idProv).subscribe((data) => {
-        console.log('Se elimino el proveedor' + data);
-      });
-      alert('El proveedor ' + idProv + ' ha sido eliminado correctamente!');
-      this.actualizarListaProveedores();
-    } else {
-      alert('El proveedor ' + idProv + ' no ha sido eliminado');
-    }
+    this.service.deleteFakeData(idProv).subscribe((data) => {
+      console.log('Se elimino el proveedor' + data);
+    });
+    this.actualizarListaProveedores();
   }
   //Funcion obtener constantemente los proveedores
   actualizarListaProveedores() {

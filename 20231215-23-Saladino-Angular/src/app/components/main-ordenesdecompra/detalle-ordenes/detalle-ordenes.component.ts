@@ -26,14 +26,9 @@ export class DetalleOrdenesComponent {
   }
   // Cancelacion de orden
   borrarOrden(idOrden: string) {
-    if (confirm('Estas seguro que deseas eliminar la orden ' + idOrden)) {
-      this.service.deleteFakeData(idOrden).subscribe((data) => {
-        console.log('Borraste' + data);
-      });
-      alert('La orden ' + idOrden + ' ha sido eliminado correctamente!');
-      this.router2.navigate(['/ordenes']);
-    } else {
-      alert('La orden ' + idOrden + ' no ha sido eliminado');
-    }
+    this.service.deleteFakeData(idOrden).subscribe((data) => {
+      console.log('Borraste' + data);
+    });
+    this.router2.navigate(['/ordenes']);
   }
 }

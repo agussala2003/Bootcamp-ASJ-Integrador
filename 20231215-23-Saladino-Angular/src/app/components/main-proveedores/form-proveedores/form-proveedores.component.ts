@@ -31,7 +31,6 @@ export class FormProveedoresComponent implements OnInit {
       if (this.idProv !== undefined) {
         // Verifico si estamos editando
         this.service.getProvData(this.idProv);
-        alert('Vas a editar el proveedor ' + this.idProv);
         // Cambiamos estas variables para el momento de actualizar
         this.flagCode = false;
         this.agregarActualizar = 'Actualizar';

@@ -36,7 +36,6 @@ export class ProductosyserviciosService {
     const newProd: ProductoyServicio = { ...this.datosProd };
     if (index !== -1) {
       // Si existe, actualiza el elemento en la posición index
-      alert('Ya tienes uno con ese sku. Actualizando...');
       this.lista[index] = newProd;
       return this.http.patch<ProductoyServicio>(
         `http://localhost:3000/productos/${this.lista[index].id}`,
@@ -44,7 +43,6 @@ export class ProductosyserviciosService {
       );
     } else {
       // Si no existe, agrega el nuevo elemento
-      alert('No existe. Agregando...');
       return this.http.post<ProductoyServicio>(
         'http://localhost:3000/productos',
         newProd
