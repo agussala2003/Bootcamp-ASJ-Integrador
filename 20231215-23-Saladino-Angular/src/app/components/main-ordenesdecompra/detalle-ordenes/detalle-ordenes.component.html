@@ -185,7 +185,7 @@
           </div>
         </div>
         <!-- Acciones desde el detalle -->
-        <div class="d-flex">
+        <div *ngIf="this.service.datosOrd.Activo === true" class="d-flex">
           <a
             data-bs-toggle="modal" data-bs-target="#exampleModal" 
             class="btn btn-danger me-2"
@@ -218,7 +218,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-           Deseas eliminar la orden "{{this.service.datosOrd.id}}"?"
+           Deseas cancelar la orden "{{this.service.datosOrd.id}}"?"
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
