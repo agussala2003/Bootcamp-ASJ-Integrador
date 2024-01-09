@@ -41,3 +41,6 @@
     -ms-transform: rotate(-45deg) translate(-1px,0px);
     -o-transform: rotate(-45deg) translate(-1px,0px)
 }
+.main {
+    min-height: 80vh;
+}
