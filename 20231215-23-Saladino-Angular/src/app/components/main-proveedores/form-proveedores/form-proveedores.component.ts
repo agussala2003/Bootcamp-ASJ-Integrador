@@ -3,6 +3,8 @@ import { ProveedoresService } from '../../../services/proveedores.service';
 import { Proveedor } from '../../../models/Proveedor';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Rubro } from '../../../models/Rubro';
+import { RubrosService } from '../../../services/rubros.service';
 
 @Component({
   selector: 'app-form-proveedores',
@@ -13,7 +15,8 @@ export class FormProveedoresComponent implements OnInit {
   constructor(
     public service: ProveedoresService,
     public router: ActivatedRoute,
-    public router2: Router
+    public router2: Router,
+    public servicioRubro: RubrosService
   ) {}
 
   idProv: string = '';
@@ -24,6 +27,7 @@ export class FormProveedoresComponent implements OnInit {
   existsCode: any = false;
   isCuit: any = true;
   agregarActualizar: string = '';
+  rubros: Rubro[] = [];
 
   ngOnInit(): void {
     this.router.params.subscribe((data) => {
@@ -48,6 +52,10 @@ export class FormProveedoresComponent implements OnInit {
     });
     // Obtenemos el estado del usuario
     this.userState = this.service.getUserState();
+    // Obtenemos los Rubros
+    this.servicioRubro.getFakeData().subscribe((data:Rubro[]) =>{
+      this.rubros = data
+    })
   }
   // Buscamos las provincias de cada pais
   buscarPais(pais: string) {

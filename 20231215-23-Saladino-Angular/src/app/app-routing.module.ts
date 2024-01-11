@@ -11,6 +11,10 @@ import { DetalleComponent } from './components/main-proveedores/detalle/detalle.
 import { LoginComponent } from './components/login/login.component';
 import { DetalleProdComponent } from './components/main-productosyservicios/detalle-prod/detalle-prod.component';
 import { DetalleOrdenesComponent } from './components/main-ordenesdecompra/detalle-ordenes/detalle-ordenes.component';
+import { TablaCategoriasComponent } from './components/main-categorias/tabla-categorias/tabla-categorias.component';
+import { FormCategoriasComponent } from './components/main-categorias/form-categorias/form-categorias.component';
+import { TablaRubrosComponent } from './components/main-rubros/tabla-rubros/tabla-rubros.component';
+import { FormRubrosComponent } from './components/main-rubros/form-rubros/form-rubros.component';
 
 const routes: Routes = [
   {
@@ -83,6 +87,32 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'categorias',
+    children: [
+      {
+        path:'',
+        component:TablaCategoriasComponent
+      },
+      {
+        path:'form',
+        component:FormCategoriasComponent
+      },
+    ]
+  },
+  {
+    path: 'rubros',
+    children: [
+      {
+        path:'',
+        component:TablaRubrosComponent
+      },
+      {
+        path:'form',
+        component:FormRubrosComponent
+      },
+    ]
   },
   {
     path: '**',

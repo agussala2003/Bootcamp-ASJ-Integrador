@@ -3,7 +3,7 @@
     {
       "id": "1A45",
       "RazonSocial": "Fravega",
-      "Rubro": "Informatica",
+      "Rubro": "Electrodomesticos",
       "Telefono": "1122334354",
       "Email": "fravega@gmail.com",
       "SitioWeb": "fravega.com.ar",
@@ -32,7 +32,7 @@
     {
       "id": "1A46",
       "RazonSocial": "Samsung",
-      "Rubro": "Informatica",
+      "Rubro": "Tecnologia",
       "Telefono": "112345634",
       "Email": "samsung@gmail.com",
       "SitioWeb": "samsung.com",
@@ -119,7 +119,7 @@
     {
       "id": "1A43",
       "RazonSocial": "Paladini",
-      "Rubro": "Fiambres",
+      "Rubro": "Alimentos",
       "Telefono": "1123435652",
       "Email": "paladini@gmail.com",
       "SitioWeb": "paladini.com",
@@ -148,7 +148,7 @@
     {
       "id": "1B46",
       "RazonSocial": "Nike",
-      "Rubro": "Ropa deportiva",
+      "Rubro": "Deportes",
       "Telefono": "1123423543",
       "Email": "nike@gmail.com",
       "SitioWeb": "nike.com",
@@ -177,7 +177,7 @@
     {
       "id": "1A49",
       "RazonSocial": "Coca Cola",
-      "Rubro": "Bebidas Y Comida",
+      "Rubro": "Alimentos",
       "Telefono": "112345623",
       "Email": "cocacola@gmail.com",
       "SitioWeb": "cocacola.com.ar",
@@ -440,6 +440,126 @@
       ],
       "Activo": false,
       "Total": "9799.88"
+    }
+  ],
+  "categorias": [
+    {
+      "id": "1",
+      "categoria": "Electrodomesticos de Cocina"
+    },
+    {
+      "id": "3",
+      "categoria": "Zapatillas"
+    },
+    {
+      "id": "4",
+      "categoria": "Electronica de consumo"
+    },
+    {
+      "id": "5",
+      "categoria": "Accesorios de Deportes"
+    },
+    {
+      "id": "6",
+      "categoria": "Joyas de oro"
+    },
+    {
+      "id": "7",
+      "categoria": "Libros Infantiles"
+    },
+    {
+      "id": "8",
+      "categoria": "Dispositivos Portatiles"
+    },
+    {
+      "id": "9",
+      "categoria": "Alimentos Organicos"
+    },
+    {
+      "id": "10",
+      "categoria": "Sillas y sillones"
+    },
+    {
+      "id": "11",
+      "categoria": "Electrodomesticos de Limpieza"
+    },
+    {
+      "id": "12",
+      "categoria": "Gaseosas o bebidas"
+    },
+    {
+      "id": "13",
+      "categoria": "Productos de mesa"
+    },
+    {
+      "id": "14",
+      "categoria": "Comidas"
+    },
+    {
+      "id": "15",
+      "categoria": "Electronica"
+    },
+    {
+      "id": "16",
+      "categoria": "Hogar"
+    },
+    {
+      "id": "17",
+      "categoria": "Moda"
+    },
+    {
+      "id": "18",
+      "categoria": "Informatica"
+    }
+  ],
+  "rubros": [
+    {
+      "id": "1",
+      "rubro": "Ropa"
+    },
+    {
+      "id": "2",
+      "rubro": "Electrodomesticos"
+    },
+    {
+      "id": "3",
+      "rubro": "Deportes"
+    },
+    {
+      "id": "4",
+      "rubro": "Ferreteria"
+    },
+    {
+      "id": "5",
+      "rubro": "Libreria"
+    },
+    {
+      "id": "6",
+      "rubro": "Muebles"
+    },
+    {
+      "id": "7",
+      "rubro": "Joyeria"
+    },
+    {
+      "id": "8",
+      "rubro": "Tecnologia"
+    },
+    {
+      "id": "9",
+      "rubro": "Arte y Antiguedades"
+    },
+    {
+      "id": "10",
+      "rubro": "Hogar"
+    },
+    {
+      "id": "11",
+      "rubro": "Mecanico"
+    },
+    {
+      "id": "12",
+      "rubro": "Alimentos"
     }
   ]
 }

@@ -7,9 +7,8 @@
         <a class="text-light text-decoration-none" routerLink="/proveedores"
           >Proveedores</a
         >
-        <i class="bx bx-chevron-right text-light fs-4"></i>
+        <i *ngIf="this.service.datosProv.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
         <p class="m-0 text-light text-md-nowrap">
-          Formulario
           <span *ngIf="this.service.datosProv.id != ''"
             >Proveedor {{ this.service.datosProv.id }}</span
           >
@@ -87,29 +86,21 @@
         </div>
         <div class="col-12 col-md-3 mb-2">
           <label for="rubro" class="form-label text-light">Rubro:</label>
-          <input
-            [(ngModel)]="this.service.datosProv.Rubro"
-            required
-            name="rubro"
-            type="text"
-            id="rubro"
-            placeholder="Ingese su rubro"
-            class="form-control"
-            minlength="2"
-            maxlength="30"
-          />
-          <div
-            *ngIf="formProv.controls['rubro']?.hasError('required')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">El dato es obligatorio</span>
-          </div>
-          <div
-            *ngIf="formProv.controls['rubro']?.hasError('minlength')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">Ingrese 2 o mas digitos</span>
-          </div>
+          <select
+          [(ngModel)]="this.service.datosProv.Rubro"
+          for="rubro"
+          id="rubro"
+          name="rubro"
+          class="form-select"
+          aria-label="Default select example"
+          required
+        >
+          <option selected disabled>Selecciona una categoria</option>
+          <option *ngFor="let item of rubros" value="{{item.rubro}}">{{item.rubro}}</option>
+        </select>
+        <div *ngIf="formProv.controls['rubro']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
         </div>
         <div class="col-12 col-md-3 mb-2">
           <label for="telefonoproveedor" class="form-label text-light"
@@ -213,85 +204,6 @@
       <div class="row">
         <h4 class="text-light my-2 text-uppercase">Dirección</h4>
         <div class="col-12 col-md-3 mb-2">
-          <label for="calle" class="form-label text-light">Calle:</label>
-          <input
-            [(ngModel)]="this.service.datosProv.Direccion.Calle"
-            required
-            name="calle"
-            type="text"
-            id="calle"
-            placeholder="Ingese su calle"
-            class="form-control"
-            minlength="3"
-            maxlength="30"
-          />
-          <div
-            *ngIf="formProv.controls['calle']?.hasError('required')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">El dato es obligatorio</span>
-          </div>
-          <div
-            *ngIf="formProv.controls['calle']?.hasError('minlength')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">Ingrese 3 o mas digitos</span>
-          </div>
-        </div>
-        <div class="col-12 col-md-3 mb-2">
-          <label for="num" class="form-label text-light">Numero:</label>
-          <input
-            [(ngModel)]="this.service.datosProv.Direccion.Numero"
-            required
-            name="num"
-            type="number"
-            id="num"
-            placeholder="Ingese numero"
-            class="form-control"
-            min="1"
-          />
-          <div
-            *ngIf="formProv.controls['num']?.hasError('required')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">El dato es obligatorio</span>
-          </div>
-          <div
-            *ngIf="formProv.controls['num']?.hasError('min')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">Ingrese un minimo de 1</span>
-          </div>
-        </div>
-        <div class="col-12 col-md-3 mb-2">
-          <label for="localidad" class="form-label text-light"
-            >Localidad:</label
-          >
-          <input
-            [(ngModel)]="this.service.datosProv.Direccion.Localidad"
-            required
-            name="localidad"
-            type="text"
-            id="localidad"
-            placeholder="Ingese localidad"
-            class="form-control"
-            minlength="3"
-            maxlength="30"
-          />
-          <div
-            *ngIf="formProv.controls['localidad']?.hasError('required')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">El dato es obligatorio</span>
-          </div>
-          <div
-            *ngIf="formProv.controls['localidad']?.hasError('minlength')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">Ingrese 3 o mas digitos</span>
-          </div>
-        </div>
-        <div class="col-12 col-md-3 mb-2">
           <label for="pais" class="form-label text-light">Pais:</label>
           <select
             (click)="this.service.datosProv.Direccion.Provincia = ''"
@@ -352,7 +264,85 @@
             <span class="form-text text-light">Ingrese 3 o mas digitos</span>
           </div>
         </div>
-
+        <div class="col-12 col-md-3 mb-2">
+          <label for="localidad" class="form-label text-light"
+            >Localidad:</label
+          >
+          <input
+            [(ngModel)]="this.service.datosProv.Direccion.Localidad"
+            required
+            name="localidad"
+            type="text"
+            id="localidad"
+            placeholder="Ingese localidad"
+            class="form-control"
+            minlength="3"
+            maxlength="30"
+          />
+          <div
+            *ngIf="formProv.controls['localidad']?.hasError('required')"
+            class="col-auto"
+          >
+            <span class="form-text text-light">El dato es obligatorio</span>
+          </div>
+          <div
+            *ngIf="formProv.controls['localidad']?.hasError('minlength')"
+            class="col-auto"
+          >
+            <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+          </div>
+        </div>
+        <div class="col-12 col-md-3 mb-2">
+          <label for="calle" class="form-label text-light">Calle:</label>
+          <input
+            [(ngModel)]="this.service.datosProv.Direccion.Calle"
+            required
+            name="calle"
+            type="text"
+            id="calle"
+            placeholder="Ingese su calle"
+            class="form-control"
+            minlength="3"
+            maxlength="30"
+          />
+          <div
+            *ngIf="formProv.controls['calle']?.hasError('required')"
+            class="col-auto"
+          >
+            <span class="form-text text-light">El dato es obligatorio</span>
+          </div>
+          <div
+            *ngIf="formProv.controls['calle']?.hasError('minlength')"
+            class="col-auto"
+          >
+            <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+          </div>
+        </div>
+        <div class="col-12 col-md-3 mb-2">
+          <label for="num" class="form-label text-light">Numero:</label>
+          <input
+            [(ngModel)]="this.service.datosProv.Direccion.Numero"
+            required
+            name="num"
+            type="number"
+            id="num"
+            placeholder="Ingese numero"
+            class="form-control"
+            min="1"
+          />
+          <div
+            *ngIf="formProv.controls['num']?.hasError('required')"
+            class="col-auto"
+          >
+            <span class="form-text text-light">El dato es obligatorio</span>
+          </div>
+          <div
+            *ngIf="formProv.controls['num']?.hasError('min')"
+            class="col-auto"
+          >
+            <span class="form-text text-light">Ingrese un minimo de 1</span>
+          </div>
+        </div>
         <div class="col-12 col-md-3 mb-2">
           <label for="cp" class="form-label text-light">Codigo Postal:</label>
           <input
@@ -379,6 +369,7 @@
             <span class="form-text text-light">Ingrese 4 o mas digitos</span>
           </div>
         </div>
+
       </div>
       <div class="row">
         <h4 class="text-light my-2 text-uppercase">Datos Fiscales</h4>
@@ -613,7 +604,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              Deseas {{agregarActualizar | lowercase}} el proveedor "{{this.service.datosProv.RazonSocial}}"?"
+              Deseas {{agregarActualizar | lowercase}} el proveedor "{{this.service.datosProv.RazonSocial}}"?
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

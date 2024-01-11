@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 export class SidebarComponent {
   adminFlag:boolean = false;
   userFlag:boolean = false;
+  extrasFlag:boolean = false;
   isPath(arg0: string) {
     return window.location.pathname == arg0;
   }

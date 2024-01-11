@@ -1,0 +1,62 @@
+<div class="bg-dark">
+    <div *ngIf="userState == true" class="container py-5 p-md-5">
+        <div class="row">
+            <!-- Breadcrumb -->
+            <div class="col-12 col-md-9 d-flex align-items-center">
+              <a class="text-light text-decoration-none" routerLink="/categorias">Categorias</a>
+            </div>
+            <!-- Breadcrumb -->
+            <div class="col-12 col-md-3 d-flex justify-content-md-end my-3">
+              <a routerLink="/categorias/form" class="btn btn-primary"
+                >Agregar Categoria</a
+              >
+            </div>
+          </div>
+          <div class="row">
+            <div *ngFor="let cat of categorias" class="col-12 col-sm-auto mb-3">
+                <div class="card">
+                  <div class="card-content">
+                    <div class="card-body">
+                      <div class="d-flex">
+                        <div class="text-start overflow-y-auto w-100">
+                            <div class="d-flex align-items-center justify-content-between">
+                              <h5 class="text-nowrap">{{cat.categoria}}</h5>
+                            <i (click)="obtenerCategoria(cat.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash ms-4"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div *ngIf="categorias.length == 0">
+            <h3 class="text-light text-center">
+              No tiene categorias en tu lista! Por favor agregar alguna.
+            </h3>
+          </div>
+    </div>
+    <div *ngIf="userState == null" class="container py-5 p-md-5">
+        <h3 class="text-light text-center">Necesitas un nivel de usuario mas alto</h3>
+        <app-navigation-home></app-navigation-home>
+    </div>
+    <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+           Deseas eliminar la categoria "{{this.categoria.categoria}}"?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarCategoria(this.categoria.id)">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+</div>

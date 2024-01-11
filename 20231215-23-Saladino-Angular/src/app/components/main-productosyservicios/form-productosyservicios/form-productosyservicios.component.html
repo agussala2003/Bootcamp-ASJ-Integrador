@@ -5,8 +5,8 @@
       <!-- Breadcrumb -->
       <div class="col-12 col-md-9 d-flex align-items-center">
         <a class="text-light text-decoration-none" routerLink="/productos-servicios">Productos y Servicios</a>
-        <i class='bx bx-chevron-right text-light fs-4' ></i>
-        <p class="m-0 text-light text-md-nowrap">Formulario <span *ngIf="this.service.datosProd.id != ''">Producto {{this.service.datosProd.id}}</span></p>
+        <i *ngIf="this.service.datosProd.id != ''" class='bx bx-chevron-right text-light fs-4' ></i>
+        <p class="m-0 text-light text-md-nowrap"><span *ngIf="this.service.datosProd.id != ''">Producto {{this.service.datosProd.id}}</span></p>
       </div>
       <!-- Breadcrumb -->
       <div class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end my-3 ">
@@ -77,7 +77,7 @@
           required
         >
           <option selected disabled>Selecciona una categoria</option>
-          <option *ngFor="let item of categorias" value="{{item}}">{{item}}</option>
+          <option *ngFor="let item of categorias" value="{{item.categoria}}">{{item.categoria}}</option>
         </select>
         <div *ngIf="formProdyServ.controls['categoria']?.hasError('required')" class="col-auto">
           <span class="form-text text-light">El dato es obligatorio</span>
@@ -179,7 +179,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            Deseas {{agregarActualizar | lowercase}} el producto "{{this.service.datosProd.Producto}}"?"
+            Deseas {{agregarActualizar | lowercase}} el producto "{{this.service.datosProd.Producto}}"?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

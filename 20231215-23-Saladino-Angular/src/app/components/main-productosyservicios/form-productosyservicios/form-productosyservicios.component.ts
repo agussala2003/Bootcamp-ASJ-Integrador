@@ -5,6 +5,8 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Proveedor } from '../../../models/Proveedor';
 import { ProveedoresService } from '../../../services/proveedores.service';
+import { Categoria } from '../../../models/Categoria';
+import { CategoriasService } from '../../../services/categorias.service';
 
 @Component({
   selector: 'app-form-productosyservicios',
@@ -16,20 +18,14 @@ export class FormProductosyserviciosComponent implements OnInit {
     public service: ProductosyserviciosService,
     public router: ActivatedRoute,
     public servicioProveedor: ProveedoresService,
-    public router2: Router
+    public router2: Router,
+    public servicioCategoria:CategoriasService
   ) {}
 
   idProdServ: string = '';
   userState: any;
   proveedores: Proveedor[] = [];
-  categorias: any[] = [
-    'Electronica',
-    'Informatica',
-    'Comidas',
-    'Bebidas',
-    'Moda',
-    'Hogar',
-  ];
+  categorias: Categoria[] = [];
 
   flagCode: boolean = true;
   isActiveSku: any = false;
@@ -61,6 +57,10 @@ export class FormProductosyserviciosComponent implements OnInit {
         (proveedor: Proveedor) => proveedor.Activo
       );
     });
+    // Obtenemos las Categorias
+    this.servicioCategoria.getFakeData().subscribe((data:Categoria[]) =>{
+      this.categorias = data
+    })
   }
   // Agregamos un producto o servicio
   agregarProductoyservicio(form: NgForm) {

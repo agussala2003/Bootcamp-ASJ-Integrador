@@ -7,9 +7,8 @@
         <a class="text-light text-decoration-none" routerLink="/ordenes"
           >Ordenes</a
         >
-        <i class="bx bx-chevron-right text-light fs-4"></i>
+        <i *ngIf="this.service.datosOrd.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
         <p class="m-0 text-light text-md-nowrap">
-          Detalles
           <span *ngIf="this.service.datosOrd.id != ''"
             >Orden {{ this.service.datosOrd.id }}</span
           >
@@ -218,7 +217,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-           Deseas cancelar la orden "{{this.service.datosOrd.id}}"?"
+           Deseas cancelar la orden "{{this.service.datosOrd.id}}"?
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

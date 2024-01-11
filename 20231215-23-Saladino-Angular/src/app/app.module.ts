@@ -22,6 +22,10 @@ import { DetalleProdComponent } from './components/main-productosyservicios/deta
 import { AtoZPipe } from './pipes/ato-z.pipe';
 import { DetalleOrdenesComponent } from './components/main-ordenesdecompra/detalle-ordenes/detalle-ordenes.component';
 import { NavigationHomeComponent } from './components/navigation-home/navigation-home.component';
+import { TablaRubrosComponent } from './components/main-rubros/tabla-rubros/tabla-rubros.component';
+import { FormRubrosComponent } from './components/main-rubros/form-rubros/form-rubros.component';
+import { TablaCategoriasComponent } from './components/main-categorias/tabla-categorias/tabla-categorias.component';
+import { FormCategoriasComponent } from './components/main-categorias/form-categorias/form-categorias.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +45,11 @@ import { NavigationHomeComponent } from './components/navigation-home/navigation
     DetalleProdComponent,
     AtoZPipe,
     DetalleOrdenesComponent,
-    NavigationHomeComponent
+    NavigationHomeComponent,
+    TablaRubrosComponent,
+    FormRubrosComponent,
+    TablaCategoriasComponent,
+    FormCategoriasComponent
   ],
   imports: [
     BrowserModule,
