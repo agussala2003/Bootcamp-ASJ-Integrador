@@ -1,4 +1,57 @@
-<div class="row my-5">
+<div class="container">
+    <div class="row my-2 my-md-5">
+       <div class="ms-0 ms-md-5 col-12 col-md-7">
+           <h1 *ngIf="this.valor == true" class="text-white">Bienvenido a nuestro sistema de gestión y administracion!</h1>
+           <p *ngIf="this.valor == true" class="text-white">Optimiza tus procesos de aprovisionamiento, controla tu inventario y agiliza las órdenes de compra. Desde el seguimiento de proveedores hasta la administración eficiente de productos.</p>
+           <h1 *ngIf="this.valor == null"  class="text-white">Oops, parece que no tienes cuenta aqui.</h1>
+           <p *ngIf="this.valor == null"  class="text-white">Te invitamos a que ingreses a tu cuenta o crees una en caso de no tener para asi poder acceder a todos los beneficios que te ofrece nuestra plataforma.</p>
+           <div class="d-flex">
+               <a routerLink="/login" class="btn btn-info me-3">Iniciar Sesion</a>
+               <a routerLink="/register" class="btn btn-outline-info">Registrarse</a>
+           </div>
+       </div>
+        <div class="col-12 offset-1 col-md-3">
+            <img src="../../../assets/img/7559348-removebg.png" alt="">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-4 text-center mb-5">
+            <div routerLink="/proveedores" class="d-flex justify-content-center card-container">
+               <div class="card py-3">
+                  <div class="container text-white ">
+                     <h5>Proveedores</h5>
+                     <i class='bx bxs-truck fs-1 my-3'></i>
+                     <p>Descubre cómo gestionar de manera eficiente tus proveedores favoritos. Simplifica tus relaciones comerciales y optimiza la cadena de suministro comodamente.</p>
+                  </div>
+               </div>              
+            </div>
+         </div>         
+         <div class="col-12 col-md-4 text-center mb-5">
+            <div routerLink="/productos-servicios" class="d-flex justify-content-center card-container">
+               <div class="card py-3">
+                  <div class="container text-white ">
+                     <h5>Productos y Servicios</h5>
+                     <i class='bx bx-package fs-1 my-3'></i>
+                     <p>Explora las diversas formas de gestionar tus productos y servicios favoritos. Desde el inventario hasta la categorización, optimiza tu oferta con facilidad.</p>
+                  </div>
+               </div>              
+            </div>
+         </div>         
+         <div class="col-12 col-md-4 text-center">
+            <div routerLink="/ordenes" class="d-flex justify-content-center card-container">
+               <div class="card py-3">
+                  <div class="container text-white ">
+                     <h5>Ordenes de Compra</h5>
+                     <i class='bx bxs-shopping-bag fs-1 my-3'></i>
+                     <p>Gestiona de manera efectiva tus órdenes de compra. Desde la creación hasta el seguimiento, controla cada paso del proceso de adquisición con facilidad.</p>
+                  </div>
+               </div>              
+            </div>
+         </div>         
+    </div>
+</div>
+
+<!-- <div class="row my-5">
     <div class="col-6 d-flex justify-content-center">
         <ul class="list-unstyled">
             <li><a class="text-light fs-5 link-offset-2 link-offset-3-hover link-underline-light link-underline-opacity-0 link-underline-opacity-100-hover" routerLink="/proveedores">Proveedores</a></li>
@@ -12,4 +65,4 @@
             <li><a class="text-light fs-5 link-offset-2 link-offset-3-hover link-underline-light link-underline-opacity-0 link-underline-opacity-100-hover" routerLink="/register">Registrarse</a></li>
         </ul>
     </div>
-</div>
+</div> -->
