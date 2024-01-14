@@ -14,13 +14,13 @@
           </div>
           <div class="row">
             <div *ngFor="let cat of categorias" class="col-12 col-sm-auto mb-3">
-                <div class="card">
+                <div class="card bg-dark border border-1 border-white">
                   <div class="card-content">
                     <div class="card-body">
                       <div class="d-flex">
                         <div class="text-start overflow-y-auto w-100">
                             <div class="d-flex align-items-center justify-content-between">
-                              <h5 class="text-nowrap">{{cat.categoria}}</h5>
+                              <h5 class="text-nowrap text-white">{{cat.categoria}}</h5>
                             <i (click)="obtenerCategoria(cat.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash ms-4"></i>
                           </div>
                         </div>
