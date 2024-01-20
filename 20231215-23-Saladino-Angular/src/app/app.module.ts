@@ -26,6 +26,8 @@ import { TablaRubrosComponent } from './components/main-rubros/tabla-rubros/tabl
 import { FormRubrosComponent } from './components/main-rubros/form-rubros/form-rubros.component';
 import { TablaCategoriasComponent } from './components/main-categorias/tabla-categorias/tabla-categorias.component';
 import { FormCategoriasComponent } from './components/main-categorias/form-categorias/form-categorias.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { EmptyListComponent } from './components/empty-list/empty-list.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import { FormCategoriasComponent } from './components/main-categorias/form-categ
     TablaRubrosComponent,
     FormRubrosComponent,
     TablaCategoriasComponent,
-    FormCategoriasComponent
+    FormCategoriasComponent,
+    ModalComponent,
+    EmptyListComponent
   ],
   imports: [
     BrowserModule,

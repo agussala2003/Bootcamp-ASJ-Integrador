@@ -9,10 +9,10 @@
           routerLink="/productos-servicios"
           >Productos y Servicios</a
         >
-        <i *ngIf="this.service.datosProd.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
+        <i *ngIf="this.datosProd.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
         <p class="m-0 text-light text-md-nowrap">
-          <span *ngIf="this.service.datosProd.id != ''"
-            >Producto {{ this.service.datosProd.id }}</span
+          <span *ngIf="this.datosProd.id != ''"
+            >Producto {{ this.datosProd.id }}</span
           >
         </p>
       </div>
@@ -33,7 +33,7 @@
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
-                    <h5 class="text-nowrap">{{ this.service.datosProd.id }}</h5>
+                    <h5 class="text-nowrap">{{ this.datosProd.id }}</h5>
                     <span>Sku</span>
                   </div>
                 </div>
@@ -48,7 +48,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
-                      {{ this.service.datosProd.Proveedor }}
+                      {{ this.datosProd.Proveedor }}
                     </h5>
                     <span>Proveedor</span>
                   </div>
@@ -64,7 +64,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
-                      {{ this.service.datosProd.Categoria }}
+                      {{ this.datosProd.Categoria }}
                     </h5>
                     <span>Categoria</span>
                   </div>
@@ -80,7 +80,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
-                      {{ this.service.datosProd.Precio }}
+                      {{ this.datosProd.Precio }}
                     </h5>
                     <span>Precio</span>
                   </div>
@@ -96,7 +96,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
-                      {{ this.service.datosProd.Producto }}
+                      {{ this.datosProd.Producto }}
                     </h5>
                     <span>Producto</span>
                   </div>
@@ -112,7 +112,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white">
                     <h5 class="text-wrap">
-                      {{ this.service.datosProd.Descripcion }}
+                      {{ this.datosProd.Descripcion }}
                     </h5>
                     <span>Descripcion</span>
                   </div>
@@ -131,7 +131,7 @@
           <a
             [routerLink]="[
               '/productos-servicios/form/',
-              this.service.datosProd.id
+              this.datosProd.id
             ]"
             class="btn btn-primary me-2"
             >Editar</a
@@ -155,11 +155,11 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-               Deseas eliminar el producto "{{this.service.datosProd.Producto}}"?
+               Deseas eliminar el producto "{{this.datosProd.Producto}}"?
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarProductoyservicio(this.service.datosProd.id)">Aceptar</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarProductoyservicio(this.datosProd.id)">Aceptar</button>
             </div>
           </div>
         </div>

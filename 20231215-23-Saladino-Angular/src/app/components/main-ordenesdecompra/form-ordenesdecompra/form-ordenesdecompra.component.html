@@ -8,10 +8,10 @@
           <a class="text-light text-decoration-none" routerLink="/ordenes"
             >Ordenes</a
           >
-          <i *ngIf="this.service.datosOrd.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
+          <i *ngIf="this.datosOrd.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
           <p class="m-0 text-light text-md-nowrap">
-            <span *ngIf="this.service.datosOrd.id != ''"
-              >Orden {{ this.service.datosOrd.id }}</span
+            <span *ngIf="this.datosOrd.id != ''"
+              >Orden {{ this.datosOrd.id }}</span
             >
           </p>
         </div>
@@ -25,6 +25,7 @@
       <!-- Ruteo -->
       <form #formOrd="ngForm" (ngSubmit)="agregarOrden(formOrd)">
         <div class="row">
+          <h4 class="text-light my-2">Datos Ordenes <i (click)="openModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class='bx bx-info-circle text-white ms-2'></i> </h4>
           <div class="col-12 col-md-6">
             <div class="row">
               <div class="col-12 col-md-6 mb-2">
@@ -33,7 +34,7 @@
                 >
                 <input
                   [disabled]="!flagCode"
-                  [(ngModel)]="this.service.datosOrd.id"
+                  [(ngModel)]="this.datosOrd.id"
                   required
                   type="text"
                   id="orden"
@@ -52,12 +53,6 @@
                     >El dato es obligatorio</span
                   >
                 </div>
-                <div
-                  *ngIf="formOrd.controls['orden']?.hasError('minlenght')"
-                  class="col-auto"
-                >
-                  <span class="form-text text-light">Mayor a 1</span>
-                </div>
                 <div *ngIf="!this.isNumberCode" class="col-auto">
                   <span class="form-text text-light">Debe ser numerico</span>
                 </div>
@@ -73,13 +68,14 @@
                 >
                 <select
                   [disabled]="this.isProductsInOrden"
-                  [(ngModel)]="this.service.datosOrd.Proveedor"
+                  [(ngModel)]="this.datosOrd.Proveedor"
                   for="seleccCodProv"
                   class="form-select"
                   name="seleccCodProv"
                   id="seleccCodProv"
                   aria-label="Default select example"
                   (click)="prod = ''"
+                  required
                 >
                   <option value="" selected disabled>
                     Selecciona un proveedor
@@ -91,14 +87,102 @@
                     {{ prov.RazonSocial }}
                   </option>
                 </select>
+                <div
+                  *ngIf="formOrd.controls['seleccCodProv']?.hasError('required')"
+                  class="col-auto"
+                >
+                  <span class="form-text text-light"
+                    >El dato es obligatorio</span
+                  >
+                </div>
+              </div>
+              <div class="col-12 col-md-6 mb-2">
+                <label for="emision" class="form-label text-light text-nowrap"
+                  >Fecha de emision:</label
+                >
+                <input
+                  [(ngModel)]="this.datosOrd.Emision"
+                  min="{{ getFormattedDate(today) }}"
+                  required
+                  type="date"
+                  id="emision"
+                  name="emision"
+                  placeholder="Ingese fecha de emision"
+                  class="form-control"
+                />
+                <div
+                  *ngIf="formOrd.controls['emision']?.hasError('required')"
+                  class="col-auto"
+                >
+                  <span class="form-text text-light"
+                    >El dato es obligatorio</span
+                  >
+                </div>
+              </div>
+              <div class="col-12 col-md-6 mb-2">
+                <label for="entrega" class="form-label text-light text-nowrap"
+                  >Fecha de entrega:</label
+                >
+                <input
+                  [(ngModel)]="this.datosOrd.Entrega"
+                  required
+                  min="{{ getFormattedDate(today) }}"
+                  type="date"
+                  id="entrega"
+                  name="entrega"
+                  placeholder="Ingese fecha de entrega"
+                  class="form-control"
+                />
+                <div
+                *ngIf="formOrd.controls['entrega']?.hasError('required')"
+                class="col-auto"
+              >
+                <span class="form-text text-light"
+                  >El dato es obligatorio</span
+                >
+              </div>
+                <div class="col-auto" *ngIf="validateStringDates(this.datosOrd.Emision,this.datosOrd.Entrega)">
+                  <span class="form-text text-light">La fecha de entrega debe ser posterior a la emision</span>
+                </div>
+              </div>
+              <div class="col-12 mb-2">
+                <label for="infoRecepcion" class="form-label text-light"
+                  >Informacion de recepcion:</label
+                >
+                <textarea
+                  [(ngModel)]="this.datosOrd.InfoRecepcion"
+                  required
+                  rows="3"
+                  type="text"
+                  id="infoRecepcion"
+                  name="infoRecepcion"
+                  placeholder="Ingese informacion de recepcion"
+                  class="form-control"
+                  minlength="15"
+                  maxlength="250"
+                ></textarea>
+                <div
+                *ngIf="formOrd.controls['infoRecepcion']?.hasError('required')"
+                class="col-auto"
+              >
+                <span class="form-text text-light"
+                  >El dato es obligatorio</span
+                >
+              </div>
+                <div
+                  *ngIf="formOrd.controls['infoRecepcion']?.hasError('minlenght')"
+                  class="col-auto"
+                >
+                  <span class="form-text text-light">Al menos 15 caracteres</span>
+                </div>
               </div>
               <div class="col-12 col-md-5 mb-2">
                 <label for="seleccCodProd" class="form-label text-light"
                   >Codigo / Sku:</label
                 >
                 <select
-                  (click)="searchProds(this.service.datosOrd.Proveedor)"
-                  [disabled]="this.service.datosOrd.Proveedor == ''"
+                  (click)="searchProds(this.datosOrd.Proveedor)"
+                  [disabled]="this.datosOrd.Proveedor == ''"
                   [(ngModel)]="prod"
                   for="seleccCodProd"
                   name="seleccCodProd"
@@ -107,13 +191,13 @@
                   aria-label="Default select example"
                   required
                 >
-                  <option value="" selected>Selecciona un Cod. / Sku</option>
+                  <option value="" selected>Selecciona un Sku</option>
                   <option *ngFor="let prod of productos" value="{{ prod.id }}">
                     {{ prod.Producto + " - " + "$" + prod.Precio }}
                   </option>
                 </select>
                 <div
-                  *ngIf="this.service.datosOrd.Proveedor == ''"
+                  *ngIf="this.datosOrd.Proveedor == ''"
                   class="col-auto"
                 >
                   <span class="form-text text-light"
@@ -140,79 +224,29 @@
                 <button
                   id="btnaggprod"
                   name="btn"
-                  [disabled]="
-                    cant == '' || prod == '' || cant == null || prod == null
-                  "
+                  [disabled]="cant == '' || prod == '' || cant == null || prod == null"
                   (click)="agregarProd()"
                   type="button"
                   class="btn btn-primary mt-1 w-100"
                 >
-                  Agregar
-                </button>
-              </div>
-              <div class="col-12 col-md-6 mb-2">
-                <label for="emision" class="form-label text-light text-nowrap"
-                  >Fecha de emision:</label
-                >
-                <input
-                  [(ngModel)]="this.service.datosOrd.Emision"
-                  required
-                  type="date"
-                  id="emision"
-                  name="emision"
-                  placeholder="Ingese fecha de emision"
-                  class="form-control"
-                />
-              </div>
-              <div class="col-12 col-md-6 mb-2">
-                <label for="entrega" class="form-label text-light text-nowrap"
-                  >Fecha de entrega:</label
-                >
-                <input
-                  [(ngModel)]="this.service.datosOrd.Entrega"
-                  required
-                  type="date"
-                  id="entrega"
-                  name="entrega"
-                  placeholder="Ingese fecha de entrega"
-                  class="form-control"
-                />
-                <div class="col-auto" *ngIf="validateStringDates(this.service.datosOrd.Emision,this.service.datosOrd.Entrega)">
-                  <span class="form-text text-light">La fecha de entrega debe ser posterior a la emision</span>
-                </div>
-              </div>
-              <div class="col-12 mb-2">
-                <label for="infoRecepcion" class="form-label text-light"
-                  >Informacion de recepcion:</label
-                >
-                <input
-                  [(ngModel)]="this.service.datosOrd.InfoRecepcion"
-                  required
-                  type="text"
-                  id="infoRecepcion"
-                  name="infoRecepcion"
-                  placeholder="Ingese informacion de recepcion"
-                  class="form-control"
-                />
+                  Añadir
+              </button>
               </div>
               <div class="col-12 mt-2">
                 <button
                   data-bs-toggle="modal" data-bs-target="#exampleModal" 
                   [disabled]="
-                    (!formOrd.valid &&
-                    this.service.datosOrd.Productos.length == 0) ||
+                    !formOrd.valid ||
+                    !this.isProductsInOrden ||
                     this.isActiveOrden ||
                     !this.isNumberCode ||
-                    validateStringDates(this.service.datosOrd.Emision,this.service.datosOrd.Entrega)
+                    validateStringDates(this.datosOrd.Emision,this.datosOrd.Entrega)
                   "
                   type="button"
                   class="btn btn-success"
                 >
-                  {{ agregarActualizar }}
+                {{this.flagCode ? 'Agregar' : 'Actualizar'}}
                 </button>
-              </div>
-              <div *ngIf="!formOrd.valid || this.service.datosOrd.Productos.length == 0 || this.isActiveOrden || !this.isNumberCode || validateStringDates(this.service.datosOrd.Emision,this.service.datosOrd.Entrega)" class="col-12 mt-2">
-                <p class="text-light">Asegurate de que todos los campos esten completos correctamente y ten al menos un producto en la orden</p>
               </div>
             </div>
           </div>
@@ -220,19 +254,19 @@
           <div class="col-12 col-md-6">
             <h4 class="mt-3 text-light text-center">
               {{
-                this.service.datosOrd.Productos.length > 0
+                this.datosOrd.Productos.length > 0
                   ? "Productos en la orden"
                   : "No tienes productos en la orden"
               }}
             </h4>
             <div
               class="mt-3"
-              *ngIf="this.service.datosOrd.Productos.length > 0"
+              *ngIf="this.datosOrd.Productos.length > 0"
             >
               <p
                 class="text-light d-flex justify-content-center"
                 *ngFor="
-                  let productoComp of this.service.datosOrd.Productos;
+                  let productoComp of this.datosOrd.Productos;
                   index as i
                 "
               >
@@ -250,7 +284,7 @@
               </p>
             </div>
             <h5 class="mt-3 text-light text-end">
-              Total ${{ this.service.datosOrd.Total }}
+              Total ${{ this.datosOrd.Total }}
             </h5>
           </div>
           <!-- Mostramos el listado de los productos que se van agregando -->
@@ -264,7 +298,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                Deseas {{agregarActualizar | lowercase}} la orden "{{this.service.datosOrd.id}}"?
+                Deseas {{this.flagCode ? 'agregar' : 'actualizar'}} la orden "{{this.datosOrd.id}}"?
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

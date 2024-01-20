@@ -5,10 +5,21 @@ import { OrdenesService } from '../../../services/ordenes.service';
 @Component({
   selector: 'app-tabla-ordenesdecompra',
   templateUrl: './tabla-ordenesdecompra.component.html',
-  styleUrl: './tabla-ordenesdecompra.component.css',
+  styleUrls: ['./tabla-ordenesdecompra.component.css'], // Ajustado el nombre de la propiedad
 })
 export class TablaOrdenesdecompraComponent implements OnInit {
   constructor(public service: OrdenesService) {}
+
+  datosOrd: Orden = {
+    id: '',
+    Emision: '',
+    Entrega: '',
+    InfoRecepcion: '',
+    Proveedor: '',
+    Productos: [],
+    Activo: true,
+    Total: '',
+  };
 
   ordenes: Orden[] = [];
   userState: any;
@@ -19,23 +30,21 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     this.userState = this.service.getUserState();
   }
 
-  // Cancelamos la orden
   borrarOrden(idOrden: string) {
     this.service.deleteFakeData(idOrden).subscribe((data) => {
-      console.log('Borraste' + data);
+      console.log(`Borraste ${data}`);
+      this.actualizarOrdenes();
     });
-    this.actualizarOrdenes();
   }
 
-  // Calculamos el total de la orden
-  calcTotal(lista: Orden) {
+  calcTotal(lista: Orden): string {
     if (!lista.Productos || lista.Productos.length === 0) {
-      return 0;
+      return '0.00';
     }
     let total = 0;
     lista.Productos.forEach((producto) => {
-      const cantidad = parseInt(producto.Cantidad, 10);
-      const subtotal = parseFloat(producto.Subtotal);
+      const cantidad = parseInt(producto.Cantidad, 10) || 0;
+      const subtotal = parseFloat(producto.Subtotal) || 0;
       if (!isNaN(cantidad) && !isNaN(subtotal)) {
         total += cantidad * subtotal;
       }
@@ -43,8 +52,13 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     return total.toFixed(2);
   }
 
-  //Actualizamos las ordenes
-  actualizarOrdenes() {
+  getOrden(id: string): void {
+    this.service.getProdData(id).subscribe((data: Orden) => {
+      this.datosOrd = data;
+    });
+  }
+
+  actualizarOrdenes(): void {
     this.service.getFakeData().subscribe((data: Orden[]) => {
       this.ordenes = data;
     });

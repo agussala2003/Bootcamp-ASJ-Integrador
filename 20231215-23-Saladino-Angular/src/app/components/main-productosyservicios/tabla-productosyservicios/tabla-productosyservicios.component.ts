@@ -1,70 +1,88 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductoyServicio } from '../../../models/ProductoyServicio';
-import { ProductosyserviciosService } from '../../../services/productosyservicios.service';
 import { ProveedoresService } from '../../../services/proveedores.service';
-import { Proveedor } from '../../../models/Proveedor';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ProductosyserviciosService } from '../../../services/productosyservicios.service';
 
 @Component({
   selector: 'app-tabla-productosyservicios',
   templateUrl: './tabla-productosyservicios.component.html',
-  styleUrl: './tabla-productosyservicios.component.css',
+  styleUrls: ['./tabla-productosyservicios.component.css'],
 })
 export class TablaProductosyserviciosComponent implements OnInit {
-  constructor(
-    public service: ProductosyserviciosService,
-    public serviceProveedor: ProveedoresService
-  ) {}
+  datosProd: ProductoyServicio = {
+    Proveedor: '',
+    id: '',
+    Categoria: '',
+    Producto: '',
+    Descripcion: '',
+    Precio: '',
+    Imagen: '',
+    Activo: true,
+  };
+
   productosyServicios: ProductoyServicio[] = [];
   userState: any;
-  proveedores: Proveedor[] = [];
+
+  constructor(
+    public productosService: ProductosyserviciosService,
+    private proveedoresService: ProveedoresService
+  ) {}
 
   ngOnInit(): void {
     this.actualizarListaProductoyServicios();
-    this.userState = this.service.getUserState();
-  }
-  // Borramos un producto o servicio
-  borrarProductoyservicio(idProd: string) {
-    this.service.deleteFakeData(idProd).subscribe(
-      () => {
-        console.log(idProd);
-        this.actualizarListaProductoyServicios();
-      },
-      (error) => {
-        console.error('Error al eliminar el producto:', error);
-      }
-    );
+    this.userState = this.productosService.getUserState();
   }
 
-  // Actualizamos todos los productos
-  actualizarListaProductoyServicios() {
-    // Tipo de operador para agrupar observables
-    forkJoin([
-      this.service.getFakeData(),
-      this.serviceProveedor.getFakeData(),
-    ]).subscribe(([productos, proveedores]) => {
-      this.productosyServicios = productos.filter(
-        (producto: ProductoyServicio) => producto.Activo
-      );
-
-      // Filtramos para que no nos muestre productos que tengan a sus proveedores inactivos
-      const proveedoresInactivos = proveedores.filter(
-        (proveedor: Proveedor) => !proveedor.Activo
-      );
-      if (proveedoresInactivos.length > 0) {
-        for (let i = 0; i < proveedoresInactivos.length; i++) {
-          const razonSocialProveedorInactivo =
-            proveedoresInactivos[i].RazonSocial;
-          this.productosyServicios = this.productosyServicios.filter(
-            (producto: ProductoyServicio) =>
-              producto.Proveedor !== razonSocialProveedorInactivo
-          );
-        }
-      }
+  borrarProductoyservicio(idProd: string): void {
+    this.productosService.deleteFakeData(idProd).subscribe(() => {
+      console.log(idProd);
+      this.actualizarListaProductoyServicios();
     });
   }
-  // Reemplazamos la imagen en caso de que de error
-  handleImageError(productoyservicio: any) {
+
+  getProducto(id:string) {
+    this.productosService.getProdData(id).subscribe((data:ProductoyServicio) => {
+      this.datosProd = data;
+    })
+  }
+
+  actualizarListaProductoyServicios(): void {
+    forkJoin([this.productosService.getFakeData(), this.proveedoresService.getFakeData()])
+      .pipe()
+      .subscribe(([productos, proveedores]) => {
+        this.productosyServicios = this.filtrarProductosActivos(productos);
+        this.productosyServicios = this.filtrarProveedoresInactivos(
+          this.productosyServicios,
+          proveedores
+        );
+      });
+  }
+
+  handleImageError(productoyservicio: any): void {
     productoyservicio.Imagen = '../../../../assets/img/logoGenerico.png';
+  }
+
+  private filtrarProductosActivos(productos: ProductoyServicio[]): ProductoyServicio[] {
+    return productos.filter((producto) => producto.Activo);
+  }
+
+  private filtrarProveedoresInactivos(
+    productos: ProductoyServicio[],
+    proveedores: any[]
+  ): ProductoyServicio[] {
+    const proveedoresInactivos = proveedores.filter((proveedor) => !proveedor.Activo);
+
+    if (proveedoresInactivos.length > 0) {
+      proveedoresInactivos.forEach((proveedor) => {
+        const razonSocialProveedorInactivo = proveedor.RazonSocial;
+        productos = productos.filter(
+          (producto) => producto.Proveedor !== razonSocialProveedorInactivo
+        );
+      });
+    }
+
+    return productos;
   }
 }

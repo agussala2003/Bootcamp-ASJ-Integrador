@@ -8,32 +8,74 @@ import { Proveedor } from '../../../models/Proveedor';
   styleUrls: ['./tabla-proveedores.component.css'],
 })
 export class TablaProveedoresComponent implements OnInit {
-  constructor(public service: ProveedoresService) {}
+  constructor(private proveedoresService: ProveedoresService) {}
+
   proveedores: Proveedor[] = [];
   userState: any;
+  
+  datosProv: Proveedor = {
+    id: '',
+    RazonSocial: '',
+    Rubro: '',
+    Telefono: '',
+    Email: '',
+    SitioWeb: '',
+    Imagen: '',
+    Activo: true,
+    Direccion: {
+      Calle: '',
+      Numero: '',
+      CP: '',
+      Localidad: '',
+      Provincia: '',
+      Pais: '',
+    },
+    DatosFiscales: {
+      CUIT: '',
+      CondicionIVA: '',
+    },
+    DatosContacto: {
+      Nombre: '',
+      Apellido: '',
+      Telefono: '',
+      Email: '',
+      Rol: '',
+    },
+  };
 
   ngOnInit(): void {
+    this.userState = this.proveedoresService.getUserState();
     this.actualizarListaProveedores();
-    this.userState = this.service.getUserState();
   }
-  //Funcion para hacer un borrado logico del proveedor
+
   borrarProveedor(idProv: string) {
-    this.service.deleteFakeData(idProv).subscribe((data) => {
-      console.log('Se elimino el proveedor' + data);
-    });
-    this.actualizarListaProveedores();
-  }
-  //Funcion obtener constantemente los proveedores
-  actualizarListaProveedores() {
-    this.service.getFakeData().subscribe((data: Proveedor[]) => {
-      this.proveedores = data;
-      // Filtramos por los que estan activos
-      this.proveedores = this.proveedores.filter(
-        (item: Proveedor) => item.Activo === true
+    this.proveedoresService.deleteFakeData(idProv)
+      .pipe().subscribe(
+        (data) => {
+          console.log('Se eliminó el proveedor: ' + data);
+          this.actualizarListaProveedores();
+        }
       );
-    });
   }
-  //Funcion para poner otra imagen si sale error
+
+  actualizarListaProveedores() {
+    this.proveedoresService.getFakeData()
+      .pipe().subscribe(
+        (data: Proveedor[]) => {
+          this.proveedores = data.filter((item: Proveedor) => item.Activo === true);
+        }
+      );
+  }
+
+  getProveedor(id: string) {
+    this.proveedoresService.getProvData(id)
+      .pipe().subscribe(
+        (data: Proveedor) => {
+          this.datosProv = data;
+        }
+      );
+  }
+
   handleImageError(proveedor: any) {
     proveedor.Imagen = '../../../../assets/img/logoGenerico.png';
   }

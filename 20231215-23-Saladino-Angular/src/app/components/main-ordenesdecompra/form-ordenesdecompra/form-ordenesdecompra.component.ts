@@ -7,6 +7,8 @@ import { ProductosyserviciosService } from '../../../services/productosyservicio
 import { NgForm } from '@angular/forms';
 import { ProveedoresService } from '../../../services/proveedores.service';
 import { Proveedor } from '../../../models/Proveedor';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalComponent } from '../../modal/modal.component';
 
 @Component({
   selector: 'app-form-ordenesdecompra',
@@ -19,156 +21,193 @@ export class FormOrdenesdecompraComponent implements OnInit {
     public servicioProducto: ProductosyserviciosService,
     public servicioProveedor: ProveedoresService,
     public router: ActivatedRoute,
-    public router2: Router
+    public router2: Router,
+    public modalService: NgbModal 
   ) {}
+
+  datosOrd: Orden = {
+    id: '',
+    Emision: '',
+    Entrega: '',
+    InfoRecepcion: '',
+    Proveedor: '',
+    Productos: [],
+    Activo: true,
+    Total: '',
+  };
 
   idOrden: string = '';
   userState: any;
   proveedores: Proveedor[] = [];
   productos: ProductoyServicio[] = [];
-  prod: any = '';
-  cant: any = '';
+  prod: string = '';
+  cant: string = '';
   flagCode: boolean = true;
-  isActiveOrden: any = false;
-  isProductsInOrden: any = false;
-  agregarActualizar: string = '';
-  isNumberCode:boolean = true;
+  isActiveOrden: boolean = false;
+  isProductsInOrden: boolean = false;
+  isNumberCode: boolean = true;
+  ords: Orden[] = [];
+  today: Date = new Date();
 
   ngOnInit(): void {
     this.router.params.subscribe((data) => {
       this.idOrden = data['idOrden'];
-      if (this.idOrden !== undefined) {
-        // Verificamos si estamos editando uno
-        this.service.getProdData(this.idOrden);
-        console.log(this.service.datosOrd);
-        this.isProductsInOrden = true;
-        this.flagCode = false;
-        this.agregarActualizar = 'Actualizar';
-      } else {
-        // Verificamos si estamos creando uno
-        this.flagCode = true;
-        this.agregarActualizar = 'Agregar';
-        resetearLista(this.service.datosOrd);
-      }
+      this.idOrden !== undefined ? this.loadOrdenData() : this.setupNewOrden();
     });
-    // Verficamos el estado del usuario
+
     this.userState = this.service.getUserState();
-    // Obtenemos los proveedores y filtramos por los que estan activos
-    this.servicioProveedor.getFakeData().subscribe((data: Proveedor[]) => {
-      this.proveedores = data;
-      this.proveedores = this.proveedores.filter(
-        (proveedor: Proveedor) => proveedor.Activo
-      );
-    });
-  }
-  // Agregamos una orden
-  agregarOrden(form: NgForm) {
-    this.calcularTotal();
-    this.service.uploadFakeData().subscribe((data) => {
-      console.log('Agregaste o actualizaste' + data);
-    });
-    form.reset();
-    this.router2.navigate(['/ordenes']);
-  }
-  // Buscamos los productos que ofrece un proveedor
-  searchProds(proveedor: string) {
-    this.servicioProducto
+
+    this.servicioProveedor
       .getFakeData()
-      .subscribe((data: ProductoyServicio[]) => {
-        const arrProd: ProductoyServicio[] = data;
-        this.productos = arrProd.filter(
-          (item: ProductoyServicio) => item.Activo === true
-        );
-        this.productos = this.productos.filter(
-          (item: ProductoyServicio) => item.Proveedor === proveedor
-        );
+      .subscribe((data: Proveedor[]) => {
+        this.proveedores = data.filter((proveedor) => proveedor.Activo);
       });
-  }
-  // Se agrega un producto a la orden
-  agregarProd() {
-    // Obtenemos el array para luego obtener el precio
-    const searchArr: ProductoyServicio[] = this.productos.filter(
-      (item: ProductoyServicio) => item.id === this.prod
-    );
-    const nuevoProducto: CalcOrden = {
-      Sku: this.prod,
-      Cantidad: this.cant,
-      Nombre: searchArr[0].Producto,
-      Subtotal: searchArr[0].Precio,
-    };
-    // Enviamos los productos
-    console.log(nuevoProducto);
-    this.service.datosOrd.Productos.push(nuevoProducto);
-    console.log('Listado de Productos:');
-    this.service.datosOrd.Productos.forEach((producto) => {
-      console.log(
-        `SKU: ${producto.Sku}, Cantidad: ${producto.Cantidad}, Subtotal: ${producto.Subtotal}`
-      );
+
+    this.service.getFakeData().subscribe((data: Orden[]) => {
+      this.ords = data;
     });
-    this.validacionProveedor();
-    this.calcularTotal();
   }
-  // Sacamos el producto en la orden
-  deleteProd(i: number) {
-    this.service.datosOrd.Productos.splice(i, 1);
-    this.validacionProveedor();
-    this.calcularTotal();
+
+  loadOrdenData() {
+    this.service.getProdData(this.idOrden).subscribe((data: Orden) => {
+      this.datosOrd = data;
+    });
+    this.isProductsInOrden = true;
+    this.flagCode = false;
   }
-  // Se calcula el total
-  calcularTotal() {
-    const totalCalculado = this.service.datosOrd.Productos.reduce(
-      (total, producto) => {
-        const cantidad = parseInt(producto.Cantidad, 10);
-        const subtotal = parseFloat(producto.Subtotal);
-        if (!isNaN(cantidad) && !isNaN(subtotal)) {
-          return total + cantidad * subtotal;
-        }
-        return total;
-      },
-      0
-    );
-    this.service.datosOrd.Total = totalCalculado.toFixed(2);
-    console.log('Total Calculado:', this.service.datosOrd.Total);
+
+  setupNewOrden() {
+    this.flagCode = true;
+    this.resetOrden();
   }
-  // Verificamos si la orden ya existe
-  ordenExists() {
-    if (this.idOrden === undefined) {
-      if (!/^\d+$/.test(this.service.datosOrd.id)) {
-        // El código no es numérico, puedes manejar la lógica correspondiente aquí
-        console.log('El código debe ser numérico');
-        this.isNumberCode = false;
-    } else {
-      this.isNumberCode = true;
-    }
-      this.service.getFakeData().subscribe((data: Orden[]) => {
-        const ords = data;
-        this.isActiveOrden = ords.find(
-          (item: Orden) => item.id === this.service.datosOrd.id
-        );
-        return this.isActiveOrden;
+
+  agregarOrden(form: NgForm) {
+    if (this.validarFormulario()) {
+      this.calcularTotal();
+      this.service.uploadFakeData(this.datosOrd).subscribe((data) => {
+        console.log('Agregaste o actualizaste' + data);
       });
+      form.reset();
+      this.router2.navigate(['/ordenes']);
+    } else {
+      this.openModal('No cumples con las condiciones');
     }
   }
-  //Validacion de las fechas
-  validateStringDates(date :string , currentDate : string){
+
+  validarFormulario(): boolean {
+    const today = new Date();
+    today.setDate(today.getDate() - 1)
+
+    if(!this.validarCodigoNumericoDe1a12Digitos(this.datosOrd.id) ||
+    this.datosOrd.Proveedor === 'Selecciona un Sku' ||
+    this.validateStringDates(this.datosOrd.Emision, this.datosOrd.Entrega) ||
+    !this.validarStringAlfanumericoEntre15y250Caracteres(this.datosOrd.InfoRecepcion)) {
+      return false;
+    }
+    if(this.idOrden === undefined) {
+      console.log("que pasa")
+      if(new Date(this.datosOrd.Emision) < today) return false;
+    }
+    return true;
+
+  }
+
+  validarCodigoNumericoDe1a12Digitos(str: string): boolean {
+    const regex = /^[0-9]{1,12}$/;
+    return regex.test(str);
+  }
+  validarStringAlfanumericoEntre15y250Caracteres(str: string): boolean {
+    const long = str.length
+    return long > 14;
+  }
+  validateStringDates(date: string, currentDate: string): boolean {
     const dateDate = new Date(date);
     const currentDateDate = new Date(currentDate);
-    return dateDate >= currentDateDate
+    return dateDate >= currentDateDate;
   }
-  // Validacion para que sea solo 1 proveedor
   validacionProveedor() {
-    this.service.datosOrd.Productos.length > 0
-      ? (this.isProductsInOrden = true)
-      : (this.isProductsInOrden = false);
+    this.isProductsInOrden = this.datosOrd.Productos.length > 0;
   }
-}
 
-function resetearLista(lista: Orden) {
-  lista.Emision = '';
-  lista.Entrega = '';
-  lista.InfoRecepcion = '';
-  lista.id = '';
-  lista.Productos = [];
-  lista.Proveedor = '';
-  lista.Activo = true;
+  searchProds(proveedor: string) {
+    this.servicioProducto.getFakeData().subscribe((data: ProductoyServicio[]) => {
+      this.productos = data
+        .filter((item) => item.Activo && item.Proveedor === proveedor);
+    });
+  }
+
+  getFormattedDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  agregarProd() {
+    const selectedProduct = this.productos.find((item) => item.id === this.prod);
+    if (selectedProduct) {
+      const nuevoProducto: CalcOrden = {
+        Sku: this.prod,
+        Cantidad: this.cant,
+        Nombre: selectedProduct.Producto,
+        Subtotal: selectedProduct.Precio,
+      };
+      this.datosOrd.Productos.push(nuevoProducto);
+      this.validacionProveedor();
+      this.calcularTotal();
+    }
+  }
+
+  deleteProd(index: number) {
+    this.datosOrd.Productos.splice(index, 1);
+    this.validacionProveedor();
+    this.calcularTotal();
+  }
+
+  calcularTotal() {
+    const totalCalculado = this.datosOrd.Productos.reduce(
+      (total, producto) => total + (parseInt(producto.Cantidad, 10) || 0) * parseFloat(producto.Subtotal || '0'),
+      0
+    );
+    this.datosOrd.Total = totalCalculado.toFixed(2);
+  }
+
+  ordenExists(): boolean {
+    if (this.idOrden === undefined) {
+      this.isNumberCode = /^\d+$/.test(this.datosOrd.id);
+      this.isActiveOrden = this.ords.some((item) => item.id === this.datosOrd.id);
+      return this.isActiveOrden;
+    }
+    return false;
+  }
+
+  openModal(aviso: string = "Informacion del formulario") {
+    const mensajes: string[] = [];
+  
+    mensajes.push('Todos los campos son obligatorios.');
+    mensajes.push('Completar todos los campos correctamente.');
+    mensajes.push('Respeta los formatos ejemplificados.');
+    mensajes.push('Evita dejar espacios en el comienzo, final o entre palabras.');
+    mensajes.push('El numero de orden debe ser numérico y contener exactamente 8 dígitos.');
+    mensajes.push('Ingresa un numero de orden que no exista.');
+    mensajes.push('La fecha de emision debe ser como minmo la fecha actual.');
+    mensajes.push('La fecha de entrega debe ser posterior a la de emision.');
+  
+    const modalRef = this.modalService.open(ModalComponent);
+    modalRef.componentInstance.listado = mensajes;
+    modalRef.componentInstance.aviso = aviso;
+  }
+
+  resetOrden(){
+    this.datosOrd = {
+      id: '',
+      Emision: '',
+      Entrega: '',
+      InfoRecepcion: '',
+      Proveedor: '',
+      Productos: [],
+      Activo: true,
+      Total: '',
+    }
+  }
 }

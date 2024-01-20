@@ -7,10 +7,10 @@
         <a class="text-light text-decoration-none" routerLink="/ordenes"
           >Ordenes</a
         >
-        <i *ngIf="this.service.datosOrd.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
+        <i *ngIf="this.datosOrd.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
         <p class="m-0 text-light text-md-nowrap">
-          <span *ngIf="this.service.datosOrd.id != ''"
-            >Orden {{ this.service.datosOrd.id }}</span
+          <span *ngIf="this.datosOrd.id != ''"
+            >Orden {{ this.datosOrd.id }}</span
           >
         </p>
       </div>
@@ -29,7 +29,7 @@
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
-                    <h5 class="text-nowrap">{{ this.service.datosOrd.id }}</h5>
+                    <h5 class="text-nowrap">{{ this.datosOrd.id }}</h5>
                     <span>Orden</span>
                   </div>
                 </div>
@@ -44,7 +44,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
-                      {{ this.service.datosOrd.Proveedor }}
+                      {{ this.datosOrd.Proveedor }}
                     </h5>
                     <span>Proveedor</span>
                   </div>
@@ -61,7 +61,7 @@
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
                       {{
-                        this.service.datosOrd.Activo ? "Activa" : "Cancelada"
+                        this.datosOrd.Activo ? "Activa" : "Cancelada"
                       }}
                     </h5>
                     <span>Estado</span>
@@ -78,7 +78,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
-                      {{ this.service.datosOrd.Emision }}
+                      {{ this.datosOrd.Emision }}
                     </h5>
                     <span>Emision</span>
                   </div>
@@ -94,7 +94,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
-                      {{ this.service.datosOrd.Entrega }}
+                      {{ this.datosOrd.Entrega }}
                     </h5>
                     <span>Entrega</span>
                   </div>
@@ -110,7 +110,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
-                      {{ this.service.datosOrd.InfoRecepcion }}
+                      {{ this.datosOrd.InfoRecepcion }}
                     </h5>
                     <span>Informacion de recepcion</span>
                   </div>
@@ -121,7 +121,7 @@
         </div>
         <h3 class="text-light my-3">Productos</h3>
         <div
-          *ngFor="let prodComp of this.service.datosOrd.Productos"
+          *ngFor="let prodComp of this.datosOrd.Productos"
           class="row p-0 m-0"
         >
           <div class="col-12 col-xl-4 col-sm-6 mb-3">
@@ -174,7 +174,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
-                      ${{ this.service.datosOrd.Total }}
+                      ${{ this.datosOrd.Total }}
                     </h5>
                     <span>Total</span>
                   </div>
@@ -184,14 +184,14 @@
           </div>
         </div>
         <!-- Acciones desde el detalle -->
-        <div *ngIf="this.service.datosOrd.Activo === true" class="d-flex">
+        <div *ngIf="this.datosOrd.Activo === true" class="d-flex">
           <a
             data-bs-toggle="modal" data-bs-target="#exampleModal" 
             class="btn btn-danger me-2"
             >Eliminar</a
           >
           <a
-            [routerLink]="['/ordenes/form/', this.service.datosOrd.id]"
+            [routerLink]="['/ordenes/form/', this.datosOrd.id]"
             class="btn btn-primary me-2"
             >Editar</a
           >
@@ -214,11 +214,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-           Deseas cancelar la orden "{{this.service.datosOrd.id}}"?
+           Deseas cancelar la orden "{{this.datosOrd.id}}"?
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarOrden(this.service.datosOrd.id)">Aceptar</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarOrden(this.datosOrd.id)">Aceptar</button>
         </div>
       </div>
     </div>

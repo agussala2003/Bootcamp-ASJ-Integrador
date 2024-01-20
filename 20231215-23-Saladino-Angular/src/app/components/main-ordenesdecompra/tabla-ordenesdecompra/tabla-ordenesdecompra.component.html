@@ -70,7 +70,7 @@
               <div class="d-flex">
                 <i
                   [ngClass]="orden.Activo ? '' : 'd-none'"
-                  (click)="this.service.getProdData(orden.id)" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                  (click)="getOrden(orden.id)" data-bs-toggle="modal" data-bs-target="#exampleModal"
                   class="btn btn-danger bx bx-trash me-2"
                 ></i>
                 <!-- <i [ngClass]="orden.Activo ? 'd-none' : '' " (click)="borrarOrden(orden.Orden)" class="btn btn-success bx bx-check me-2"></i> -->
@@ -91,9 +91,7 @@
     </div>
     <!-- Mostramos un mensaje si no hay ordenes -->
     <div *ngIf="ordenes.length == 0">
-      <h3 class="text-light text-center">
-        No tiene ordenes en tu lista! Por favor agregar alguno
-      </h3>
+      <app-empty-list></app-empty-list>
     </div>
     <!-- Mostramos un mensaje si no hay ordenes -->
   </div>
@@ -111,11 +109,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-           Deseas cancelar la orden "{{this.service.datosOrd.id}}"?
+           Deseas cancelar la orden "{{this.datosOrd.id}}"?
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarOrden(this.service.datosOrd.id)">Aceptar</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarOrden(this.datosOrd.id)">Aceptar</button>
         </div>
       </div>
     </div>

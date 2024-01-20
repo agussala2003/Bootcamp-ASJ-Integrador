@@ -49,7 +49,7 @@
             <td>
               <p class="fw-normal mb-1 text-nowrap">{{ proveedor.Telefono }}</p>
               <p class="fw-normal mb-1 text-nowrap">{{ proveedor.Email }}</p>
-              <p class="fw-normal mb-1 text-nowrap"><a target="_blank" href="https://agussala2003.github.io/portfolio/">{{ proveedor.SitioWeb }}</a></p>
+              <p class="fw-normal mb-1 text-nowrap"><a target="_blank" href="{{ proveedor.SitioWeb }}">{{ proveedor.SitioWeb }}</a></p>
             </td>
             <td>
               <p class="fw-normal mb-1 text-nowrap">
@@ -58,7 +58,7 @@
             </td>
             <td>
               <div class="d-flex">
-                <i (click)="this.service.getProvData(proveedor.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash me-2"></i>
+                <i (click)="getProveedor(proveedor.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash me-2"></i>
                 <i [routerLink]="['/proveedores/form/',proveedor.id]" class="btn btn-primary bx bx-edit-alt me-2"></i>
                 <i [routerLink]="['/proveedores/detalle/',proveedor.id]" class="btn btn-success bx bx-info-circle"></i>
               </div>
@@ -69,7 +69,7 @@
     </div>
     <!-- Mostramos un mensaje si no tiene productos -->
     <div *ngIf="proveedores.length == 0">
-      <h3 class="text-light text-center">No tiene proveedores en tu lista! Por favor agregar alguno</h3>
+      <app-empty-list></app-empty-list>
     </div>
     <!-- Mostramos un mensaje si no tiene productos -->
   </div>
@@ -87,11 +87,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-           Deseas eliminar el proveedor "{{this.service.datosProv.RazonSocial}}"?
+           Deseas eliminar el proveedor "{{this.datosProv.RazonSocial}}"?
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarProveedor(this.service.datosProv.id)">Aceptar</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarProveedor(this.datosProv.id)">Aceptar</button>
         </div>
       </div>
     </div>

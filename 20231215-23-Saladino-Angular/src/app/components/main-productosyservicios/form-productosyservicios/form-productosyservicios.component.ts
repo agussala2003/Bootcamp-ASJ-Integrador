@@ -7,6 +7,8 @@ import { Proveedor } from '../../../models/Proveedor';
 import { ProveedoresService } from '../../../services/proveedores.service';
 import { Categoria } from '../../../models/Categoria';
 import { CategoriasService } from '../../../services/categorias.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalComponent } from '../../modal/modal.component';
 
 @Component({
   selector: 'app-form-productosyservicios',
@@ -19,83 +21,150 @@ export class FormProductosyserviciosComponent implements OnInit {
     public router: ActivatedRoute,
     public servicioProveedor: ProveedoresService,
     public router2: Router,
-    public servicioCategoria:CategoriasService
+    public servicioCategoria:CategoriasService,
+    public modalService: NgbModal
   ) {}
+
+  datosProd: ProductoyServicio = {
+    Proveedor: '',
+    id: '',
+    Categoria: '',
+    Producto: '',
+    Descripcion: '',
+    Precio: '',
+    Imagen: '',
+    Activo: true,
+  };
 
   idProdServ: string = '';
   userState: any;
   proveedores: Proveedor[] = [];
   categorias: Categoria[] = [];
+  productos: ProductoyServicio[] = [];
+  isActiveSku: any = false;
 
   flagCode: boolean = true;
-  isActiveSku: any = false;
-  agregarActualizar: string = '';
   isNumberCode: boolean = true;
 
   ngOnInit(): void {
     this.router.params.subscribe((data) => {
       this.idProdServ = data['idProdServ'];
       if (this.idProdServ !== undefined) {
-        // Verficamos si es uno editado
-        this.service.getProdData(this.idProdServ);
-        this.flagCode = false;
-        this.agregarActualizar = 'Actualizar';
+        this.loadProductoData();
       } else {
-        // Verificamos si es uno nuevo
-        this.flagCode = true;
-        this.agregarActualizar = 'Agregar';
-        // Se resetea la lista cada vez que se quiera ingresar uno nuevo
-        resetearLista(this.service.datosProd);
+        this.setupNewProduct();
       }
     });
-    //Obtenemos el estado del usuario
+
     this.userState = this.service.getUserState();
-    //Obtenemos los proveedores ACTIVOS para poder ser seleccionados
+
     this.servicioProveedor.getFakeData().subscribe((data: Proveedor[]) => {
-      this.proveedores = data;
-      this.proveedores = this.proveedores.filter(
-        (proveedor: Proveedor) => proveedor.Activo
-      );
+      this.proveedores = data.filter((proveedor: Proveedor) => proveedor.Activo);
     });
-    // Obtenemos las Categorias
+
     this.servicioCategoria.getFakeData().subscribe((data:Categoria[]) =>{
       this.categorias = data
-    })
-  }
-  // Agregamos un producto o servicio
-  agregarProductoyservicio(form: NgForm) {
-    this.service.uploadFakeData().subscribe((data) => {
-      console.log('Agregaste o actualizate' + data);
     });
-    form.reset();
-    this.router2.navigate(['/productos-servicios']);
+
+    this.service.getFakeData().subscribe((data: ProductoyServicio[]) => {
+      this.productos = data;
+    });
   }
-  // Validamos si ya existe el SKU al momento de ingresar uno
-  skuExists() {
-    if (this.idProdServ === undefined) {
-        // Agregar la validación de que el código sea numérico
-        if (!/^\d+$/.test(this.service.datosProd.id)) {
-            // El código no es numérico, puedes manejar la lógica correspondiente aquí
-            console.log('El código debe ser numérico');
-            this.isNumberCode = false;
-        } else {
-          this.isNumberCode = true;
-        }
-        this.service.getFakeData().subscribe((data: ProductoyServicio[]) => {
-            const prods = data;
-            this.isActiveSku = prods.find(
-                (item: ProductoyServicio) => item.id === this.service.datosProd.id
-            );
-        });
+
+  loadProductoData(){
+    this.service.getProdData(this.idProdServ).subscribe((data: ProductoyServicio) => {
+      this.datosProd = data;
+    });
+    this.flagCode = false;
+  }
+  setupNewProduct(){
+    this.flagCode = true;
+    this.resetProductoData();
+  }
+
+  agregarProductoyservicio(form: NgForm) {
+    if(this.validarFormulario()){
+      this.service.uploadFakeData(this.datosProd).subscribe((data) => {
+        console.log('Agregaste o actualizate' + data);
+      });
+      form.reset();
+      this.router2.navigate(['/productos-servicios']);
+    } else {
+      this.openModal('No cumples con las condiciones');
     }
   }
-}
-function resetearLista(lista: ProductoyServicio) {
-  lista.Categoria = '';
-  lista.Descripcion = '';
-  lista.Imagen = '';
-  lista.Precio = '';
-  lista.Producto = '';
-  lista.Proveedor = '';
-  lista.id = '';
+
+  validarFormulario():boolean {
+    if(!this.validarCodigoNumericoDe8Digitos(this.datosProd.id) ||
+    this.datosProd.Proveedor === 'Selecciona un proveedor' ||
+    this.datosProd.Categoria === 'Selecciona una categoria' ||
+    !this.validarStringAlfanumericoEntre3y30Caracteres(this.datosProd.Producto) ||
+    !this.validarStringAlfanumericoEntre15y250Caracteres(this.datosProd.Descripcion) ||
+    parseInt(this.datosProd.Precio) < 1 ||
+    !this.validarUrl(this.datosProd.Imagen)
+    ){
+      return false;
+    }
+    return true;
+  }
+
+  validarCodigoNumericoDe8Digitos(str: string): boolean {
+    const regex = /^[0-9]{8}$/;
+    return regex.test(str);
+  }
+  validarStringAlfanumericoEntre3y30Caracteres(str: string): boolean {
+    const regex = /^[0-9 A-Z a-z]{3,30}$/;
+    return regex.test(str);
+  }
+  validarStringAlfanumericoEntre15y250Caracteres(str: string): boolean {
+    const long = str.length
+    return long > 14;
+  }
+  validarUrl(sitioWeb: string): boolean {
+    const regex = /^(ftp|http|https):\/\/[^ "]+$/;
+    return regex.test(sitioWeb);
+  }
+  
+  skuExists() {
+    if (this.idProdServ === undefined) {
+      if (!/^\d+$/.test(this.datosProd.id)) {
+        console.log('El código debe ser numérico');
+        this.isNumberCode = false;
+      } else {
+        this.isNumberCode = true;
+      }
+
+      this.isActiveSku = this.productos.some((item: ProductoyServicio) => item.id === this.datosProd.id);
+    }
+  }
+
+  resetProductoData(){
+    this.datosProd = {
+      Proveedor: '',
+      id: '',
+      Categoria: '',
+      Producto: '',
+      Descripcion: '',
+      Precio: '',
+      Imagen: '',
+      Activo: true,
+    };
+  }
+
+  openModal(aviso: string = "Informacion del formulario") {
+    const mensajes: string[] = [];
+  
+    mensajes.push('Todos los campos son obligatorios.');
+    mensajes.push('Completar todos los campos correctamente.');
+    mensajes.push('Respeta los formatos ejemplificados.');
+    mensajes.push('Evita dejar espacios en el comienzo, final o entre palabras.');
+    mensajes.push('El código debe ser numérico y contener exactamente 8 dígitos.');
+    mensajes.push('La Imagen debe comenzar con "https://" y seguir un formato válido.');
+    mensajes.push('Ingresa un código que no exista.');
+  
+    const modalRef = this.modalService.open(ModalComponent);
+    modalRef.componentInstance.listado = mensajes;
+    modalRef.componentInstance.aviso = aviso;
+  }
+  
 }

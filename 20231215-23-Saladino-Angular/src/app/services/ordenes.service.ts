@@ -1,64 +1,50 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Orden } from '../models/Orden';
-// import { ordenes } from '../../data/ordenes';
-import { Observable, tap } from 'rxjs';
-// const data:Orden[] = ordenes;
+import { Observable, of, switchMap, tap } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
 export class OrdenesService {
   constructor(private http: HttpClient) {}
+
+  private readonly baseUrl = 'http://localhost:3000/ordenes'
   lista: Orden[] = [];
-  datosOrd: Orden = {
-    id: '',
-    Emision: '',
-    Entrega: '',
-    InfoRecepcion: '',
-    Proveedor: '',
-    Productos: [],
-    Activo: true,
-    Total: '',
-  };
-  // Obtenemos todas las ordenes
+
   public getFakeData(): Observable<Orden[]> {
-    return this.http.get<Orden[]>('http://localhost:3000/ordenes').pipe(
-      tap((ordenes) => {
-        this.lista = ordenes;
-      })
-    );
+    return this.http
+    .get<Orden[]>(this.baseUrl)
+    .pipe(tap((ordenes) =>  (this.lista = ordenes)));
   }
-  // Agragamos o actualizamos un proveedor
-  public uploadFakeData(): Observable<Orden> {
-    const index = this.lista.findIndex((item) => item.id === this.datosOrd.id);
-    const newOrden: Orden = { ...this.datosOrd };
+
+  public uploadFakeData(orden: Orden): Observable<Orden> {
+    const url = `${this.baseUrl}/${orden.id}`;
+    const index = this.lista.findIndex((item) => item.id === orden.id);
     if (index !== -1) {
-      // Si existe, actualiza el elemento en la posición index
-      this.lista[index] = newOrden;
-      return this.http.patch<Orden>(
-        `http://localhost:3000/ordenes/${this.lista[index].id}`,
-        this.lista[index]
-      );
+      return this.http.patch<Orden>(url,orden);
     } else {
       // Si no existe, agrega el nuevo elemento
-      return this.http.post<Orden>('http://localhost:3000/ordenes', newOrden);
+      return this.http.post<Orden>(this.baseUrl,orden);
     }
   }
-  // Hacemos un borrado logico
-  public deleteFakeData(id: string): Observable<Orden> {
+
+  public deleteFakeData(id: string): Observable<Orden[]> {
+    const url = `${this.baseUrl}/${id}`;
     const index = this.lista.findIndex((item) => item.id === id);
-    this.lista[index].Activo = false;
-    return this.http.patch<Orden>(
-      `http://localhost:3000/ordenes/${this.lista[index].id}`,
-      this.lista[index]
-    );
+    if(index !== -1) {
+      this.lista[index].Activo = false;
+      return this.http
+      .patch<Orden>(url,this.lista[index])
+      .pipe(switchMap(() => this.getFakeData()));
+    }
+
+    return of([]);
   }
   // Obtenemos la data de una orden
-  public getProdData(id: string) {
-    const num = this.lista.findIndex((item) => item.id === id);
-    if (num !== -1) {
-      this.datosOrd = { ...this.lista[num] };
-    }
+  public getProdData(id: string): Observable<Orden> {
+    const url = `${this.baseUrl}/${id}`;
+    return this.http.get<Orden>(url);
   }
   // Obtenemos el estado de, usuario
   public getUserState(): string | null {
