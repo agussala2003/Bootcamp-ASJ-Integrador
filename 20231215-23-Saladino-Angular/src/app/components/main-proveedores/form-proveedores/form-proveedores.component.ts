@@ -162,7 +162,7 @@ export class FormProveedoresComponent implements OnInit {
   validarFormulario(): boolean {
     if (
       !this.validarStringAlfanumericoDe4Digitos(this.datosProv.id) ||
-      !this.validarStringAlfanumericoEntre3y30Caracteres(this.datosProv.RazonSocial) ||
+      !this.validarStringAlfanumericoEntre3y50Caracteres(this.datosProv.RazonSocial) ||
       this.datosProv.Rubro === 'Selecciona un rubro' ||
       !this.validarTelefono(this.datosProv.Telefono) ||
       !this.validarEmail(this.datosProv.Email) ||
@@ -170,17 +170,17 @@ export class FormProveedoresComponent implements OnInit {
       (this.datosProv.Imagen && !this.validarUrl(this.datosProv.Imagen)) ||
       this.datosProv.Direccion.Pais === 'Selecciona Pais' ||
       this.datosProv.Direccion.Provincia === 'Selecciona Provincia' ||
-      !this.validarStringAlfanumericoEntre3y30Caracteres(this.datosProv.Direccion.Localidad) ||
-      !this.validarStringAlfanumericoEntre3y30Caracteres(this.datosProv.Direccion.Calle) ||
+      !this.validarStringAlfanumericoEntre3y50Caracteres(this.datosProv.Direccion.Localidad) ||
+      !this.validarStringAlfanumericoEntre3y50Caracteres(this.datosProv.Direccion.Calle) ||
       parseInt(this.datosProv.Direccion.Numero) < 1 ||
       !this.validarCodigoPostal(this.datosProv.Direccion.CP) ||
       !this.validarCUIT(this.datosProv.DatosFiscales.CUIT) ||
       this.datosProv.DatosFiscales.CondicionIVA === 'Selecciona Condicion' ||
-      !this.validarStringAlfanumericoEntre3y30Caracteres(this.datosProv.DatosContacto.Nombre) ||
-      !this.validarStringAlfanumericoEntre3y30Caracteres(this.datosProv.DatosContacto.Apellido) ||
+      !this.validarStringAlfanumericoEntre3y50Caracteres(this.datosProv.DatosContacto.Nombre) ||
+      !this.validarStringAlfanumericoEntre3y50Caracteres(this.datosProv.DatosContacto.Apellido) ||
       !this.validarTelefono(this.datosProv.DatosContacto.Telefono) ||
       !this.validarEmail(this.datosProv.DatosContacto.Email) ||
-      !this.validarStringAlfanumericoEntre3y30Caracteres(this.datosProv.DatosContacto.Rol)
+      !this.validarStringAlfanumericoEntre3y50Caracteres(this.datosProv.DatosContacto.Rol)
     ) {
       return false;
     }
@@ -191,8 +191,8 @@ export class FormProveedoresComponent implements OnInit {
     const regex = /^(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z]{4}$/;
     return regex.test(str);
   }
-  validarStringAlfanumericoEntre3y30Caracteres(str: string): boolean {
-    const regex = /^[0-9 A-Z a-z]{3,30}$/;
+  validarStringAlfanumericoEntre3y50Caracteres(str: string): boolean {
+    const regex = /^[0-9 A-Z a-z]{3,50}$/;
     return regex.test(str);
   }
   validarTelefono(telefono: string): boolean {

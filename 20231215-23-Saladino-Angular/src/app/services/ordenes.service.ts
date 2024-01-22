@@ -41,6 +41,19 @@ export class OrdenesService {
 
     return of([]);
   }
+
+  public activeOrden(id: string): Observable<Orden[]> {
+    const url = `${this.baseUrl}/${id}`;
+    const index = this.lista.findIndex((item) => item.id === id);
+    if(index !== -1) {
+      this.lista[index].Activo = true;
+      return this.http
+      .patch<Orden>(url,this.lista[index])
+      .pipe(switchMap(() => this.getFakeData()));
+    }
+
+    return of([]);
+  }
   // Obtenemos la data de una orden
   public getProdData(id: string): Observable<Orden> {
     const url = `${this.baseUrl}/${id}`;

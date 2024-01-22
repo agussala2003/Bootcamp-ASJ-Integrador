@@ -24,6 +24,11 @@ export class TablaOrdenesdecompraComponent implements OnInit {
   ordenes: Orden[] = [];
   userState: any;
   total: string = '';
+  isDeleting:boolean = false;
+  ord:string = '';
+  prevPage: number = 0;
+  nextPage: number = 5;
+  isActiveItems: boolean = true;
 
   ngOnInit(): void {
     this.actualizarOrdenes();
@@ -52,15 +57,41 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     return total.toFixed(2);
   }
 
-  getOrden(id: string): void {
+  getOrden(id: string,state:boolean): void {
     this.service.getProdData(id).subscribe((data: Orden) => {
       this.datosOrd = data;
+      this.isDeleting = state;
+    });
+  }
+
+  activarOrden(id:string): void {
+    this.service.activeOrden(id).subscribe((data) => {
+      console.log(`Activaste ${data}`);
+      this.actualizarOrdenes();
     });
   }
 
   actualizarOrdenes(): void {
     this.service.getFakeData().subscribe((data: Orden[]) => {
-      this.ordenes = data;
+      this.ordenes = data.filter((item:Orden) => item.Activo);
     });
+  }
+  private filtrarProductosInactivos(productos: Orden[],state:boolean): Orden[] {
+    return productos.filter((producto) => producto.Activo === state);
+  }
+
+  goPrevPage(){
+    this.prevPage -= 5;
+    this.nextPage -= 5;
+  }
+  goNextPage(){
+    this.prevPage += 5;
+    this.nextPage += 5;
+  }
+  changeState(){
+    this.isActiveItems = !this.isActiveItems
+    this.service.getFakeData().subscribe((data:Orden[]) => {
+      this.ordenes = this.filtrarProductosInactivos(data, this.isActiveItems);
+    })
   }
 }

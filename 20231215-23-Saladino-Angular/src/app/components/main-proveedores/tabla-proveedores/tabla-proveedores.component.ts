@@ -12,6 +12,10 @@ export class TablaProveedoresComponent implements OnInit {
 
   proveedores: Proveedor[] = [];
   userState: any;
+  prov:string = '';
+  prevPage: number = 0;
+  nextPage: number = 5;
+  isActiveItems:boolean = true;
   
   datosProv: Proveedor = {
     id: '',
@@ -75,8 +79,26 @@ export class TablaProveedoresComponent implements OnInit {
         }
       );
   }
+  private filtrarProductosInactivos(productos: Proveedor[],state:boolean): Proveedor[] {
+    return productos.filter((producto) => producto.Activo === state);
+  }
 
   handleImageError(proveedor: any) {
     proveedor.Imagen = '../../../../assets/img/logoGenerico.png';
+  }
+
+  goPrevPage(){
+    this.prevPage -= 5;
+    this.nextPage -= 5;
+  }
+  goNextPage(){
+    this.prevPage += 5;
+    this.nextPage += 5;
+  }
+  changeState(){
+    this.isActiveItems = !this.isActiveItems
+    this.proveedoresService.getFakeData().subscribe((data:Proveedor[]) => {
+      this.proveedores = this.filtrarProductosInactivos(data, this.isActiveItems);
+    })
   }
 }

@@ -28,6 +28,9 @@ import { TablaCategoriasComponent } from './components/main-categorias/tabla-cat
 import { FormCategoriasComponent } from './components/main-categorias/form-categorias/form-categorias.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { EmptyListComponent } from './components/empty-list/empty-list.component';
+import { SearchPipe } from './pipes/search.pipe';
+import { PaginationPipe } from './pipes/pagination.pipe';
+import { StateItemsPipe } from './pipes/state-items.pipe';
 
 @NgModule({
   declarations: [
@@ -53,7 +56,10 @@ import { EmptyListComponent } from './components/empty-list/empty-list.component
     TablaCategoriasComponent,
     FormCategoriasComponent,
     ModalComponent,
-    EmptyListComponent
+    EmptyListComponent,
+    SearchPipe,
+    PaginationPipe,
+    StateItemsPipe
   ],
   imports: [
     BrowserModule,

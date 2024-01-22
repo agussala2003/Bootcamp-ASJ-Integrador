@@ -24,6 +24,10 @@ export class TablaProductosyserviciosComponent implements OnInit {
 
   productosyServicios: ProductoyServicio[] = [];
   userState: any;
+  prod:string = '';
+  prevPage: number = 0;
+  nextPage: number = 5;
+  isActiveItems: boolean = true;
 
   constructor(
     public productosService: ProductosyserviciosService,
@@ -67,6 +71,9 @@ export class TablaProductosyserviciosComponent implements OnInit {
   private filtrarProductosActivos(productos: ProductoyServicio[]): ProductoyServicio[] {
     return productos.filter((producto) => producto.Activo);
   }
+  private filtrarProductosInactivos(productos: ProductoyServicio[],state:boolean): ProductoyServicio[] {
+    return productos.filter((producto) => producto.Activo === state);
+  }
 
   private filtrarProveedoresInactivos(
     productos: ProductoyServicio[],
@@ -84,5 +91,20 @@ export class TablaProductosyserviciosComponent implements OnInit {
     }
 
     return productos;
+  }
+
+  goPrevPage(){
+    this.prevPage -= 5;
+    this.nextPage -= 5;
+  }
+  goNextPage(){
+    this.prevPage += 5;
+    this.nextPage += 5;
+  }
+  changeState(){
+    this.isActiveItems = !this.isActiveItems
+    this.productosService.getFakeData().subscribe((data:ProductoyServicio[]) => {
+      this.productosyServicios = this.filtrarProductosInactivos(data, this.isActiveItems);
+    })
   }
 }

@@ -98,7 +98,7 @@ export class FormProductosyserviciosComponent implements OnInit {
     if(!this.validarCodigoNumericoDe8Digitos(this.datosProd.id) ||
     this.datosProd.Proveedor === 'Selecciona un proveedor' ||
     this.datosProd.Categoria === 'Selecciona una categoria' ||
-    !this.validarStringAlfanumericoEntre3y30Caracteres(this.datosProd.Producto) ||
+    !this.validarStringAlfanumericoEntre3y50Caracteres(this.datosProd.Producto) ||
     !this.validarStringAlfanumericoEntre15y250Caracteres(this.datosProd.Descripcion) ||
     parseInt(this.datosProd.Precio) < 1 ||
     !this.validarUrl(this.datosProd.Imagen)
@@ -112,8 +112,8 @@ export class FormProductosyserviciosComponent implements OnInit {
     const regex = /^[0-9]{8}$/;
     return regex.test(str);
   }
-  validarStringAlfanumericoEntre3y30Caracteres(str: string): boolean {
-    const regex = /^[0-9 A-Z a-z]{3,30}$/;
+  validarStringAlfanumericoEntre3y50Caracteres(str: string): boolean {
+    const regex = /^[0-9 A-Z a-z]{3,50}$/;
     return regex.test(str);
   }
   validarStringAlfanumericoEntre15y250Caracteres(str: string): boolean {
