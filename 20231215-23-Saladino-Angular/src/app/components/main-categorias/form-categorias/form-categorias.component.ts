@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoriasService } from '../../../services/categorias.service';
-import { Categoria } from '../../../models/Categoria';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Category } from '../../../models/Category';
 
 @Component({
   selector: 'app-form-categorias',
@@ -10,27 +10,29 @@ import { Router } from '@angular/router';
   styleUrl: './form-categorias.component.css'
 })
 export class FormCategoriasComponent implements OnInit{
-  constructor(public service: CategoriasService,public router:Router){}
+  constructor(public categoryService: CategoriasService,public router:Router){}
   userState:any
-  categoriasFull: Categoria[] = [];
-  categorias:Categoria = {
+
+  categories: Category[] = [];
+
+  categoryViewModel: Category = {
     id: '',
-    categoria: ''
+    categoryName: '',
+    createdAt: '',
+    updatedAt: ''
   };
+
   ngOnInit(): void {
-    this.userState = this.service.getUserState();
-    this.service.getFakeData().subscribe((data: Categoria[]) => {
-      this.categoriasFull = data;
-    });
+    this.userState = this.categoryService.getUserState();
   }
+
+
   // Agregamos Categoria
-  agregarCategoria(form:NgForm) {
-    const highestId = this.categoriasFull.reduce((maxId, item) => {
-      const currentId = parseInt(item.id);
-      return currentId > maxId ? currentId : maxId;
-    }, 0);
-    this.categorias.id = String(highestId + 1);
-    this.service.uploadFakeData(this.categorias).subscribe(data => console.log(data));
+  postCategory(form:NgForm) {
+    this.categoryService.postCategory(this.categoryViewModel).subscribe((data: Category) => {
+      console.log("You posted a Category");
+      console.log(data);
+    })
     this.router.navigate(['/categorias']);
   }
 }

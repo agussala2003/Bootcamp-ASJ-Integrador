@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductosyserviciosService } from '../../../services/productosyservicios.service';
+import { ProductService } from '../../../services/productosyservicios.service';
 import { ProductoyServicio } from '../../../models/ProductoyServicio';
+import { Industry } from '../../../models/Industry';
+import { IvaCondition } from '../../../models/IvaCondition';
+import { Supplier } from '../../../models/Supplier';
+import { Category } from '../../../models/Category';
+import { Product } from '../../../models/Product';
 
 @Component({
   selector: 'app-detalle-prod',
@@ -10,45 +15,85 @@ import { ProductoyServicio } from '../../../models/ProductoyServicio';
 })
 export class DetalleProdComponent {
   constructor(
+    public productService: ProductService,
     public router: ActivatedRoute,
-    public service: ProductosyserviciosService,
     public router2: Router
   ) {}
 
-  datosProd: ProductoyServicio = {
-    Proveedor: '',
+  industryViewModel: Industry = { id: '', industryName: '' };
+  ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
+  supplierViewModel: Supplier = {
     id: '',
-    Categoria: '',
-    Producto: '',
-    Descripcion: '',
-    Precio: '',
-    Imagen: '',
-    Activo: true,
+    supplierCode: '',
+    businessName: '',
+    active: true,
+    cuit: '',
+    email: '',
+    image: '',
+    phoneNumber: '',
+    website: '',
+    industry: this.industryViewModel,
+    ivaCondition: this.ivaConditionViewModel,
+    createdAt: '',
+    updatedAt: '',
   };
 
-  idProdServ: string = '';
+  categoryViewModel: Category = {
+    id: '',
+    categoryName: '',
+    createdAt: '',
+    updatedAt: '',
+  };
+
+  productViewModel: Product = {
+    id: '',
+    sku: '',
+    productName: '',
+    description: '',
+    imageUrl: '',
+    active: true,
+    price: 0,
+    createdAt: '',
+    updatedAt: '',
+    supplier: this.supplierViewModel,
+    category: this.categoryViewModel,
+  };
+
+
+  idProduct: string = '';
   userState: any;
 
   ngOnInit(): void {
     this.router.params.subscribe((data) => {
-      this.idProdServ = data['idProdServ'];
-      this.loadProductoData();
+      this.idProduct = data['idProduct'];
+      this.getProductById(this.idProduct);
     });
-    this.userState = this.service.getUserState();
+    this.userState = this.productService.getUserState();
   }
   
-  loadProductoData():void {
-    this.service.getProdData(this.idProdServ).subscribe(
-      (data: ProductoyServicio) => (this.datosProd = data)
+  getProductById(id: string):void {
+    this.productService.getProductById(id).subscribe((data: Product) => {
+      console.log("You get product by id");
+      console.log(data);
+      this.productViewModel = data;
+    }
     );
   }
 
-  borrarProductoyservicio(idProd: string) {
-    this.service.deleteFakeData(idProd).subscribe(
+  deleteProduct(id: string) {
+    this.productService.deleteProduct(id).subscribe(
       () => {
-        console.log(idProd);
+        console.log('You delteed a product');
         this.router2.navigate(['/productos-servicios']);
       }
     );
+  }
+
+  undeleteProductById(id:string) {
+    this.productService.patchProduct(id).subscribe((data:Product) => {
+      console.log("You undeleted a product");
+      console.log(data);
+      this.router2.navigate(['/productos-servicios']);
+    })
   }
 }

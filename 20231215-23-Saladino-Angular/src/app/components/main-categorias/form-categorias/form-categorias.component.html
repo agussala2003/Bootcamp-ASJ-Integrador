@@ -12,12 +12,12 @@
               <a routerLink="/categorias" class="btn btn-primary">Volver a la lista</a>
             </div>
         </div>
-        <form #formCategorias="ngForm" (ngSubmit)="agregarCategoria(formCategorias)">
+        <form #formCategorias="ngForm" (ngSubmit)="postCategory(formCategorias)">
             <div class="row">
                 <div class="col-12 col-md-3 mb-2">
                     <label for="categoria" class="form-label text-light">Categoria:</label>
                     <input
-                      [(ngModel)]="this.categorias.categoria"
+                      [(ngModel)]="this.categoryViewModel.categoryName"
                       required
                       type="text"
                       id="categoria"
@@ -26,10 +26,10 @@
                       class="form-control"
                       minlength="4"
                     />
-                    <div *ngIf="formCategorias.controls['sku']?.hasError('required')" class="col-auto">
+                    <div *ngIf="formCategorias.controls['categoria']?.hasError('required')" class="col-auto">
                       <span class="form-text text-light">El dato es obligatorio</span>
                     </div>
-                    <div *ngIf="formCategorias.controls['sku']?.hasError('minlength')" class="col-auto">
+                    <div *ngIf="formCategorias.controls['categoria']?.hasError('minlength')" class="col-auto">
                       <span class="form-text text-light">Codigo de 8 o mas digitos</span>
                     </div>
                   </div>
@@ -57,7 +57,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                        Deseas agregar la categoria "{{this.categorias.categoria}}"?
+                        Deseas agregar la categoria "{{this.categoryViewModel.categoryName}}"?
                         </div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

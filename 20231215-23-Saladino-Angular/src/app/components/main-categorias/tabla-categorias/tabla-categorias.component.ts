@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CategoriasService } from '../../../services/categorias.service';
-import { Categoria } from '../../../models/Categoria';
+import { Category } from '../../../models/Category';
 
 @Component({
   selector: 'app-tabla-categorias',
@@ -8,35 +8,45 @@ import { Categoria } from '../../../models/Categoria';
   styleUrl: './tabla-categorias.component.css'
 })
 export class TablaCategoriasComponent implements OnInit{
-  constructor(public service: CategoriasService){}
-  categorias: Categoria[] = [];
-  categoria: Categoria = {
+  constructor(public categoryService: CategoriasService){}
+
+  categories: Category[] = [];
+
+  categoryViewModel: Category = {
     id: '',
-    categoria: ''
+    categoryName: '',
+    createdAt: '',
+    updatedAt: ''
   };
+
   userState:any;
+
   ngOnInit(): void {
-    this.userState = this.service.getUserState();
-    this.actualizarListaCategorias();
+    this.userState = this.categoryService.getUserState();
+    this.refreshCategories();
   }
-  // Actualizamos el array de categorias
-  actualizarListaCategorias() {
-    this.service.getFakeData().subscribe((data: Categoria[]) => {
-      this.categorias = data;
+
+  refreshCategories() {
+    this.categoryService.getCategories().subscribe((data: Category[]) => {
+      console.log("You Get All categories")
+      console.log(data);
+      this.categories = data;
     });
   }
-  // Borramos categoria y actualizamos
-  borrarCategoria(id:string) {
-    this.service.deleteFakeData(id).subscribe(data => {
+  
+  deleteCategory(id:string) {
+    this.categoryService.deleteCategory(id).subscribe((data: Category) => {
+      console.log("You Deleted")
       console.log(data)
+      this.refreshCategories();
     })
-    this.actualizarListaCategorias();
   }
-  // Obtenemos la categoria
-  obtenerCategoria(id: string | undefined) {
-    const arr = this.categorias.find((item: Categoria) => item.id === id);
-    if(arr !== undefined){
-      this.categoria = arr
-    }
+
+  getCategoryById(id: string) {
+    this.categoryService.getCategoryById(id).subscribe((data: Category) => {
+      console.log("You Get By id");
+      console.log(data);
+      this.categoryViewModel = data;
+    })
   }
 }

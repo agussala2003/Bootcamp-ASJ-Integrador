@@ -8,10 +8,10 @@
           <a class="text-light text-decoration-none" routerLink="/ordenes"
             >Ordenes</a
           >
-          <i *ngIf="this.datosOrd.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
+          <i *ngIf="this.orderViewModel.orderNumber != ''" class="bx bx-chevron-right text-light fs-4"></i>
           <p class="m-0 text-light text-md-nowrap">
-            <span *ngIf="this.datosOrd.id != ''"
-              >Orden {{ this.datosOrd.id }}</span
+            <span *ngIf="this.orderViewModel.orderNumber != ''"
+              >Orden {{ this.orderViewModel.orderNumber }}</span
             >
           </p>
         </div>
@@ -23,7 +23,7 @@
         </div>
       </div>
       <!-- Ruteo -->
-      <form #formOrd="ngForm" (ngSubmit)="agregarOrden(formOrd)">
+      <form #formOrd="ngForm" (ngSubmit)="submitOrder(formOrd)">
         <div class="row">
           <h4 class="text-light my-2">Datos Ordenes <i (click)="openModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class='bx bx-info-circle text-white ms-2'></i> </h4>
           <div class="col-12 col-md-6">
@@ -34,7 +34,7 @@
                 >
                 <input
                   [disabled]="!flagCode"
-                  [(ngModel)]="this.datosOrd.id"
+                  [(ngModel)]="this.orderViewModel.orderNumber"
                   required
                   type="text"
                   id="orden"
@@ -43,7 +43,7 @@
                   class="form-control"
                   minlength="1"
                   maxlength="12"
-                  (keyup)="ordenExists()"
+                  (keyup)="orderExists()"
                 />
                 <div
                   *ngIf="formOrd.controls['orden']?.hasError('required')"
@@ -63,28 +63,28 @@
                 </div>
               </div>
               <div class="col-12 col-md-6 mb-2">
-                <label for="seleccCodProv" class="form-label text-light"
-                  >Codigo Proveedor:</label
+                <label for="seleccCodProv" class="form-label text-light position-relative labelProv"
+                  >Codigo Proveedor: <img class="rounded-circle position-absolute end-0 bottom-0" *ngIf="this.orderViewModel.supplier.id != ''" src="{{supplierImg}}" style="width: 30px; height: 30px" alt=""></label
                 >
                 <select
                   [disabled]="this.isProductsInOrden"
-                  [(ngModel)]="this.datosOrd.Proveedor"
+                  [(ngModel)]="this.orderViewModel.supplier.id"
                   for="seleccCodProv"
                   class="form-select"
                   name="seleccCodProv"
                   id="seleccCodProv"
                   aria-label="Default select example"
-                  (click)="prod = ''"
+                  (change)="onSupplierChange()"
                   required
                 >
                   <option value="" selected disabled>
                     Selecciona un proveedor
                   </option>
                   <option
-                    *ngFor="let prov of proveedores"
-                    value="{{ prov.RazonSocial }}"
+                    *ngFor="let supplier of suppliers"
+                    value="{{ supplier.id }}"
                   >
-                    {{ prov.RazonSocial }}
+                    {{ supplier.businessName }}
                   </option>
                 </select>
                 <div
@@ -101,7 +101,7 @@
                   >Fecha de emision:</label
                 >
                 <input
-                  [(ngModel)]="this.datosOrd.Emision"
+                  [(ngModel)]="this.orderViewModel.issuanceDate"
                   min="{{ getFormattedDate(today) }}"
                   required
                   type="date"
@@ -124,7 +124,7 @@
                   >Fecha de entrega:</label
                 >
                 <input
-                  [(ngModel)]="this.datosOrd.Entrega"
+                  [(ngModel)]="this.orderViewModel.deliveryDate"
                   required
                   min="{{ getFormattedDate(today) }}"
                   type="date"
@@ -141,16 +141,43 @@
                   >El dato es obligatorio</span
                 >
               </div>
-                <div class="col-auto" *ngIf="validateStringDates(this.datosOrd.Emision,this.datosOrd.Entrega)">
+                <div class="col-auto" *ngIf="validateStringDates(this.orderViewModel.issuanceDate,this.orderViewModel.deliveryDate)">
                   <span class="form-text text-light">La fecha de entrega debe ser posterior a la emision</span>
                 </div>
+              </div>
+              <div class="col-12 mb-2">
+                <label for="status" class="form-label text-light text-nowrap"
+                  >Estado de la orden</label
+                >
+                <select
+                  [(ngModel)]="this.orderViewModel.status.id"
+                  for="status"
+                  name="status"
+                  id="status"
+                  class="form-select"
+                  aria-label="Default select example"
+                  required
+                >
+                  <option value="" selected>Selecciona el estado de la orden</option>
+                  <option *ngFor="let status of statuses" value="{{ status.id }}">
+                    {{ status.statusName }}
+                  </option>
+                </select>
+                <div
+                *ngIf="formOrd.controls['status']?.hasError('required')"
+                class="col-auto"
+              >
+                <span class="form-text text-light"
+                  >El dato es obligatorio</span
+                >
+              </div>
               </div>
               <div class="col-12 mb-2">
                 <label for="infoRecepcion" class="form-label text-light"
                   >Informacion de recepcion:</label
                 >
                 <textarea
-                  [(ngModel)]="this.datosOrd.InfoRecepcion"
+                  [(ngModel)]="this.orderViewModel.receptionInfo"
                   required
                   rows="3"
                   type="text"
@@ -181,9 +208,8 @@
                   >Codigo / Sku:</label
                 >
                 <select
-                  (click)="searchProds(this.datosOrd.Proveedor)"
-                  [disabled]="this.datosOrd.Proveedor == ''"
-                  [(ngModel)]="prod"
+                  [disabled]="this.orderViewModel.supplier.id == ''"
+                  [(ngModel)]="this.orderDetailViewModel.product.id"
                   for="seleccCodProd"
                   name="seleccCodProd"
                   id="seleccCodProd"
@@ -192,12 +218,12 @@
                   required
                 >
                   <option value="" selected>Selecciona un Sku</option>
-                  <option *ngFor="let prod of productos" value="{{ prod.id }}">
-                    {{ prod.Producto + " - " + "$" + prod.Precio }}
+                  <option *ngFor="let product of products" value="{{ product.id }}">
+                    {{ product.productName + " - " + "$" + product.price }}
                   </option>
                 </select>
                 <div
-                  *ngIf="this.datosOrd.Proveedor == ''"
+                  *ngIf="this.orderViewModel.supplier.id == ''"
                   class="col-auto"
                 >
                   <span class="form-text text-light"
@@ -210,7 +236,7 @@
                   >Cantidad:</label
                 >
                 <input
-                  [(ngModel)]="cant"
+                  [(ngModel)]="this.orderDetailViewModel.quantity"
                   min="1"
                   required
                   type="number"
@@ -224,8 +250,8 @@
                 <button
                   id="btnaggprod"
                   name="btn"
-                  [disabled]="cant == '' || prod == '' || cant == null || prod == null"
-                  (click)="agregarProd()"
+                  [disabled]="this.orderDetailViewModel.quantity == 0 || this.orderDetailViewModel.product.id == '' || this.orderDetailViewModel.quantity == null || this.orderDetailViewModel.product.id == null"
+                  (click)="addProduct()"
                   type="button"
                   class="btn btn-primary mt-1 w-100"
                 >
@@ -235,17 +261,11 @@
               <div class="col-12 mt-2">
                 <button
                   data-bs-toggle="modal" data-bs-target="#exampleModal" 
-                  [disabled]="
-                    !formOrd.valid ||
-                    !this.isProductsInOrden ||
-                    this.isActiveOrden ||
-                    !this.isNumberCode ||
-                    validateStringDates(this.datosOrd.Emision,this.datosOrd.Entrega)
-                  "
+                  [disabled]="this.ordersDetail.length == 0 || this.orderViewModel.orderNumber == '' || this.orderViewModel.supplier.id == '' || this.orderViewModel.issuanceDate == '' || this.orderViewModel.deliveryDate == '' || this.orderViewModel.receptionInfo == ''"
                   type="button"
                   class="btn btn-success"
                 >
-                {{this.flagCode ? 'Agregar' : 'Actualizar'}}
+                {{this.flagCode ? 'Guardar Orden' : 'Actualizar Orden'}}
                 </button>
               </div>
             </div>
@@ -254,37 +274,34 @@
           <div class="col-12 col-md-6">
             <h4 class="mt-3 text-light text-center">
               {{
-                this.datosOrd.Productos.length > 0
+                this.ordersDetail.length > 0
                   ? "Productos en la orden"
                   : "No tienes productos en la orden"
               }}
             </h4>
             <div
               class="mt-3"
-              *ngIf="this.datosOrd.Productos.length > 0"
+              *ngIf="this.ordersDetail.length"
             >
               <p
                 class="text-light d-flex justify-content-center"
-                *ngFor="
-                  let productoComp of this.datosOrd.Productos;
-                  index as i
-                "
+                *ngFor="let orderDetail of ordersDetail"
               >
                 {{
-                  productoComp.Nombre +
+                  orderDetail.product.productName +
                     " - " +
-                    productoComp.Cantidad +
+                    orderDetail.quantity +
                     " - $" +
-                    productoComp.Subtotal
+                    orderDetail.product.price
                 }}
                 <i
-                  (click)="deleteProd(i)"
+                  (click)="deleteProduct(orderDetail.product.id)"
                   class="ms-3 bx bx-x text-light fs-4"
                 ></i>
               </p>
             </div>
             <h5 class="mt-3 text-light text-end">
-              Total ${{ this.datosOrd.Total }}
+              Total ${{ total }}
             </h5>
           </div>
           <!-- Mostramos el listado de los productos que se van agregando -->
@@ -298,7 +315,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                Deseas {{this.flagCode ? 'agregar' : 'actualizar'}} la orden "{{this.datosOrd.id}}"?
+                Deseas {{this.flagCode ? 'agregar' : 'actualizar'}} la orden "{{this.orderViewModel.orderNumber}}"?
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

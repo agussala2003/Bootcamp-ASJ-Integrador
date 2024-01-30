@@ -1,14 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { OrdenesService } from '../../../services/ordenes.service';
-import { CalcOrden, Orden } from '../../../models/Orden';
+import { OrderService } from '../../../services/ordenes.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductoyServicio } from '../../../models/ProductoyServicio';
-import { ProductosyserviciosService } from '../../../services/productosyservicios.service';
+import { ProductService } from '../../../services/productosyservicios.service';
 import { NgForm } from '@angular/forms';
-import { ProveedoresService } from '../../../services/proveedores.service';
-import { Proveedor } from '../../../models/Proveedor';
+import { SupplierService } from '../../../services/proveedores.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from '../../modal/modal.component';
+import { Supplier } from '../../../models/Supplier';
+import { Product } from '../../../models/Product';
+import { Role } from '../../../models/Role';
+import { User } from '../../../models/User';
+import { Industry } from '../../../models/Industry';
+import { IvaCondition } from '../../../models/IvaCondition';
+import { Status } from '../../../models/Status';
+import { Order } from '../../../models/Order';
+import { Category } from '../../../models/Category';
+import { OrderDetail } from '../../../models/OrderDetail';
+import { OrderDetailService } from '../../../services/order-detail.service';
+import { StatusService } from '../../../services/status-service.service';
 
 @Component({
   selector: 'app-form-ordenesdecompra',
@@ -17,96 +26,275 @@ import { ModalComponent } from '../../modal/modal.component';
 })
 export class FormOrdenesdecompraComponent implements OnInit {
   constructor(
-    public service: OrdenesService,
-    public servicioProducto: ProductosyserviciosService,
-    public servicioProveedor: ProveedoresService,
-    public router: ActivatedRoute,
-    public router2: Router,
-    public modalService: NgbModal 
+    private orderService: OrderService,
+    private productService: ProductService,
+    private supplierService: SupplierService,
+    private orderDetailService: OrderDetailService,
+    private statusService: StatusService,
+    private router: ActivatedRoute,
+    private router2: Router,
+    private modalService: NgbModal 
   ) {}
 
-  datosOrd: Orden = {
-    id: '',
-    Emision: '',
-    Entrega: '',
-    InfoRecepcion: '',
-    Proveedor: '',
-    Productos: [],
-    Activo: true,
-    Total: '',
+    
+  roleViewModel: Role = {
+    id: '1',
+    roleName: '',
+    createdAt: '',
+    updatedAt: '',
   };
 
-  idOrden: string = '';
+  userViewModel: User = {
+    id: '1',
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    role: this.roleViewModel,
+    createdAt: '',
+    updatedAt: '',
+  };
+
+  industryViewModel: Industry = { id: '', industryName: '' };
+  ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
+  supplierViewModel: Supplier = {
+    id: '',
+    supplierCode: '',
+    businessName: '',
+    active: true,
+    cuit: '',
+    email: '',
+    image: '',
+    phoneNumber: '',
+    website: '',
+    industry: this.industryViewModel,
+    ivaCondition: this.ivaConditionViewModel,
+    createdAt: '',
+    updatedAt: '',
+  };
+
+  statusViewModel: Status = {
+    id: '',
+    statusName: '',
+  };
+
+  orderViewModel: Order = {
+    id: '',
+    orderNumber: '',
+    issuanceDate: '',
+    deliveryDate: '',
+    active: true,
+    receptionInfo: '',
+    createdAt: '',
+    updatedAt: '',
+    status: this.statusViewModel,
+    supplier: this.supplierViewModel,
+    user: this.userViewModel,
+  };
+
+  categoryViewModel: Category = {
+    id: '',
+    categoryName: '',
+    createdAt: '',
+    updatedAt: '',
+  };
+
+  productViewModel: Product = {
+    id: '',
+    sku: '',
+    productName: '',
+    description: '',
+    imageUrl: '',
+    active: true,
+    price: 0,
+    createdAt: '',
+    updatedAt: '',
+    supplier: this.supplierViewModel,
+    category: this.categoryViewModel,
+  };
+
+  orderDetailViewModel: OrderDetail = {
+    id: '',
+    quantity: 0,
+    createdAt: '',
+    updatedAt: '',
+    subtotal: 0,
+    order: this.orderViewModel,
+    product: this.productViewModel,
+  };
+
+  ordersDetail: OrderDetail[] = [];
+  orders: Order[] = [];
+  suppliers: Supplier[] = [];
+  products: Product[] = [];
+  statuses: Status[] = [];
+  idOrder: string = '';
   userState: any;
-  proveedores: Proveedor[] = [];
-  productos: ProductoyServicio[] = [];
-  prod: string = '';
-  cant: string = '';
+  supplierImg: string = '';
   flagCode: boolean = true;
   isActiveOrden: boolean = false;
   isProductsInOrden: boolean = false;
   isNumberCode: boolean = true;
-  ords: Orden[] = [];
   today: Date = new Date();
+  total: number = 0;
 
   ngOnInit(): void {
     this.router.params.subscribe((data) => {
-      this.idOrden = data['idOrden'];
-      this.idOrden !== undefined ? this.loadOrdenData() : this.setupNewOrden();
+      this.idOrder = data['idOrder'];
+      if(this.idOrder !== undefined) {
+        this.getOrderById(this.idOrder)
+        this.getOrderDetailsByOrderId(this.idOrder)
+      } else {
+        this.setupNewOrden();
+      }
     });
 
-    this.userState = this.service.getUserState();
-
-    this.servicioProveedor
-      .getFakeData()
-      .subscribe((data: Proveedor[]) => {
-        this.proveedores = data.filter((proveedor) => proveedor.Activo);
-      });
-
-    this.service.getFakeData().subscribe((data: Orden[]) => {
-      this.ords = data;
-    });
+    this.userState = this.orderService.getUserState();
+    this.getActiveSuppliers();
+    this.getOrders();
+    this.getStatus();
   }
 
-  loadOrdenData() {
-    this.service.getProdData(this.idOrden).subscribe((data: Orden) => {
-      this.datosOrd = data;
+  getActiveSuppliers() {
+    this.supplierService.getActiveSuppliers().subscribe((data: Supplier[]) => {
+      this.suppliers = data;
+    });
+  }
+  getOrders() {
+    this.orderService.getOrders().subscribe((data: Order[]) => {
+      this.orders = data;
+    });
+  }
+  getOrderById(id: string) {
+    this.orderService.getOrderById(id).subscribe((data: Order) => {
+      console.log('You got a order by id');
+      console.log(data);
+      this.orderViewModel = data;
+      this.orderViewModel.issuanceDate = this.getFormattedDate(new Date(this.orderViewModel.issuanceDate));
+      this.orderViewModel.deliveryDate = this.getFormattedDate(new Date(this.orderViewModel.deliveryDate));
+      this.getProductsBySupplierId(this.orderViewModel.supplier.id);
     });
     this.isProductsInOrden = true;
     this.flagCode = false;
   }
+  getStatus() {
+    this.statusService.getStatus().subscribe((data: Status[]) => {
+      console.log('You got status');
+      console.log(data);
+      this.statuses = data;
+    });
+  }
+  getOrderDetailsByOrderId(id:string) {
+    this.orderDetailService.getOrderDetailsByOrderId(id).subscribe((data: OrderDetail[]) => {
+      console.log('You get Order Detail by order id');
+      console.log(data);
+      this.ordersDetail = data;
+      this.calculateTotal();
+    })
+  }
+
+  onSupplierChange() {
+    this.supplierImg = this.suppliers.find((item: Supplier) => item.id == this.orderViewModel.supplier.id)?.image || '';
+    const selectedSupplier = this.orderViewModel.supplier.id;
+    if (selectedSupplier) {
+      this.getProductsBySupplierId(selectedSupplier);
+    }
+  }
+  getProductsBySupplierId(supplierId: string) {
+    this.productService.getProductsBySupplierId(supplierId).subscribe((data: Product[]) => {
+      console.log('You prodcuts by supplier id');
+      console.log(data);
+      this.products = data;
+    });
+  }
 
   setupNewOrden() {
     this.flagCode = true;
-    this.resetOrden();
+    this.resetOrderData();
   }
 
-  agregarOrden(form: NgForm) {
-    if (this.validarFormulario()) {
-      this.calcularTotal();
-      this.service.uploadFakeData(this.datosOrd).subscribe((data) => {
-        console.log('Agregaste o actualizaste' + data);
-      });
-      form.reset();
-      this.router2.navigate(['/ordenes']);
+  submitOrder(form: NgForm) {
+    if (this.validateForm()) {
+      if(this.idOrder !== undefined) {
+        this.putOrder(this.idOrder, this.orderViewModel);
+      } else {
+        this.postOrder(this.orderViewModel);
+      }
     } else {
       this.openModal('No cumples con las condiciones');
     }
   }
 
-  validarFormulario(): boolean {
+  postOrder(order: Order) {
+    console.log(order);
+    this.orderService.postOrder(order).subscribe((data) => {
+      console.log('You posted a order');
+      console.log(data);
+      this.orderViewModel = data;
+      this.postOrderDetail(this.ordersDetail);
+    }, (error) => {
+      console.log('Error posting order');
+      console.log(error);
+    });
+  }
+  postOrderDetail(ordersDetails: OrderDetail[]) {
+    console.log(ordersDetails);
+    ordersDetails.forEach((item) => {
+      item.order.id = this.orderViewModel.id;
+    });
+    this.orderDetailService.createOrderDetail(ordersDetails).subscribe((data) => {
+      console.log('You posted a order detail');
+      console.log(data);
+      ordersDetails = data;
+      this.router2.navigate(['/ordenes']);
+    }, (error) => {
+      console.log('Error posting order detail');
+      console.log(error);
+    });
+  }
+
+  putOrder(id: string, order: Order) {
+    this.orderService.putOrder(id, order).subscribe((data) => {
+      console.log('You updated a order');
+      console.log(data);
+      this.orderViewModel = data;
+      this.putOrderDetail(this.ordersDetail);
+    }, (error) => {
+      console.log('Error updating order');
+      console.log(error);
+    });
+  }
+  putOrderDetail(ordersDetails: OrderDetail[]) {
+    ordersDetails.forEach((item) => {
+      item.order.id = this.orderViewModel.id;
+    });
+    console.log(ordersDetails);
+    this.orderDetailService.updateOrderDetail(ordersDetails).subscribe((data) => {
+      console.log('You updated a order detail');
+      console.log(data);
+      ordersDetails = data;
+      this.router2.navigate(['/ordenes']);
+    }
+    , (error) => {
+      console.log('Error updating order detail');
+      console.log(error);
+    });
+  }
+
+
+  validateForm(): boolean {
     const today = new Date();
     today.setDate(today.getDate() - 1)
 
-    if(!this.validarCodigoNumericoDe1a12Digitos(this.datosOrd.id) ||
-    this.datosOrd.Proveedor === 'Selecciona un Sku' ||
-    this.validateStringDates(this.datosOrd.Emision, this.datosOrd.Entrega) ||
-    !this.validarStringAlfanumericoEntre15y250Caracteres(this.datosOrd.InfoRecepcion)) {
+    //    this.orderViewModel.supplier.id === 'Selecciona un Sku' ||
+    if(!this.validarCodigoNumericoDe1a12Digitos(this.orderViewModel.orderNumber) ||
+
+    this.validateStringDates(this.orderViewModel.issuanceDate, this.orderViewModel.deliveryDate) ||
+    !this.validarStringAlfanumericoEntre15y250Caracteres(this.orderViewModel.receptionInfo)) {
       return false;
     }
-    if(this.idOrden === undefined) {
-      console.log("que pasa")
-      if(new Date(this.datosOrd.Emision) < today) return false;
+    if(this.idOrder === undefined) {
+      if(new Date(this.orderViewModel.issuanceDate) < today) return false;
     }
     return true;
 
@@ -126,56 +314,75 @@ export class FormOrdenesdecompraComponent implements OnInit {
     return dateDate >= currentDateDate;
   }
   validacionProveedor() {
-    this.isProductsInOrden = this.datosOrd.Productos.length > 0;
-  }
-
-  searchProds(proveedor: string) {
-    this.servicioProducto.getFakeData().subscribe((data: ProductoyServicio[]) => {
-      this.productos = data
-        .filter((item) => item.Activo && item.Proveedor === proveedor);
-    });
+    this.isProductsInOrden = this.ordersDetail.length > 0;
   }
 
   getFormattedDate(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
+    const day = (date.getDate() + 1).toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+  
 
-  agregarProd() {
-    const selectedProduct = this.productos.find((item) => item.id === this.prod);
-    if (selectedProduct) {
-      const nuevoProducto: CalcOrden = {
-        Sku: this.prod,
-        Cantidad: this.cant,
-        Nombre: selectedProduct.Producto,
-        Subtotal: selectedProduct.Precio,
-      };
-      this.datosOrd.Productos.push(nuevoProducto);
-      this.validacionProveedor();
-      this.calcularTotal();
+  addProduct() {
+    if (this.validateProduct()) {
+      const existingProduct = this.ordersDetail.find((item: OrderDetail) => item.product.id == this.orderDetailViewModel.product.id);
+      console.log(this.ordersDetail);
+      if (existingProduct) {
+        existingProduct.quantity += this.orderDetailViewModel.quantity;
+        existingProduct.subtotal = existingProduct.quantity * existingProduct.product.price;
+        console.log('You added a product');
+        this.calculateTotal()
+      } else {
+        this.getProductById(this.orderDetailViewModel.product.id, this.orderDetailViewModel);
+        this.calculateTotal()
+      }
+    } else {
+      this.openModal('No cumples con las condiciones');
     }
   }
 
-  deleteProd(index: number) {
-    this.datosOrd.Productos.splice(index, 1);
+  getProductById(id: string, orderDetailViewModel: OrderDetail) {
+    this.productService.getProductById(id).subscribe((data: Product) => {
+      console.log('You got a product by id');
+      console.log(data);
+      orderDetailViewModel.product = data;
+      this.pushProduct(orderDetailViewModel);
+    });
+  }
+
+  pushProduct(orderDetailViewModel: OrderDetail) {
+    console.log(orderDetailViewModel);
+    orderDetailViewModel.subtotal = orderDetailViewModel.quantity * orderDetailViewModel.product.price;
+    this.ordersDetail.push(orderDetailViewModel);
+    this.calculateTotal();
+    this.resetOrderDetailData();
     this.validacionProveedor();
-    this.calcularTotal();
   }
 
-  calcularTotal() {
-    const totalCalculado = this.datosOrd.Productos.reduce(
-      (total, producto) => total + (parseInt(producto.Cantidad, 10) || 0) * parseFloat(producto.Subtotal || '0'),
-      0
-    );
-    this.datosOrd.Total = totalCalculado.toFixed(2);
+  validateProduct(): boolean {
+    if (this.orderDetailViewModel.product.id === 'Selecciona un Sku') {
+      return false;
+    }
+    return true;
   }
 
-  ordenExists(): boolean {
-    if (this.idOrden === undefined) {
-      this.isNumberCode = /^\d+$/.test(this.datosOrd.id);
-      this.isActiveOrden = this.ords.some((item) => item.id === this.datosOrd.id);
+  deleteProduct(id: string) {
+    this.ordersDetail = this.ordersDetail.filter((item:OrderDetail) => item.product.id !== id);
+    this.calculateTotal();
+    this.validacionProveedor();
+  }
+
+  calculateTotal() {
+    this.total = this.ordersDetail.reduce((acc, item) => acc + item.subtotal, 0);
+    // this.orderViewModel.receptionInfo = total.toString();
+  }
+
+  orderExists(): boolean {
+    if (this.idOrder === undefined) {
+      this.isNumberCode = /^\d+$/.test(this.orderViewModel.orderNumber);
+      this.isActiveOrden = this.orders.some((item:Order) => item.orderNumber === this.orderViewModel.orderNumber);
       return this.isActiveOrden;
     }
     return false;
@@ -198,16 +405,103 @@ export class FormOrdenesdecompraComponent implements OnInit {
     modalRef.componentInstance.aviso = aviso;
   }
 
-  resetOrden(){
-    this.datosOrd = {
+  resetOrderData(){
+    this.roleViewModel = {
+      id: '1',
+      roleName: '',
+      createdAt: '',
+      updatedAt: '',
+    };
+  
+    this.userViewModel = {
+      id: '1',
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      role: this.roleViewModel,
+      createdAt: '',
+      updatedAt: '',
+    };
+  
+    this.industryViewModel = { id: '', industryName: '' };
+    this.ivaConditionViewModel = { id: '', taxCondition: '' };
+    this.supplierViewModel = {
       id: '',
-      Emision: '',
-      Entrega: '',
-      InfoRecepcion: '',
-      Proveedor: '',
-      Productos: [],
-      Activo: true,
-      Total: '',
-    }
+      supplierCode: '',
+      businessName: '',
+      active: true,
+      cuit: '',
+      email: '',
+      image: '',
+      phoneNumber: '',
+      website: '',
+      industry: this.industryViewModel,
+      ivaCondition: this.ivaConditionViewModel,
+      createdAt: '',
+      updatedAt: '',
+    };
+  
+    this.statusViewModel = {
+      id: '',
+      statusName: '',
+    };
+  
+    this.orderViewModel = {
+      id: '',
+      orderNumber: '',
+      issuanceDate: '',
+      deliveryDate: '',
+      active: true,
+      receptionInfo: '',
+      createdAt: '',
+      updatedAt: '',
+      status: this.statusViewModel,
+      supplier: this.supplierViewModel,
+      user: this.userViewModel,
+    };
+  
+    this.categoryViewModel = {
+      id: '',
+      categoryName: '',
+      createdAt: '',
+      updatedAt: '',
+    };
+  
+    this.productViewModel = {
+      id: '',
+      sku: '',
+      productName: '',
+      description: '',
+      imageUrl: '',
+      active: true,
+      price: 0,
+      createdAt: '',
+      updatedAt: '',
+      supplier: this.supplierViewModel,
+      category: this.categoryViewModel,
+    };
+  
+    this.orderDetailViewModel = {
+      id: '',
+      quantity: 0,
+      createdAt: '',
+      updatedAt: '',
+      subtotal: 0,
+      order: this.orderViewModel,
+      product: this.productViewModel,
+    };
+  }
+
+  resetOrderDetailData() {
+    this.orderDetailViewModel = {
+      id: '',
+      quantity: 0,
+      createdAt: '',
+      updatedAt: '',
+      subtotal: 0,
+      order: this.orderViewModel,
+      product: this.productViewModel,
+    };
   }
 }

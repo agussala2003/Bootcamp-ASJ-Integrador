@@ -1,31 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Rubro } from '../models/Rubro';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
+import { Industry } from '../models/Industry';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RubrosService {
   constructor(public http:HttpClient) {}
-  lista: Rubro[] = [];
-  // Obtenemos todos los rubros
-  public getFakeData(): Observable<Rubro[]> {
-    return this.http.get<Rubro[]>('http://localhost:3000/rubros').pipe(
-      tap((rubros) => {
-        this.lista = rubros;
-      })
-    );
+  private readonly baseUrl = 'http://localhost:8080/industries'
+
+  public getIndustries(): Observable<Industry[]> {
+    return this.http.get<Industry[]>(this.baseUrl);
   }
-  // Agregar Rubro
-  public uploadFakeData(rubro:Rubro): Observable<Rubro> {
-    return this.http.post<Rubro>('http://localhost:3000/rubros', rubro);
+
+  public getIndustryById(id: string): Observable<Industry> {
+    return this.http.get<Industry>(this.baseUrl + '/' + id);
   }
-  // Borramos rubro
-  public deleteFakeData(id:string): Observable<Rubro> {
-    return this.http.delete<Rubro>(`http://localhost:3000/rubros/${id}`);
+  
+  public postIndustry(industry:Industry): Observable<Industry> {
+    return this.http.post<Industry>(this.baseUrl, industry);
   }
-  // Obtenemos el estado del usuario
+  
+  public deleteIndustry(id:string): Observable<Industry> {
+    return this.http.delete<Industry>(this.baseUrl + '/' + id);
+  }
+ 
   public getUserState(): string | null {
     const valor: string | null = JSON.parse(
       localStorage.getItem('inicio') || 'null'

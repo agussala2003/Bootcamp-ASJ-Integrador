@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RubrosService } from '../../../services/rubros.service';
-import { Rubro } from '../../../models/Rubro';
+import { Industry } from '../../../models/Industry';
 
 @Component({
   selector: 'app-tabla-rubros',
@@ -8,35 +8,45 @@ import { Rubro } from '../../../models/Rubro';
   styleUrl: './tabla-rubros.component.css'
 })
 export class TablaRubrosComponent implements OnInit {
-  constructor(public service: RubrosService){}
-  rubros: Rubro[] = [];
-  rubroUnico: Rubro = {
+  constructor(public industryService: RubrosService){}
+
+  industries: Industry[] = [];
+
+  industryViewModel: Industry = {
     id: '',
-    rubro: ''
+    industryName: '',
+    createdAt: '',
+    updatedAt: ''
   };
+
   userState:any;
+
   ngOnInit(): void {
-    this.userState = this.service.getUserState();
-    this.actualizarListaRubros();
+    this.userState = this.industryService.getUserState();
+    this.refreshIndustries();
   }
-  // Actualizamos el array de rubros
-  actualizarListaRubros() {
-    this.service.getFakeData().subscribe((data: Rubro[]) => {
-      this.rubros = data;
+
+  refreshIndustries() {
+    this.industryService.getIndustries().subscribe((data: Industry[]) => {
+      console.log("You get all Industries");
+      console.log(data);
+      this.industries = data;
     });
   }
-  // Eliminamos rubro y actualizamos
-  borrarRubro(id:string) {
-    this.service.deleteFakeData(id).subscribe(data => {
-      console.log(data)
+  
+  deleteIndustry(id:string) {
+    this.industryService.deleteIndustry(id).subscribe((data: Industry) => {
+      console.log("You Deleted");
+      console.log(data);
+      this.refreshIndustries();
     })
-    this.actualizarListaRubros();
   }
-  // Obtenemos el rubro
-  obtenerRubro(id: string | undefined) {
-    const arr = this.rubros.find((item: Rubro) => item.id === id);
-    if(arr !== undefined){
-      this.rubroUnico = arr
-    }
+  
+  getIndustryById(id: string) {
+    this.industryService.getIndustryById(id).subscribe((data: Industry) => {
+      console.log("You get Industry By id");
+      console.log(data);
+      this.industryViewModel = data;
+    })
   }
 }

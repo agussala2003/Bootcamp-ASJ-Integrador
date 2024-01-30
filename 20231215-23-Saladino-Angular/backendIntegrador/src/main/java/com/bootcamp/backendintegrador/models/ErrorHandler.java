@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.validation.BindingResult;
 
 public class ErrorHandler {
-	public Map<String,String> validation(BindingResult bindingResult) {
+	public static Map<String,String> validation(BindingResult bindingResult) {
 		
 		Map<String,String> errors = new HashMap<>();
 		

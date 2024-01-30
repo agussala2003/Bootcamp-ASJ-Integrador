@@ -3,6 +3,7 @@ import { RubrosService } from '../../../services/rubros.service';
 import { Router } from '@angular/router';
 import { Rubro } from '../../../models/Rubro';
 import { NgForm } from '@angular/forms';
+import { Industry } from '../../../models/Industry';
 
 @Component({
   selector: 'app-form-rubros',
@@ -10,27 +11,27 @@ import { NgForm } from '@angular/forms';
   styleUrl: './form-rubros.component.css'
 })
 export class FormRubrosComponent implements OnInit{
-  constructor(public service: RubrosService,public router:Router){}
+  constructor(public industryService: RubrosService,public router:Router){}
+
   userState:any
-  rubrosFull: Rubro[] = [];
-  rubros:Rubro = {
+  industries: Industry[] = [];
+
+  industryViewModel: Industry = {
     id: '',
-    rubro: ''
+    industryName: '',
+    createdAt: '',
+    updatedAt: ''
   };
+
   ngOnInit(): void {
-    this.userState = this.service.getUserState();
-    this.service.getFakeData().subscribe((data: Rubro[]) => {
-      this.rubrosFull = data;
-    });
+    this.userState = this.industryService.getUserState();
   }
-  // Agregamos rubro
-  agregarRubro(form:NgForm) {
-    const highestId = this.rubrosFull.reduce((maxId, item) => {
-      const currentId = parseInt(item.id);
-      return currentId > maxId ? currentId : maxId;
-    }, 0);
-    this.rubros.id = String(highestId + 1);
-    this.service.uploadFakeData(this.rubros).subscribe(data => console.log(data));
+
+  postIndustry(form:NgForm) {
+    this.industryService.postIndustry(this.industryViewModel).subscribe((data: Industry) => {
+      console.log("You Posted an Industry");
+      console.log(data);
+    })
     this.router.navigate(['/rubros']);
   }
 }

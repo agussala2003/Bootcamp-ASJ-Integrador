@@ -1,31 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
-import { Categoria } from '../models/Categoria';
+import { Observable } from 'rxjs';
+import { Category } from '../models/Category';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoriasService {
   constructor(public http:HttpClient) { }
-  lista: Categoria[] = [];
-  // Obtenemos todas las categorias
-  public getFakeData(): Observable<Categoria[]> {
-    return this.http.get<Categoria[]>('http://localhost:3000/categorias').pipe(
-      tap((categorias) => {
-        this.lista = categorias;
-      })
-    );
+  private readonly baseUrl = 'http://localhost:8080/categories';
+
+  public getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.baseUrl);
   }
-  // Agregar Categoria
-  public uploadFakeData(categoria:Categoria): Observable<Categoria> {
-    return this.http.post<Categoria>('http://localhost:3000/categorias', categoria);
+  
+  public getCategoryById(id:string): Observable<Category> {
+    return this.http.get<Category>(this.baseUrl + '/' + id);
   }
-  // Borramos categoria
-  public deleteFakeData(id:string): Observable<Categoria> {
-    return this.http.delete<Categoria>(`http://localhost:3000/categorias/${id}`);
+
+  public postCategory(category:Category): Observable<Category> {
+    return this.http.post<Category>(this.baseUrl, category);
   }
-  // Obtenemos el estado del usuario
+  
+  public deleteCategory(id:string): Observable<Category> {
+    return this.http.delete<Category>(this.baseUrl + '/' + id);
+  }
+  
   public getUserState(): string | null {
     const valor: string | null = JSON.parse(
       localStorage.getItem('inicio') || 'null'

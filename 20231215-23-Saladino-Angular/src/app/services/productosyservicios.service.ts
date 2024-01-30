@@ -1,51 +1,49 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ProductoyServicio } from '../models/ProductoyServicio';
-import { Observable, of, switchMap, tap } from 'rxjs';
+import { Observable } from 'rxjs';
+import { Product } from '../models/Product';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductosyserviciosService {
+export class ProductService {
+  private readonly baseUrl = 'http://localhost:8080/products';
   constructor(private http: HttpClient) {}
 
-  private readonly baseUrl = 'http://localhost:3000/productos';
-  lista: ProductoyServicio[] = [];
-
-  public getFakeData(): Observable<ProductoyServicio[]> {
-    return this.http
-      .get<ProductoyServicio[]>(this.baseUrl)
-      .pipe(tap((productos) => (this.lista = productos)));
-  }
-  // Agregamos o actualizamos un producto
-  public uploadFakeData(producto: ProductoyServicio): Observable<ProductoyServicio> {
-    const url = `${this.baseUrl}/${producto.id}`;
-    const index = this.lista.findIndex((item) => item.id === producto.id);
-    
-    if (index !== -1) {
-      return this.http.patch<ProductoyServicio>(url,producto);
-    } else {
-      // Si no existe, agrega el nuevo elemento
-      return this.http.post<ProductoyServicio>(this.baseUrl,producto);
-    }
-  }
-  public deleteFakeData(id: string): Observable<ProductoyServicio[]> {
-    const url = `${this.baseUrl}/${id}`;
-    const index = this.lista.findIndex((item) => item.id === id);
-    
-    if (index !== -1) {
-      this.lista[index].Activo = false;
-      return this.http
-        .patch<ProductoyServicio>(url, this.lista[index])
-        .pipe(switchMap(() => this.getFakeData()));
-    }
-
-    return of([]);
+  public getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.baseUrl);
   }
 
-  public getProdData(id: string): Observable<ProductoyServicio> {
-    const url = `${this.baseUrl}/${id}`;
-    return this.http.get<ProductoyServicio>(url);
+  public getProductById(id: string): Observable<Product> {
+    return this.http.get<Product>(`${this.baseUrl}/${id}`);
+  }
+
+  public getActiveProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/active`);
+  }
+
+  public getDeletedProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/deleted`);
+  }
+
+  public getProductsBySupplierId(supplierId: string): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/supplier/${supplierId}`);
+  }
+
+  public postProduct(product: Product): Observable<Product> {
+    return this.http.post<Product>(this.baseUrl,product);
+  }
+
+  public putProduct(id: string, product: Product): Observable<Product> {
+    return this.http.put<Product>(`${this.baseUrl}/${id}`,product);
+  }
+
+  public deleteProduct(id: string) :Observable<Product> {
+    return this.http.delete<Product>(`${this.baseUrl}/${id}`);
+  }
+
+  public patchProduct(id: string) :Observable<Product> {
+    return this.http.patch<Product>(`${this.baseUrl}/${id}/undelete`,true);
   }
 
   getUserState(): string | null {

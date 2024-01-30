@@ -1,6 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Orden } from '../../../models/Orden';
-import { OrdenesService } from '../../../services/ordenes.service';
+
+import { OrderService } from '../../../services/ordenes.service';
+import { Order } from '../../../models/Order';
+import { User } from '../../../models/User';
+import { Role } from '../../../models/Role';
+import { Industry } from '../../../models/Industry';
+import { IvaCondition } from '../../../models/IvaCondition';
+import { Supplier } from '../../../models/Supplier';
+import { Status } from '../../../models/Status';
+import { ProductService } from '../../../services/productosyservicios.service';
+import { Product } from '../../../models/Product';
+import { SupplierService } from '../../../services/proveedores.service';
+import { OrderDetailService } from '../../../services/order-detail.service';
+import { OrderDetail } from '../../../models/OrderDetail';
 
 @Component({
   selector: 'app-tabla-ordenesdecompra',
@@ -8,90 +20,198 @@ import { OrdenesService } from '../../../services/ordenes.service';
   styleUrls: ['./tabla-ordenesdecompra.component.css'], // Ajustado el nombre de la propiedad
 })
 export class TablaOrdenesdecompraComponent implements OnInit {
-  constructor(public service: OrdenesService) {}
+  constructor(
+    private orderService: OrderService,
+    private productService: ProductService,
+    private orderDetailService: OrderDetailService,
+    private supplierService: SupplierService
+  ) {}
 
-  datosOrd: Orden = {
+  roleViewModel: Role = {
     id: '',
-    Emision: '',
-    Entrega: '',
-    InfoRecepcion: '',
-    Proveedor: '',
-    Productos: [],
-    Activo: true,
-    Total: '',
+    roleName: '',
+    createdAt: '',
+    updatedAt: '',
   };
 
-  ordenes: Orden[] = [];
+  userViewModel: User = {
+    id: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    role: this.roleViewModel,
+    createdAt: '',
+    updatedAt: '',
+  };
+
+  industryViewModel: Industry = { id: '', industryName: '' };
+  ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
+  supplierViewModel: Supplier = {
+    id: '',
+    supplierCode: '',
+    businessName: '',
+    active: true,
+    cuit: '',
+    email: '',
+    image: '',
+    phoneNumber: '',
+    website: '',
+    industry: this.industryViewModel,
+    ivaCondition: this.ivaConditionViewModel,
+    createdAt: '',
+    updatedAt: '',
+  };
+
+  statusViewModel: Status = {
+    id: '',
+    statusName: '',
+  };
+
+  orderViewModel: Order = {
+    id: '',
+    orderNumber: '',
+    issuanceDate: '',
+    deliveryDate: '',
+    active: true,
+    receptionInfo: '',
+    createdAt: '',
+    updatedAt: '',
+    status: this.statusViewModel,
+    supplier: this.supplierViewModel,
+    user: this.userViewModel,
+  };
+
+  orders: Order[] = [];
+  products: Product[] = [];
+  suppliers: Supplier[] = [];
+  orderDetails: OrderDetail[] = [];
   userState: any;
   total: string = '';
-  isDeleting:boolean = false;
-  ord:string = '';
+  orderFilter: string = '';
   prevPage: number = 0;
   nextPage: number = 5;
   isActiveItems: boolean = true;
 
   ngOnInit(): void {
-    this.actualizarOrdenes();
-    this.userState = this.service.getUserState();
+    this.getActiveOrders();
+    this.getOrderDetails();
+    this.userState = this.orderService.getUserState();
   }
 
-  borrarOrden(idOrden: string) {
-    this.service.deleteFakeData(idOrden).subscribe((data) => {
-      console.log(`Borraste ${data}`);
-      this.actualizarOrdenes();
+  deleteOrder(id: string): void {
+    this.orderService.deleteOrder(id).subscribe((data: Order) => {
+      console.log('You deleted a order');
+      console.log(data);
+      this.getActiveOrders();
     });
   }
 
-  calcTotal(lista: Orden): string {
-    if (!lista.Productos || lista.Productos.length === 0) {
-      return '0.00';
+  calculateTotal(order: Order): number {
+   let total = 0;
+   this.orderDetails.forEach((orderDetail) => {
+    if (orderDetail.order.id === order.id){
+      total += orderDetail.quantity * orderDetail.product.price;
     }
-    let total = 0;
-    lista.Productos.forEach((producto) => {
-      const cantidad = parseInt(producto.Cantidad, 10) || 0;
-      const subtotal = parseFloat(producto.Subtotal) || 0;
-      if (!isNaN(cantidad) && !isNaN(subtotal)) {
-        total += cantidad * subtotal;
-      }
     });
-    return total.toFixed(2);
+    return total;
   }
 
-  getOrden(id: string,state:boolean): void {
-    this.service.getProdData(id).subscribe((data: Orden) => {
-      this.datosOrd = data;
-      this.isDeleting = state;
+  getOrderDetails(){
+    this.orderDetailService.getOrderDetails().subscribe((data: OrderDetail[]) => {
+      console.log('You get order details');
+      console.log(data);
+      this.orderDetails = data;
     });
   }
-
-  activarOrden(id:string): void {
-    this.service.activeOrden(id).subscribe((data) => {
-      console.log(`Activaste ${data}`);
-      this.actualizarOrdenes();
+  getOrders() {
+    this.orderService.getOrders().subscribe((data: Order[]) => {
+      console.log('You get orders');
+      console.log(data);
+      this.orders = data;
+      this.formatDates(this.orders);
     });
   }
 
-  actualizarOrdenes(): void {
-    this.service.getFakeData().subscribe((data: Orden[]) => {
-      this.ordenes = data.filter((item:Orden) => item.Activo);
+  formatDates(orders: Order[]) {
+    orders.forEach((order) => {
+      order.issuanceDate = this.getFormattedDate(new Date(order.issuanceDate));
+      order.deliveryDate = this.getFormattedDate(new Date(order.deliveryDate));
     });
   }
-  private filtrarProductosInactivos(productos: Orden[],state:boolean): Orden[] {
-    return productos.filter((producto) => producto.Activo === state);
+
+  getActiveOrders() {
+    this.orderService.getActiveOrders().subscribe((data: Order[]) => {
+      console.log('You get active orders');
+      console.log(data);
+      this.orders = data;
+      this.formatDates(this.orders);
+    });
   }
 
-  goPrevPage(){
-    this.prevPage -= 5;
-    this.nextPage -= 5;
+  getDeletedOrders() {
+    this.orderService.getDeletedOrders().subscribe((data: Order[]) => {
+      console.log('You get deleted orders');
+      console.log(data);
+      this.orders = data;
+      this.formatDates(this.orders);
+    });
   }
-  goNextPage(){
+
+  getOrderById(id: string) {
+    this.orderService.getOrderById(id).subscribe((data: Order) => {
+      console.log('You get a order by Id');
+      console.log(data);
+      this.orderViewModel = data;
+    });
+  }
+
+  undeleteOrder(id: string): void {
+    this.orderService.undeleteOrder(id).subscribe((data: Order) => {
+      console.log('You undeleted a order');
+      console.log(data);
+      this.isActiveItems = !this.isActiveItems;
+      this.getActiveOrders();
+    });
+  }
+
+  getFormattedDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = (date.getDate() + 1).toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  getActiveSuppliers(): void {
+    this.supplierService.getActiveSuppliers().subscribe((data: Supplier[]) => {
+      console.log('You get active suppliers');
+      console.log(data);
+      this.suppliers = data;
+    });
+  }
+
+  goPrevPage() {
+    if (this.prevPage >= 5) {
+      this.prevPage -= 5;
+      this.nextPage -= 5;
+    }
+  }
+
+  goNextPage() {
     this.prevPage += 5;
     this.nextPage += 5;
   }
-  changeState(){
-    this.isActiveItems = !this.isActiveItems
-    this.service.getFakeData().subscribe((data:Orden[]) => {
-      this.ordenes = this.filtrarProductosInactivos(data, this.isActiveItems);
-    })
+
+  changeState() {
+    this.isActiveItems = !this.isActiveItems;
+    if (this.isActiveItems) {
+      this.prevPage = 0;
+      this.nextPage = 5;
+      this.getActiveOrders();
+    } else {
+      this.getDeletedOrders();
+      this.prevPage = 0;
+      this.nextPage = 5;
+    }
   }
 }

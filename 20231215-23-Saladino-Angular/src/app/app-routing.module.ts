@@ -29,7 +29,7 @@ const routes: Routes = [
         component: TablaProveedoresComponent
       },
       {
-        path: "form/:idProv",
+        path: "form/:idSupplier",
         component: FormProveedoresComponent
       },
       {
@@ -37,7 +37,7 @@ const routes: Routes = [
         component: FormProveedoresComponent
       },
       {
-        path: "detalle/:idProv",
+        path: "detalle/:idSupplier",
         component: DetalleComponent
       },
     ]
@@ -50,7 +50,7 @@ const routes: Routes = [
         component: TablaProductosyserviciosComponent
       },
       {
-        path: "form/:idProdServ",
+        path: "form/:idProduct",
         component: FormProductosyserviciosComponent
       },
       {
@@ -58,7 +58,7 @@ const routes: Routes = [
         component: FormProductosyserviciosComponent
       },
       {
-        path: "detalle/:idProdServ",
+        path: "detalle/:idProduct",
         component: DetalleProdComponent
       },
     ]
@@ -71,7 +71,7 @@ const routes: Routes = [
         component: TablaOrdenesdecompraComponent
       },
       {
-        path: "form/:idOrden",
+        path: "form/:idOrder",
         component: FormOrdenesdecompraComponent
       },
       {
@@ -79,7 +79,7 @@ const routes: Routes = [
         component: FormOrdenesdecompraComponent
       },
       {
-        path: "detalle/:idOrden",
+        path: "detalle/:idOrder",
         component: DetalleOrdenesComponent
       },
     ]

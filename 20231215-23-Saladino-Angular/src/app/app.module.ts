@@ -31,6 +31,9 @@ import { EmptyListComponent } from './components/empty-list/empty-list.component
 import { SearchPipe } from './pipes/search.pipe';
 import { PaginationPipe } from './pipes/pagination.pipe';
 import { StateItemsPipe } from './pipes/state-items.pipe';
+import { FilterCategoryPipe } from './pipes/filter-category.pipe';
+import { FilterByPricePipe } from './pipes/filter-by-price.pipe';
+import { FilterByBusinessNamePipe } from './pipes/filter-by-business-name.pipe';
 
 @NgModule({
   declarations: [
@@ -59,7 +62,10 @@ import { StateItemsPipe } from './pipes/state-items.pipe';
     EmptyListComponent,
     SearchPipe,
     PaginationPipe,
-    StateItemsPipe
+    StateItemsPipe,
+    FilterCategoryPipe,
+    FilterByPricePipe,
+    FilterByBusinessNamePipe
   ],
   imports: [
     BrowserModule,

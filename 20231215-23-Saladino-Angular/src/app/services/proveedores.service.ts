@@ -1,74 +1,49 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Proveedor } from '../models/Proveedor';
+import { Supplier } from '../models/Supplier';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProveedoresService {
-  private baseUrl = 'http://localhost:3000/proveedores';
-  lista: Proveedor[] = [];
+export class SupplierService {
+  private readonly baseUrl = 'http://localhost:8080/suppliers';
 
   constructor(private http: HttpClient) {}
 
-  getFakeData(): Observable<Proveedor[]> {
-    return this.http.get<Proveedor[]>(this.baseUrl).pipe(
-      tap((proveedores) => {
-        this.lista = proveedores;
-      })
-    );
+  getSuppliers(): Observable<Supplier[]> {
+    return this.http.get<Supplier[]>(this.baseUrl);
   }
 
-  uploadFakeData(proveedor: Proveedor): Observable<Proveedor> {
-    const url = `${this.baseUrl}/${proveedor.id}`;
-    const index = this.lista.findIndex((item) => item.id === proveedor.id);
-
-    if (index !== -1) {
-      return this.http.patch<Proveedor>(url, proveedor);
-    } else {
-      return this.http.post<Proveedor>(this.baseUrl, proveedor);
-    }
+  getSupplierById(id: string): Observable<Supplier> {
+    return this.http.get<Supplier>(`${this.baseUrl}/${id}`);
   }
 
-  deleteFakeData(id: string): Observable<Proveedor> {
-    const url = `${this.baseUrl}/${id}`;
-    const index = this.lista.findIndex((item) => item.id === id);
-  
-    if (index !== -1) {
-      this.lista[index].Activo = false;
-      return this.http.patch<Proveedor>(url, this.lista[index]);
-    } else {
-      // Returning an observable that represents an error
-      return new Observable<Proveedor>((observer) => {
-        observer.error('Proveedor no encontrado');
-      });
-    }
-  }
-  
-
-  getProvData(id: string): Observable<Proveedor> {
-    const url = `${this.baseUrl}/${id}`;
-    return this.http.get<Proveedor>(url);
+  getActiveSuppliers(): Observable<Supplier[]> {
+    return this.http.get<Supplier[]>(`${this.baseUrl}/active`);
   }
 
-  getCountryData(): Observable<any> {
-    const url =
-      'https://raw.githubusercontent.com/millan2993/countries/master/json/countries.json';
-    return this.http.get(url);
+  getDeletedSuppliers(): Observable<Supplier[]> {
+    return this.http.get<Supplier[]>(`${this.baseUrl}/deleted`);
   }
 
-  getStateData(): Observable<any> {
-    const url =
-      'https://raw.githubusercontent.com/millan2993/countries/master/json/states.json';
-    return this.http.get(url);
+  postSupplier(supplier: Supplier): Observable<Supplier> {
+    return this.http.post<Supplier>(this.baseUrl, supplier);
+  }
+
+  putSupplier(id: string, supplier: Supplier): Observable<Supplier> {
+    return this.http.put<Supplier>(`${this.baseUrl}/${id}`, supplier);
+  }
+
+  patchSupplier(id: string): Observable<Supplier> {
+    return this.http.patch<Supplier>(`${this.baseUrl}/${id}/undelete`, true);
+  }
+
+  deleteSupplier(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
   getUserState(): string | null {
-    const valor: string | null = JSON.parse(
-      localStorage.getItem('inicio') || 'null'
-    );
-    return valor !== null ? valor : null;
+    return JSON.parse(localStorage.getItem('inicio') || 'null');
   }
 }

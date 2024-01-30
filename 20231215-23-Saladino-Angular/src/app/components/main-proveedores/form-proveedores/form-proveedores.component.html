@@ -7,10 +7,10 @@
         <a class="text-light text-decoration-none" routerLink="/proveedores"
           >Proveedores</a
         >
-        <i *ngIf="this.datosProv.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
+        <i *ngIf="this.supplierViewModel.supplierCode != ''" class="bx bx-chevron-right text-light fs-4"></i>
         <p class="m-0 text-light text-md-nowrap">
-          <span *ngIf="this.datosProv.id != ''"
-            >Proveedor {{ this.datosProv.id }}</span
+          <span *ngIf="this.supplierViewModel.supplierCode != ''"
+            >Proveedor {{ this.supplierViewModel.supplierCode }}</span
           >
         </p>
       </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <!-- Ruteo -->
-    <form #formProv="ngForm" (ngSubmit)="agregarProveedor(formProv)">
+    <form #formProv="ngForm" (ngSubmit)="submitSupplier(formProv)">
       <div class="row">
         <h4 class="text-light my-2">Datos Proveedor <i (click)="openModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class='bx bx-info-circle text-white ms-2'></i> </h4>
         <div class="col-12 col-md-auto mb-2">
@@ -30,7 +30,7 @@
           <div class="underline"></div>
           <input
             [disabled]="!flagCode"
-            [(ngModel)]="this.datosProv.id"
+            [(ngModel)]="this.supplierViewModel.supplierCode"
             required
             name="proveedor"
             type="text"
@@ -39,7 +39,7 @@
             class="form-control"
             minlength="4"
             maxlength="4"
-            (keyup)="codProvExists()"
+            (keyup)="supplierCodeExists()"
           />
           <div *ngIf="this.existsCode" class="col-auto">
             <span class="form-text text-light">El código ya está en uso</span>
@@ -51,7 +51,7 @@
         <div class="col-12 col-md-auto mb-2">
           <label for="rs" class="form-label text-light">Razon Social:</label>
           <input
-            [(ngModel)]="this.datosProv.RazonSocial"
+            [(ngModel)]="this.supplierViewModel.businessName"
             required
             name="razonsocial"
             id="rs"
@@ -77,7 +77,7 @@
         <div class="col-12 col-md-auto mb-2">
           <label for="rubro" class="form-label text-light">Rubro:</label>
           <select
-          [(ngModel)]="this.datosProv.Rubro"
+          [(ngModel)]="this.supplierViewModel.industry.id"
           for="rubro"
           id="rubro"
           name="rubro"
@@ -86,7 +86,7 @@
           required
         >
           <option selected disabled>Selecciona un rubro</option>
-          <option *ngFor="let item of rubros" value="{{item.rubro}}">{{item.rubro}}</option>
+          <option *ngFor="let industry of industries" value="{{industry.id}}">{{industry.industryName}}</option>
         </select>
         <div *ngIf="formProv.controls['rubro']?.hasError('required')" class="col-auto">
           <span class="form-text text-light">El campo es obligatorio</span>
@@ -97,7 +97,7 @@
             >Telefono:</label
           >
           <input
-            [(ngModel)]="this.datosProv.Telefono"
+            [(ngModel)]="this.supplierViewModel.phoneNumber"
             required
             name="telefonoproveedor"
             id="telefonoproveedor"
@@ -125,7 +125,7 @@
         <div class="col-12 col-md-auto mb-2">
           <label for="emailProv" class="form-label text-light">Email:</label>
           <input
-            [(ngModel)]="this.datosProv.Email"
+            [(ngModel)]="this.supplierViewModel.email"
             required
             name="emailProv"
             id="emailProv"
@@ -153,7 +153,7 @@
             >Sitio Web:</label
           >
           <input
-            [(ngModel)]="this.datosProv.SitioWeb"
+            [(ngModel)]="this.supplierViewModel.website"
             required
             name="sitioProv"
             id="sitioProv"
@@ -181,7 +181,7 @@
             >Imagen proveedor:</label
           >
           <input
-            [(ngModel)]="this.datosProv.Imagen"
+            [(ngModel)]="this.supplierViewModel.image"
             required
             name="imgProv"
             id="imgProv"
@@ -203,8 +203,8 @@
         <div class="col-12 col-md-auto mb-2">
           <label for="pais" class="form-label text-light">Pais:</label>
           <select
-            (click)="this.datosProv.Direccion.Provincia = ''"
-            [(ngModel)]="this.datosProv.Direccion.Pais"
+            (change)="onCountryChange()"
+            [(ngModel)]="this.addressViewModel.location.province.country.id"
             required
             name="pais"
             id="pais"
@@ -212,8 +212,8 @@
             aria-label="Default select example"
           >
             <option selected disabled>Selecciona Pais</option>
-            <option *ngFor="let pais of paises" value="{{ pais.name }}">
-              {{ pais.name }}
+            <option *ngFor="let country of countries" value="{{ country.id }}">
+              {{ country.countryName }}
             </option>
           </select>
           <div
@@ -223,14 +223,13 @@
             <span class="form-text text-light">El campo es obligatorio</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-3 mb-2">
           <label for="provincia" class="form-label text-light"
             >Provincia:</label
           >
           <select
-            (click)="buscarPais(this.datosProv.Direccion.Pais)"
-            [disabled]="this.datosProv.Direccion.Pais == ''"
-            [(ngModel)]="this.datosProv.Direccion.Provincia"
+            [disabled]="this.addressViewModel.location.province.country.id == ''"
+            [(ngModel)]="this.addressViewModel.location.province.id"
             required
             name="provincia"
             id="provincia"
@@ -238,8 +237,8 @@
             aria-label="Default select example"
           >
             <option selected disabled>Selecciona Provincia</option>
-            <option *ngFor="let prov of provincias" value="{{ prov.name }}">
-              {{ prov.name }}
+            <option *ngFor="let province of provinces" value="{{ province.id }}">
+              {{ province.provinceName }}
             </option>
           </select>
           <div
@@ -254,7 +253,7 @@
             >Localidad:</label
           >
           <input
-            [(ngModel)]="this.datosProv.Direccion.Localidad"
+            [(ngModel)]="this.addressViewModel.location.locationName"
             required
             name="localidad"
             type="text"
@@ -280,7 +279,7 @@
         <div class="col-12 col-md-auto mb-2">
           <label for="calle" class="form-label text-light">Calle:</label>
           <input
-            [(ngModel)]="this.datosProv.Direccion.Calle"
+            [(ngModel)]="this.addressViewModel.streetName"
             required
             name="calle"
             type="text"
@@ -306,7 +305,7 @@
         <div class="col-12 col-md-auto mb-2">
           <label for="num" class="form-label text-light">Numero:</label>
           <input
-            [(ngModel)]="this.datosProv.Direccion.Numero"
+            [(ngModel)]="this.addressViewModel.streetNumber"
             required
             name="num"
             type="number"
@@ -331,7 +330,7 @@
         <div class="col-12 col-md-auto mb-2">
           <label for="cp" class="form-label text-light">Codigo Postal:</label>
           <input
-            [(ngModel)]="this.datosProv.Direccion.CP"
+            [(ngModel)]="this.addressViewModel.postalCode"
             required
             name="codigopostal"
             type="text"
@@ -362,7 +361,7 @@
           <label for="cuit" class="form-label text-light">CUIT:</label>
           <input
             [disabled]="!flagCode"
-            [(ngModel)]="this.datosProv.DatosFiscales.CUIT"
+            [(ngModel)]="this.supplierViewModel.cuit"
             required
             name="cuit"
             type="text"
@@ -387,7 +386,7 @@
             >Condicion IVA:</label
           >
           <select
-            [(ngModel)]="this.datosProv.DatosFiscales.CondicionIVA"
+            [(ngModel)]="this.supplierViewModel.ivaCondition.id"
             required
             name="condicion"
             id="condicion"
@@ -395,26 +394,9 @@
             aria-label="Default select example"
           >
             <option selected disabled>Selecciona Condicion</option>
-            <option value="IVA Responsable Inscripto">
-              IVA Responsable Inscripto
+            <option *ngFor="let ivaCondition of ivaConditions" value="{{ivaCondition.id}}">
+              {{ivaCondition.taxCondition}}
             </option>
-            <option value="IVA Responsable No Inscripto">
-              IVA Responsable No Inscripto
-            </option>
-            <option value="IVA Sujeto Exento">IVA Sujeto Exento</option>
-            <option value="Consumidor Final">Consumidor Final</option>
-            <option value="Responsable Monotributo">
-              Responsable Monotributo
-            </option>
-            <option value="Sujeto no Categorizado">
-              Sujeto no Categorizado
-            </option>
-            <option value="Proveedor del Exterior">
-              Proveedor del Exterior
-            </option>
-            <option value="Cliente del Exterior">Cliente del Exterior</option>
-            <option value="IVA Liberado">Iva Liberado</option>
-            <option value="Monotributista social">Monotributista social</option>
           </select>
           <div
             *ngIf="formProv.controls['condicion']?.hasError('required')"
@@ -431,7 +413,7 @@
             >Nombre:</label
           >
           <input
-            [(ngModel)]="this.datosProv.DatosContacto.Nombre"
+            [(ngModel)]="this.contactViewModel.firstName"
             required
             name="nombrecontacto"
             type="text"
@@ -459,7 +441,7 @@
             >Apellido:</label
           >
           <input
-            [(ngModel)]="this.datosProv.DatosContacto.Apellido"
+            [(ngModel)]="this.contactViewModel.lastName"
             required
             name="apellidocontacto"
             type="text"
@@ -487,7 +469,7 @@
             >Telefono:</label
           >
           <input
-            [(ngModel)]="this.datosProv.DatosContacto.Telefono"
+            [(ngModel)]="this.contactViewModel.phoneNumber"
             required
             name="telefonocontacto"
             type="text"
@@ -515,7 +497,7 @@
             >Email:</label
           >
           <input
-            [(ngModel)]="this.datosProv.DatosContacto.Email"
+            [(ngModel)]="this.contactViewModel.email"
             required
             name="emailcontacto"
             type="email"
@@ -541,7 +523,7 @@
         <div class="col-12 col-md-auto mb-2">
           <label for="rol" class="form-label text-light">Rol:</label>
           <input
-            [(ngModel)]="this.datosProv.DatosContacto.Rol"
+            [(ngModel)]="this.contactViewModel.role"
             required
             name="rol"
             type="text"
@@ -573,7 +555,7 @@
             type="button"
             class="btn btn-success"
           >
-            {{ agregarActualizar }}
+            {{ flagCode ? 'Agregar' : 'Actualizar' }}
           </button>
         </div>
       </div>
@@ -586,7 +568,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              Deseas {{agregarActualizar | lowercase}} el proveedor "{{this.datosProv.RazonSocial}}"?
+              Deseas {{flagCode ? 'agregar' : 'actualizar'}} el proveedor "{{this.supplierViewModel.businessName}}"?
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

@@ -9,3 +9,7 @@
 .bx-x:hover {
   transform: scale(1.5);
 }
+
+.labelProv {
+  width: -webkit-fill-available;
+}

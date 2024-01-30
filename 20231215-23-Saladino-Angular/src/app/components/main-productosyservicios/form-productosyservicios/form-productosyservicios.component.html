@@ -5,8 +5,8 @@
       <!-- Breadcrumb -->
       <div class="col-12 col-md-9 d-flex align-items-center">
         <a class="text-light text-decoration-none" routerLink="/productos-servicios">Productos y Servicios</a>
-        <i *ngIf="this.datosProd.id != ''" class='bx bx-chevron-right text-light fs-4' ></i>
-        <p class="m-0 text-light text-md-nowrap"><span *ngIf="this.datosProd.id != ''">Producto {{this.datosProd.id}}</span></p>
+        <i *ngIf="this.productViewModel.sku != ''" class='bx bx-chevron-right text-light fs-4' ></i>
+        <p class="m-0 text-light text-md-nowrap"><span *ngIf="this.productViewModel.sku != ''">Producto {{this.productViewModel.sku}}</span></p>
       </div>
       <!-- Breadcrumb -->
       <div class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end my-3 ">
@@ -14,14 +14,13 @@
       </div>
     </div>
     <!-- Ruteo -->
-    <form #formProdyServ="ngForm" (ngSubmit)="agregarProductoyservicio(formProdyServ)">
+    <form #formProdyServ="ngForm" (ngSubmit)="submitProduct(formProdyServ)">
     <div class="row">
       <h4 class="text-light my-2">Datos Productos y Servicios <i (click)="openModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class='bx bx-info-circle text-white ms-2'></i> </h4>
       <div class="col-12 col-md-auto mb-2">
         <label for="sku" class="form-label text-light">Codigo / Sku:</label>
         <input
-          [disabled]="!flagCode"
-          [(ngModel)]="this.datosProd.id"
+          [(ngModel)]="this.productViewModel.sku"
           required
           type="text"
           id="sku"
@@ -50,8 +49,7 @@
           >Codigo Proveedor:</label
         >
         <select
-          [disabled]="!flagCode"
-          [(ngModel)]="this.datosProd.Proveedor"
+          [(ngModel)]="this.productViewModel.supplier.id"
           for="seleccCodProv"
           id="seleccCodProv"
           name="seleccCodProv"
@@ -60,7 +58,7 @@
           required
         >
           <option selected disabled>Selecciona un proveedor</option>
-          <option *ngFor="let prov of proveedores" value="{{prov.RazonSocial}}">{{prov.id + ' - ' + prov.RazonSocial}}</option>
+          <option *ngFor="let supplier of suppliers" value="{{ supplier.id }}">{{supplier.businessName}}</option>
         </select>
         <div *ngIf="formProdyServ.controls['seleccCodProv']?.hasError('required')" class="col-auto">
           <span class="form-text text-light">El dato es obligatorio</span>
@@ -69,7 +67,7 @@
       <div class="col-12 col-md-auto mb-2">
         <label for="categoria" class="form-label text-light">Categoria:</label>
         <select
-          [(ngModel)]="this.datosProd.Categoria"
+          [(ngModel)]="this.productViewModel.category.id"
           for="categoria"
           id="categoria"
           name="categoria"
@@ -78,7 +76,7 @@
           required
         >
           <option selected disabled>Selecciona una categoria</option>
-          <option *ngFor="let item of categorias" value="{{item.categoria}}">{{item.categoria}}</option>
+          <option *ngFor="let category of categories" value="{{category.id}}">{{category.categoryName}}</option>
         </select>
         <div *ngIf="formProdyServ.controls['categoria']?.hasError('required')" class="col-auto">
           <span class="form-text text-light">El dato es obligatorio</span>
@@ -89,7 +87,7 @@
           >Nombre del producto:</label
         >
         <input
-          [(ngModel)]="this.datosProd.Producto"
+          [(ngModel)]="this.productViewModel.productName"
           required
           type="text"
           id="nomProd"
@@ -108,7 +106,7 @@
       <div class="col-12 col-md-auto mb-2">
         <label for="precio" class="form-label text-light">Precio:</label>
         <input
-          [(ngModel)]="this.datosProd.Precio"
+          [(ngModel)]="this.productViewModel.price"
           required
           type="number"
           id="precio"
@@ -127,7 +125,7 @@
       <div class="col-12 col-md-auto mb-2">
         <label for="imagen" class="form-label text-light">Imagen:</label>
         <input
-          [(ngModel)]="this.datosProd.Imagen"
+          [(ngModel)]="this.productViewModel.imageUrl"
           type="text"
           id="imagen"
           name="imagen"
@@ -145,7 +143,7 @@
             >Descripcion:</label
           >
           <textarea
-            [(ngModel)]="this.datosProd.Descripcion"
+            [(ngModel)]="this.productViewModel.description"
             required
             type="text"
             id="descripcion"
@@ -185,7 +183,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            Deseas {{this.flagCode ? 'agregar' : 'actualizar'}} el producto "{{this.datosProd.Producto}}"?
+            Deseas {{this.flagCode ? 'agregar' : 'actualizar'}} el producto "{{this.productViewModel.productName}}"?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

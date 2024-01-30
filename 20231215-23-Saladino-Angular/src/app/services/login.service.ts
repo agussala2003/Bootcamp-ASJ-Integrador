@@ -1,22 +1,17 @@
 import { Injectable } from '@angular/core';
-import { usuarios } from '../../data/usuarios';
 import { User } from '../models/User';
-const data:User[] = usuarios;
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  constructor() { }
-  lista: User[] = data;
-  datosUser:User = {
-    username: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    isAdmin: false,
-    isClient: false,
-    isNormalUser: false,
+  constructor(private http: HttpClient) { }
+  private readonly baseUrl = 'http://localhost:8080/users';
+
+  public getUsers():Observable<User[]> {
+    return this.http.get<User[]>(this.baseUrl);
   }
   public validateLogin(){
     localStorage.setItem('inicio',JSON.stringify(true));

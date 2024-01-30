@@ -13,15 +13,15 @@
             </div>
           </div>
           <div class="row">
-            <div *ngFor="let rubro of rubros;index as i" class="col-12 col-sm-auto mb-3">
+            <div *ngFor="let industry of industries;index as i" class="col-12 col-sm-auto mb-3">
                 <div class="card bg-dark border border-1 border-white">
                   <div class="card-content">
                     <div class="card-body">
                       <div class="d-flex">
                         <div class="text-start overflow-y-auto w-100">
                             <div class="d-flex align-items-center justify-content-between">
-                              <h5 class="text-nowrap text-white">{{rubro.rubro}}</h5>
-                            <i (click)="obtenerRubro(rubro.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash ms-4"></i>
+                              <h5 class="text-nowrap text-white">{{industry.industryName}}</h5>
+                            <i (click)="getIndustryById(industry.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash ms-4"></i>
                           </div>
                         </div>
                       </div>
@@ -30,10 +30,8 @@
                 </div>
               </div>
           </div>
-          <div *ngIf="rubros.length == 0">
-            <h3 class="text-light text-center">
-              No tiene rubros en tu lista! Por favor agregar alguno.
-            </h3>
+          <div *ngIf="industries.length == 0">
+            <app-empty-list></app-empty-list>
           </div>
     </div>
     <div *ngIf="userState == null" class="container py-5 p-md-5">
@@ -48,11 +46,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-           Deseas eliminar el rubro "{{this.rubroUnico.rubro}}"?
+           Deseas eliminar el rubro "{{this.industryViewModel.industryName}}"?
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarRubro(this.rubroUnico.id)">Aceptar</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteIndustry(this.industryViewModel.id)">Aceptar</button>
         </div>
       </div>
     </div>

@@ -1,10 +1,12 @@
+import { Role } from "./Role";
+
 export interface User {
-    username: string;
+    id: string;
     firstName: string;
     lastName: string;
     email: string;
     password:string;
-    isAdmin: boolean;
-    isClient:boolean;
-    isNormalUser:boolean;
+    createdAt?: string;
+    updatedAt?: string;
+    role: Role;
 }

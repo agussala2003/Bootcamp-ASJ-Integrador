@@ -7,10 +7,10 @@
         <a class="text-light text-decoration-none" routerLink="/proveedores"
           >Proveedores</a
         >
-        <i *ngIf="this.datosProv.id != ''" class="bx bx-chevron-right text-light fs-4"></i>
+        <i *ngIf="this.supplierViewModel.supplierCode != ''" class="bx bx-chevron-right text-light fs-4"></i>
         <p class="m-0 text-light text-md-nowrap">
-          <span *ngIf="this.datosProv.id != ''"
-            >Proveedor {{ this.datosProv.id }}</span
+          <span *ngIf="this.supplierViewModel.supplierCode != ''"
+            >Proveedor {{ this.supplierViewModel.supplierCode }}</span
           >
         </p>
       </div>
@@ -31,7 +31,7 @@
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">{{ this.datosProv.id }}</h5>
+                    <h5 class="text-nowrap">{{ this.supplierViewModel.supplierCode }}</h5>
                     <span>Codigo</span>
                   </div>
                 </div>
@@ -46,7 +46,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.RazonSocial }}
+                      {{ this.supplierViewModel.businessName }}
                     </h5>
                     <span>Razon Social</span>
                   </div>
@@ -62,7 +62,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.Rubro }}
+                      {{ this.supplierViewModel.industry.industryName }}
                     </h5>
                     <span>Rubro</span>
                   </div>
@@ -78,7 +78,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.Telefono }}
+                      {{ this.supplierViewModel.phoneNumber }}
                     </h5>
                     <span>Telefono</span>
                   </div>
@@ -94,7 +94,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.Email }}
+                      {{ this.supplierViewModel.email }}
                     </h5>
                     <span>Email</span>
                   </div>
@@ -113,7 +113,7 @@
                       <a
                         target="_blank"
                         href="https://agussala2003.github.io/portfolio/"
-                        >{{ this.datosProv.SitioWeb }}</a
+                        >{{ this.supplierViewModel.website }}</a
                       >
                     </h5>
                     <span>Sitio Web</span>
@@ -131,9 +131,9 @@
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
                       {{
-                        this.datosProv.Direccion.Calle +
+                        this.addressViewModel.streetName +
                           " " +
-                          this.datosProv.Direccion.Numero
+                          this.addressViewModel.streetNumber
                       }}
                     </h5>
                     <span>Calle y numero</span>
@@ -150,7 +150,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.Direccion.Localidad }}
+                      {{ this.addressViewModel.location.locationName }}
                     </h5>
                     <span>Localidad</span>
                   </div>
@@ -166,7 +166,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.Direccion.Provincia }}
+                      {{ this.addressViewModel.location.province.provinceName }}
                     </h5>
                     <span>Provincia</span>
                   </div>
@@ -182,7 +182,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.Direccion.Pais }}
+                      {{ this.addressViewModel.location.province.country.countryName }}
                     </h5>
                     <span>Pais</span>
                   </div>
@@ -198,7 +198,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.Direccion.CP }}
+                      {{ this.addressViewModel.postalCode }}
                     </h5>
                     <span>Codigo Postal</span>
                   </div>
@@ -217,7 +217,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.DatosFiscales.CUIT }}
+                      {{ this.supplierViewModel.cuit }}
                     </h5>
                     <span>CUIT</span>
                   </div>
@@ -233,7 +233,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.DatosFiscales.CondicionIVA }}
+                      {{ this.supplierViewModel.ivaCondition.taxCondition }}
                     </h5>
                     <span>Condicion IVA</span>
                   </div>
@@ -252,7 +252,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.DatosContacto.Nombre }}
+                      {{ this.contactViewModel.firstName }}
                     </h5>
                     <span>Nombre</span>
                   </div>
@@ -268,7 +268,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.DatosContacto.Apellido }}
+                      {{ this.contactViewModel.lastName }}
                     </h5>
                     <span>Apellido</span>
                   </div>
@@ -284,7 +284,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.DatosContacto.Telefono }}
+                      {{ this.contactViewModel.phoneNumber }}
                     </h5>
                     <span>Telefono</span>
                   </div>
@@ -300,7 +300,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.DatosContacto.Email }}
+                      {{ this.contactViewModel.email }}
                     </h5>
                     <span>Email</span>
                   </div>
@@ -316,7 +316,7 @@
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
                     <h5 class="text-nowrap">
-                      {{ this.datosProv.DatosContacto.Rol }}
+                      {{ this.contactViewModel.role }}
                     </h5>
                     <span>Rol</span>
                   </div>
@@ -328,16 +328,23 @@
       </div>
       <!-- Botones para realizar las acciones en el detalle -->
       <div class="d-flex">
-        <a
+        <a 
           data-bs-toggle="modal" data-bs-target="#exampleModal" 
           class="btn btn-danger me-2"
+          *ngIf="this.supplierViewModel.active"
           >Eliminar</a
         >
         <a
-          [routerLink]="['/proveedores/form/', this.datosProv.id]"
+          [routerLink]="['/proveedores/form/', this.supplierViewModel.id]"
           class="btn btn-primary me-2"
           >Editar</a
         >
+        <a 
+        data-bs-toggle="modal" data-bs-target="#exampleModal" 
+        class="btn btn-success me-2"
+        *ngIf="!this.supplierViewModel.active"
+        >Dar de alta</a
+      >
       </div>
       <!-- Botones para realizar las acciones en el detalle -->
     </div>
@@ -356,11 +363,12 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-             Deseas eliminar el proveedor "{{this.datosProv.RazonSocial}}"?
+             Deseas {{this.supplierViewModel.active ? 'eliminar' : 'dar de alta'}} el proveedor "{{this.supplierViewModel.businessName}}"?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="borrarProveedor(this.datosProv.id)">Aceptar</button>
+            <button *ngIf="this.supplierViewModel.active" type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteSupplier(this.supplierViewModel.id)">Aceptar</button>
+            <button *ngIf="!this.supplierViewModel.active" type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="undeleteSupplierById(this.supplierViewModel.id)">Aceptar</button>
           </div>
         </div>
       </div>
