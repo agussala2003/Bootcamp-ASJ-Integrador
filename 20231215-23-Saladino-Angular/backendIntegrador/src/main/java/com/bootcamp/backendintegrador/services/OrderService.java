@@ -46,7 +46,22 @@ public class OrderService {
         return orderRepository.findById(orderId);
     }
 
+	public List<Order> getOrdersByStatusId(Integer statusId) {
+		Status status = statusService.getStatusById(statusId).orElseThrow(() ->
+        new EntityNotFoundException("Status with ID " + statusId + " not found"));
+		return orderRepository.findByStatus(status);
+	}
+
+    
     public Order createOrder(Order newOrder) {
+    	
+    	List<Order> orders = getAllOrders();
+    	
+    	for (Order order2 : orders) {
+			if(order2.getOrderNumber().equalsIgnoreCase(newOrder.getOrderNumber())) {
+				return null;
+			}
+		}
     	
     	if(validateOrder(newOrder)) {
             if (newOrder.getCreatedAt() == null) {
@@ -61,6 +76,10 @@ public class OrderService {
 
             User orderUser = userService.getUserById(newOrder.getUser().getId())
                     .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + newOrder.getUser().getId()));
+            
+            if(orderStatus.getId() == 2) {
+            	newOrder.setActive(false);
+            }
 
             newOrder.setSupplier(orderSupplier);
             newOrder.setStatus(orderStatus);
@@ -76,7 +95,10 @@ public class OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
 
         if (optionalOrder.isPresent()) {
+        	Status updatedStatus = statusService.getStatusById(2).orElseThrow(
+             		() -> new EntityNotFoundException("Status not found with ID: " + 2));
             Order orderToDeactivate = optionalOrder.get();
+            orderToDeactivate.setStatus(updatedStatus);
             orderToDeactivate.setActive(false);
             orderToDeactivate.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return orderRepository.save(orderToDeactivate);
@@ -114,6 +136,7 @@ public class OrderService {
     }
     
     private boolean validateOrder(Order order) {
+    	
         String regex1 = "^[0-9]{1,12}$";
         
     	if(!order.getOrderNumber().matches(regex1)) {
@@ -130,8 +153,11 @@ public class OrderService {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
 
         if (optionalOrder.isPresent()) {
+        	Status updatedStatus = statusService.getStatusById(3).orElseThrow(
+             		() -> new EntityNotFoundException("Status not found with ID: " + 3));
             Order orderToUndelete = optionalOrder.get();
 
+            orderToUndelete.setStatus(updatedStatus);
             orderToUndelete.setActive(true);
             orderToUndelete.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 

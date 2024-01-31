@@ -28,16 +28,29 @@ public class CategoryService {
         newCategory.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return categoryRepository.save(newCategory);
     }
+    
+    public Category updateCategory(Integer id, Category updatedCategory) {
+    	Optional<Category> optionalCategory = categoryRepository.findById(id);
+    	
+    	if (optionalCategory.isPresent()) {
+            Category category = optionalCategory.get();
+            category.setCategoryName(updatedCategory.getCategoryName());
+            return categoryRepository.save(category);
+        }
+
+        return null;
+    }
 
     public Category deleteCategoryById(Integer categoryId) {
         Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
 
         if (optionalCategory.isPresent()) {
-            
-            categoryRepository.deleteById(categoryId);
-            return optionalCategory.get();
+            Category category = optionalCategory.get();
+            category.setActive(false);
+            return categoryRepository.save(category);
         }
 
         return null;
     }
+
 }

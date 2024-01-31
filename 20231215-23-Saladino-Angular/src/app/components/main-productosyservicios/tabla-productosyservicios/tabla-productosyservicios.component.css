@@ -95,3 +95,7 @@
     display: none!important;
    }
    
+
+.loader {
+    min-height: 80vh;
+}

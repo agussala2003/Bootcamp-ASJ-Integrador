@@ -12,6 +12,7 @@
               <a routerLink="/categorias" class="btn btn-primary">Volver a la lista</a>
             </div>
         </div>
+
         <form #formCategorias="ngForm" (ngSubmit)="postCategory(formCategorias)">
             <div class="row">
                 <div class="col-12 col-md-3 mb-2">
@@ -41,11 +42,8 @@
                     [disabled]="!formCategorias.valid"
                     type="button"
                     class="btn btn-success">
-                   Agregar
+                    {{this.idCategory == undefined ? 'Agregar' : 'Actualizar'}}
                   </button>
-                </div>
-                <div *ngIf="!formCategorias.valid" class="col-12 mt-2">
-                  <p class="text-light">Asegurate de que todos los campos esten completos correctamente</p>
                 </div>
               </div>
               <!-- Modal -->

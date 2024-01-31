@@ -27,6 +27,14 @@ export class SupplierService {
     return this.http.get<Supplier[]>(`${this.baseUrl}/deleted`);
   }
 
+  getSuppliersByBusinessNameAsc(): Observable<Supplier[]> {
+    return this.http.get<Supplier[]>(`${this.baseUrl}/businessNameAsc`);
+  }
+
+  getSuppliersByBusinessNameDesc(): Observable<Supplier[]> {
+    return this.http.get<Supplier[]>(`${this.baseUrl}/businessNameDesc`);
+  }
+
   postSupplier(supplier: Supplier): Observable<Supplier> {
     return this.http.post<Supplier>(this.baseUrl, supplier);
   }

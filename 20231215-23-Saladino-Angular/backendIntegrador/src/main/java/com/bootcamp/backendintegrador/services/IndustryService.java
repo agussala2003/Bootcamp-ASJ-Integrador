@@ -28,13 +28,26 @@ public class IndustryService {
         newIndustry.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return industryRepository.save(newIndustry);
     }
+    
+    public Industry updateIndustry(Integer id, Industry updatedIndustry) {
+    	Optional<Industry> optionalIndustry = industryRepository.findById(id);
+
+        if (optionalIndustry.isPresent()) {
+            Industry industry = optionalIndustry.get();
+            industry.setIndustryName(updatedIndustry.getIndustryName());
+            return industryRepository.save(industry);
+        }
+
+        return null;
+    }
 
     public Industry deleteIndustryById(Integer id) {
         Optional<Industry> optionalIndustry = industryRepository.findById(id);
 
         if (optionalIndustry.isPresent()) {
-            industryRepository.deleteById(id);
-            return optionalIndustry.get();
+            Industry industry = optionalIndustry.get();
+            industry.setActive(false);
+            return industryRepository.save(industry);
         }
 
         return null;

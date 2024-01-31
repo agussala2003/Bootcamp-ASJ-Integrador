@@ -22,6 +22,10 @@ public class Category {
     @NotBlank(message = "Category name must be complete")
     @Column(name = "category_name", nullable = false)
     private String categoryName;
+    
+    @NotNull(message = "Active is required")
+    @Column(name = "active", nullable = false)
+    private Boolean active;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -34,16 +38,21 @@ public class Category {
     }
 
     public Category(Integer id,
-            String categoryName,
-            Timestamp createdAt,
-            Timestamp updatedAt) {
-        this.id = id;
-        this.categoryName = categoryName;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+			String categoryName,
+			Boolean active, 
+			Timestamp createdAt, 
+			Timestamp updatedAt) {
+		super();
+		this.id = id;
+		this.categoryName = categoryName;
+		this.active = active;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
 
-    public Integer getId() {
+
+
+	public Integer getId() {
         return id;
     }
 
@@ -74,4 +83,13 @@ public class Category {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+    
 }

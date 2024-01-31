@@ -24,6 +24,7 @@ export class DetalleComponent implements OnInit {
   industryViewModel: Industry = {
     id: '',
     industryName: '',
+    active: true,
   }
 
   ivaConditionViewModel: IvaCondition = {

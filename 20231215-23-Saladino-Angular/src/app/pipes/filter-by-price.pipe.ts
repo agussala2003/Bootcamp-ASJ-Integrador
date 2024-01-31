@@ -11,10 +11,10 @@ export class FilterByPricePipe implements PipeTransform {
       return value.sort((a, b) => a.productName.localeCompare(b.productName));
     }
     if(args == 1) {
-      return value.sort((a, b) => b.price - a.price);
+      return value.sort((a, b) => a.price - b.price);
     }
     if(args == 2) {
-      return value.sort((a, b) => a.price - b.price);
+      return value.sort((a, b) => b.price - a.price);
     }
   }
 }

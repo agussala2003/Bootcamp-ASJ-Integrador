@@ -30,6 +30,20 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.baseUrl}/supplier/${supplierId}`);
   }
 
+  public getProductsByPriceAsc(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/priceAsc`);
+  }
+
+  public getProductsByPriceDesc(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/priceDesc`);
+  }
+
+  public getProductsByCategory(categoryId: string): Observable<Product[]> {
+    return this.http.get<Product[]>(
+      `${this.baseUrl}/category/${categoryId}`
+    );
+  }
+
   public postProduct(product: Product): Observable<Product> {
     return this.http.post<Product>(this.baseUrl,product);
   }

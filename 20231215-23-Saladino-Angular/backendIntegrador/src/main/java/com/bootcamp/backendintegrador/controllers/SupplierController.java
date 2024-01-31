@@ -65,6 +65,26 @@ public class SupplierController {
         	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleted suppliers");
         }
     }
+    
+    @GetMapping("/businessNameAsc")
+    public ResponseEntity<?> getSuppliersByBusinessNameAsc() {
+        try {
+            List<Supplier> deletedSuppliers = supplierService.getSuppliersByBusinessNameAsc();
+            return new ResponseEntity<>(deletedSuppliers, HttpStatus.OK);
+        } catch (Exception e) {
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleted suppliers");
+        }
+    }
+    
+    @GetMapping("/businessNameDesc")
+    public ResponseEntity<?> getSuppliersByBusinessNameDesc() {
+        try {
+            List<Supplier> deletedSuppliers = supplierService.getSuppliersByBusinessNameDesc();
+            return new ResponseEntity<>(deletedSuppliers, HttpStatus.OK);
+        } catch (Exception e) {
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleted suppliers");
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getSupplierById(@PathVariable Integer id) {

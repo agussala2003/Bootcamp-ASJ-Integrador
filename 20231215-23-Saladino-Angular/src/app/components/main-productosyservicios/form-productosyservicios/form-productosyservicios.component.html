@@ -45,8 +45,8 @@
         </div>
       </div>
       <div class="col-12 col-md-auto mb-2">
-        <label for="seleccCodProv" class="form-label text-light"
-          >Codigo Proveedor:</label
+        <label for="seleccCodProv" class="form-label text-light position-relative labelProv"
+          >Codigo Proveedor: <img class="rounded-circle position-absolute end-0 bottom-0" *ngIf="this.productViewModel.supplier.id != ''" src="{{supplierImg}}" style="width: 30px; height: 30px" alt=""></label
         >
         <select
           [(ngModel)]="this.productViewModel.supplier.id"
@@ -56,6 +56,7 @@
           class="form-select"
           aria-label="Default select example"
           required
+          (change)="onSupplierChange()"
         >
           <option selected disabled>Selecciona un proveedor</option>
           <option *ngFor="let supplier of suppliers" value="{{ supplier.id }}">{{supplier.businessName}}</option>
@@ -65,7 +66,14 @@
         </div>
       </div>
       <div class="col-12 col-md-auto mb-2">
-        <label for="categoria" class="form-label text-light">Categoria:</label>
+        <label for="categoria" class="form-label text-light position-relative labelCat">Categoria:
+          <div class="containerTooltip position-absolute end-0 bottom-0">
+            <span class="hover-me text-white" routerLink="/categorias/form" >Agregar</span>
+            <div class="tooltip">
+              <p>Clickea aqui para agregar una nueva categoria</p>
+            </div>
+          </div>
+        </label>
         <select
           [(ngModel)]="this.productViewModel.category.id"
           for="categoria"

@@ -32,10 +32,12 @@ export class TablaProveedoresComponent implements OnInit {
   prevPage: number = 0;
   nextPage: number = 5;
   isActiveItems: boolean = true;
+  loaderFlag: boolean = false;
 
   industryViewModel: Industry = {
     id: '',
     industryName: '',
+    active: true,
   }
 
   ivaConditionViewModel: IvaCondition = {
@@ -111,6 +113,7 @@ export class TablaProveedoresComponent implements OnInit {
       this.refreshSuppliers();
       this.refreshContacts();
       this.refreshAddresses();
+      this.loader();
     });
   }
 
@@ -122,7 +125,43 @@ export class TablaProveedoresComponent implements OnInit {
       this.refreshSuppliers();
       this.refreshContacts();
       this.refreshAddresses();
+      this.loader();
     })
+  }
+
+  getSuppliersByBusinessNameAsc() {
+    this.supplierService.getSuppliersByBusinessNameAsc().subscribe((data: Supplier[]) => {
+      console.log('You get Suppliers by business name asc');
+      console.log(data);
+      this.suppliers = data.filter((item: Supplier) => item.active === this.isActiveItems);
+      this.loader();
+    });
+  }
+
+  getSuppliersByBusinessNameDesc() {
+    this.supplierService.getSuppliersByBusinessNameDesc().subscribe((data: Supplier[]) => {
+      console.log('You get Suppliers by business name desc');
+      console.log(data);
+      this.suppliers = data.filter((item: Supplier) => item.active === this.isActiveItems);
+      this.loader();
+    });
+  }
+
+  onBusinessNameFilterChange() {
+    if (this.businessNameFilter === '0') {
+      this.refreshSuppliers();
+    } else if (this.businessNameFilter === '1') {
+      this.getSuppliersByBusinessNameAsc();
+    } else if (this.businessNameFilter === '2') {
+      this.getSuppliersByBusinessNameDesc();
+    }
+  }
+
+  loader() {
+    this.loaderFlag = true;
+    setTimeout(() => {
+      this.loaderFlag = false;
+    }, 1000);
   }
 
   refreshSuppliers() {
@@ -130,6 +169,8 @@ export class TablaProveedoresComponent implements OnInit {
       console.log('You get active Suppliers');
       console.log(data);
       this.suppliers = data;
+      this.isActiveItems = true;
+      this.loader();
     });
   }
   refreshContacts() {
@@ -156,11 +197,21 @@ export class TablaProveedoresComponent implements OnInit {
     return 'No tiene contacto';
   }
 
+  getAddressBySupplierId(id: string): string {
+    const address = this.addresses.find((item: Address) => item.supplier.id === id);
+    if (address !== undefined) {
+      this.addressViewModel = address;
+      return `${this.addressViewModel.location.province.country.countryName} - ${this.addressViewModel.location.province.provinceName}`;
+    }
+    return 'No tiene dirección';
+  }
+
   getDeletedSuppliers() {
     this.supplierService.getDeletedSuppliers().subscribe((data: Supplier[]) => {
       console.log('You get deleted Suppliers');
       console.log(data);
       this.suppliers = data;
+      this.loader();
     });
   }
 

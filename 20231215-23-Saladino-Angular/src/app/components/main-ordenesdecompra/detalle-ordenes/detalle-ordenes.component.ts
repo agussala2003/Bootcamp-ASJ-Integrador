@@ -37,7 +37,7 @@ export class DetalleOrdenesComponent implements OnInit {
     updatedAt: '',
   };
 
-  industryViewModel: Industry = { id: '', industryName: '' };
+  industryViewModel: Industry = { id: '', industryName: '', active: true};
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -77,6 +77,7 @@ export class DetalleOrdenesComponent implements OnInit {
   categoryViewModel: Category = {
     id: '',
     categoryName: '',
+    active: true,
     createdAt: '',
     updatedAt: '',
   };

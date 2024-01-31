@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../../services/productosyservicios.service';
-import { ProductoyServicio } from '../../../models/ProductoyServicio';
 import { Industry } from '../../../models/Industry';
 import { IvaCondition } from '../../../models/IvaCondition';
 import { Supplier } from '../../../models/Supplier';
@@ -20,7 +19,7 @@ export class DetalleProdComponent {
     public router2: Router
   ) {}
 
-  industryViewModel: Industry = { id: '', industryName: '' };
+  industryViewModel: Industry = { id: '', industryName: '', active: true};
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -41,6 +40,7 @@ export class DetalleProdComponent {
   categoryViewModel: Category = {
     id: '',
     categoryName: '',
+    active: true,
     createdAt: '',
     updatedAt: '',
   };

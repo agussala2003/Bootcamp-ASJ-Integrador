@@ -99,6 +99,10 @@ const routes: Routes = [
         path:'form',
         component:FormCategoriasComponent
       },
+      {
+        path:'form/:idCategory',
+        component:FormCategoriasComponent
+      }
     ]
   },
   {
@@ -112,6 +116,10 @@ const routes: Routes = [
         path:'form',
         component:FormRubrosComponent
       },
+      {
+        path:'form/:idIndustry',
+        component:FormRubrosComponent
+      }
     ]
   },
   {

@@ -10,7 +10,7 @@
               <a routerLink="/rubros" class="btn btn-primary">Volver a la lista</a>
             </div>
         </div>
-        <form #formRubro="ngForm" (ngSubmit)="postIndustry(formRubro)">
+        <form *ngIf="!loaderFlag" #formRubro="ngForm" (ngSubmit)="postIndustry(formRubro)">
             <div class="row">
                 <div class="col-12 col-md-3 mb-2">
                     <label for="rubro" class="form-label text-light">Rubro:</label>
@@ -20,7 +20,7 @@
                       type="text"
                       id="rubro"
                       name="rubro"
-                      placeholder="Ingese rubro"
+                      placeholder="Ingrese rubro"
                       class="form-control"
                       minlength="4"
                     />
@@ -39,11 +39,8 @@
                     [disabled]="!formRubro.valid"
                     type="button"
                     class="btn btn-success">
-                   Agregar
+                   {{this.idIndustry == undefined ? 'Agregar' : 'Actualizar'}}
                   </button>
-                </div>
-                <div *ngIf="!formRubro.valid" class="col-12 mt-2">
-                  <p class="text-light">Asegurate de que todos los campos esten completos correctamente</p>
                 </div>
               </div>
               <!-- Modal -->

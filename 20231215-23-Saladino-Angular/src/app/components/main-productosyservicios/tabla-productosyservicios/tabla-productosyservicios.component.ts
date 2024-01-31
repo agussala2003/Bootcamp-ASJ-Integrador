@@ -14,7 +14,7 @@ import { CategoriasService } from '../../../services/categorias.service';
 })
 export class TablaProductosyserviciosComponent implements OnInit {
 
-  industryViewModel: Industry = { id: '', industryName: '' };
+  industryViewModel: Industry = { id: '', industryName: '', active: true};
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -35,6 +35,7 @@ export class TablaProductosyserviciosComponent implements OnInit {
   categoryViewModel: Category = {
     id: '',
     categoryName: '',
+    active: true,
     createdAt: '',
     updatedAt: ''
   }
@@ -57,11 +58,12 @@ export class TablaProductosyserviciosComponent implements OnInit {
   categories: Category[] = [];
   userState: any;
   productFilter:string = '';
-  categoryFilter:string = '';
+  categoryFilter:string = '0';
   priceFilter:string = '0';
   prevPage: number = 0;
   nextPage: number = 5;
   isActiveItems: boolean = true;
+  loaderFlag = false;
 
   constructor(
     private productService: ProductService,
@@ -79,6 +81,7 @@ export class TablaProductosyserviciosComponent implements OnInit {
       console.log('You deleted a product');
       console.log(data);
       this.getActiveProducts();
+      this.loader();
     });
   }
 
@@ -88,6 +91,7 @@ export class TablaProductosyserviciosComponent implements OnInit {
       console.log(data);
       this.isActiveItems = !this.isActiveItems;
       this.getActiveProducts();
+      this.loader();
     });
   }
 
@@ -95,7 +99,7 @@ export class TablaProductosyserviciosComponent implements OnInit {
     this.categoryService.getCategories().subscribe((data: Category[]) => {
       console.log('You get Categories');
       console.log(data);
-      this.categories = data;
+      this.categories = data.filter((item: Category) => item.active === true);
     });
   }
 
@@ -111,6 +115,7 @@ export class TablaProductosyserviciosComponent implements OnInit {
     this.productService.getActiveProducts().subscribe((data: Product[]) => {
       console.log('You get active products');
       console.log(data);
+      this.loader();
       this.products = data;
     })
   }
@@ -119,15 +124,82 @@ export class TablaProductosyserviciosComponent implements OnInit {
     this.productService.getDeletedProducts().subscribe((data: Product[]) => {
       console.log('You get active products');
       console.log(data);
+      this.loader();
       this.products = data;
     })
+  }
+
+  getProductsByPriceAsc(): void {
+    this.productService.getProductsByPriceAsc().subscribe((data: Product[]) => {
+      console.log('You get products by price asc');
+      console.log(data);
+      this.loader();
+      this.products = data.filter((item: Product) => item.active === this.isActiveItems);
+    })
+  }
+
+  getProductsByPriceDesc(): void {
+    this.productService.getProductsByPriceDesc().subscribe((data: Product[]) => {
+      console.log('You get products by price desc');
+      console.log(data);
+      this.loader();
+      this.products = data.filter((item: Product) => item.active === this.isActiveItems);
+    })
+  }
+
+  getProductByCategory(categoryId: string): void {
+    this.productService.getProductsByCategory(categoryId).subscribe((data: Product[]) => {
+      console.log('You get products by category');
+      console.log(data);
+      this.loader();
+      this.products = data.filter((item: Product) => item.active === this.isActiveItems);
+    })
+  }
+
+  onPriceFilterChange() {
+    if (this.priceFilter === '0') {
+      if(this.isActiveItems) {
+        this.getActiveProducts();
+      } else {
+        this.getDeletedProducts();
+      }
+    } else if (this.priceFilter === '1') {
+      this.getProductsByPriceAsc();
+      this.categoryFilter = '0';
+    } else if (this.priceFilter === '2') {
+      this.getProductsByPriceDesc();
+      this.categoryFilter = '0';
+    }
+  }
+
+  onCategoryFilterChange() {
+    if (this.categoryFilter === '0') {
+      if(this.isActiveItems) {
+        this.getActiveProducts();
+      } else {
+        this.getDeletedProducts();
+      }
+    } else {
+      this.getProductByCategory(this.categoryFilter);
+      this.priceFilter = '0';
+    }
+  }
+
+  loader() {
+    this.loaderFlag = true;
+    setTimeout(() => {
+      this.loaderFlag = false;
+    }, 1000);
   }
 
   handleImageError(productoyservicio: any): void {
     productoyservicio.Imagen = '../../../../assets/img/logoGenerico.png';
   }
 
-  
+  onFilterChange() {
+    this.prevPage = 0;
+    this.nextPage = 5;
+  }
 
   goPrevPage() {
     if (this.prevPage >= 5) {

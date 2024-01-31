@@ -38,6 +38,10 @@ public class StatusService {
 
         return null;
     }
+    
+    public List<Status> findByStatusName(String string) {
+    	return statusRepository.findByStatusName(string);
+    }
 
     public void deleteStatus(Integer id) {
         statusRepository.deleteById(id);

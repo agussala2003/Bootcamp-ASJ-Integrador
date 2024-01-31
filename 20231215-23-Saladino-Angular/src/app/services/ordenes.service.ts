@@ -26,6 +26,10 @@ export class OrderService {
     return this.http.get<Order>(`${this.baseUrl}/${id}`);
   }
 
+  public getOrderByStatus(status: string): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.baseUrl}/status/${status}`);
+  }
+
   public postOrder(order: Order): Observable<Order> {
     return this.http.post<Order>(this.baseUrl, order);
   }

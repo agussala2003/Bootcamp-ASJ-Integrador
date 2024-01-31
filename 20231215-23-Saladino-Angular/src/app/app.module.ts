@@ -34,6 +34,7 @@ import { StateItemsPipe } from './pipes/state-items.pipe';
 import { FilterCategoryPipe } from './pipes/filter-category.pipe';
 import { FilterByPricePipe } from './pipes/filter-by-price.pipe';
 import { FilterByBusinessNamePipe } from './pipes/filter-by-business-name.pipe';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { FilterByBusinessNamePipe } from './pipes/filter-by-business-name.pipe';
     StateItemsPipe,
     FilterCategoryPipe,
     FilterByPricePipe,
-    FilterByBusinessNamePipe
+    FilterByBusinessNamePipe,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

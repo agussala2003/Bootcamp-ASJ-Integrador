@@ -55,7 +55,7 @@ export class FormOrdenesdecompraComponent implements OnInit {
     updatedAt: '',
   };
 
-  industryViewModel: Industry = { id: '', industryName: '' };
+  industryViewModel: Industry = { id: '', industryName: '', active: true };
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -95,6 +95,7 @@ export class FormOrdenesdecompraComponent implements OnInit {
   categoryViewModel: Category = {
     id: '',
     categoryName: '',
+    active: true,
     createdAt: '',
     updatedAt: '',
   };
@@ -173,6 +174,7 @@ export class FormOrdenesdecompraComponent implements OnInit {
       this.orderViewModel.issuanceDate = this.getFormattedDate(new Date(this.orderViewModel.issuanceDate));
       this.orderViewModel.deliveryDate = this.getFormattedDate(new Date(this.orderViewModel.deliveryDate));
       this.getProductsBySupplierId(this.orderViewModel.supplier.id);
+      this.supplierImg = this.orderViewModel.supplier.image;
     });
     this.isProductsInOrden = true;
     this.flagCode = false;
@@ -239,7 +241,7 @@ export class FormOrdenesdecompraComponent implements OnInit {
   }
   postOrderDetail(ordersDetails: OrderDetail[]) {
     console.log(ordersDetails);
-    ordersDetails.forEach((item) => {
+    ordersDetails.forEach((item:OrderDetail) => {
       item.order.id = this.orderViewModel.id;
     });
     this.orderDetailService.createOrderDetail(ordersDetails).subscribe((data) => {
@@ -424,7 +426,7 @@ export class FormOrdenesdecompraComponent implements OnInit {
       updatedAt: '',
     };
   
-    this.industryViewModel = { id: '', industryName: '' };
+    this.industryViewModel = { id: '', industryName: '', active: true};
     this.ivaConditionViewModel = { id: '', taxCondition: '' };
     this.supplierViewModel = {
       id: '',
@@ -464,6 +466,7 @@ export class FormOrdenesdecompraComponent implements OnInit {
     this.categoryViewModel = {
       id: '',
       categoryName: '',
+      active: true,
       createdAt: '',
       updatedAt: '',
     };

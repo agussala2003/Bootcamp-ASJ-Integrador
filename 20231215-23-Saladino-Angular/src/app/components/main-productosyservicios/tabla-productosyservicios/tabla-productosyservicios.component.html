@@ -1,7 +1,10 @@
 <div class="bg-dark">
+  <div *ngIf="loaderFlag" class="d-flex justify-content-center align-items-center mt-5 loader">
+    <app-loader></app-loader>
+  </div>
   <div *ngIf="userState == true" class="container py-5 p-md-5">
     <!-- Ruteo -->
-    <div class="row">
+    <div *ngIf="!loaderFlag" class="row">
       <!-- Breadcrumb -->
       <div class="col-12 col-md-8 d-flex align-items-center">
         <a
@@ -20,33 +23,33 @@
       </div>
     </div>
     <!-- Ruteo -->
-    <div class="row">
+    <div *ngIf="!loaderFlag" class="row">
       <div class="col-12 mb-2 mb-md-0 col-md-2">
         <input class="searchInput mt-4" type="text" placeholder="Buscar" [(ngModel)]="productFilter">
       </div>
-      <div class="col-12 mb-2 col-md-auto d-flex align-items-end">
+      <div class="col-12 mb-2 col-md-2 d-flex align-items-end">
         <p class="text-light m-0 me-2">Ver eliminados</p>
         <div class="cntr">
           <button (click)="changeState()" id="cbx" [ngClass]="this.isActiveItems ? '' : 'checked' " class="hidden-xs-up"></button>
           <label for="cbx" class="cbx"></label>
         </div>
       </div>
-      <div class="col-12 mb-2 mb-md-0 col-md-auto align-items-end justify-content-start ">
+      <div class="col-12 mb-2 mb-md-0 col-md-3 align-items-end justify-content-start ">
         <label class="form-label text-light" for="category">Filtra por categoria</label>
-        <select for="category" name="category" id="category" class="form-select" [(ngModel)]="categoryFilter" aria-label="Default select example">
-          <option value="">Sin filtro</option>
+        <select (change)="onCategoryFilterChange()" for="category" name="category" id="category" class="form-select" [(ngModel)]="categoryFilter" aria-label="Default select example">
+          <option value="0">Sin filtro</option>
           <option *ngFor="let category of categories" value="{{category.id}}">{{category.categoryName}}</option>
         </select>
       </div>
-      <div class="col-12 mb-2 mb-md-0 col-md-auto align-items-end justify-content-start ">
+      <div class="col-12 mb-2 mb-md-0 col-md-2 align-items-end justify-content-start ">
         <label class="form-label text-light" for="price">Ordernar por Precio</label>
-        <select for="price" name="price" id="price" class="form-select" [(ngModel)]="priceFilter" aria-label="Default select example">
+        <select (change)="onPriceFilterChange()" for="price" name="price" id="price" class="form-select" [(ngModel)]="priceFilter" aria-label="Default select example">
           <option value="0">Sin Orden</option>
           <option value="1">Ascendente</option>
           <option value="2">Descendente</option>
         </select>
       </div>
-      <div class="col-12 mb-2 mb-md-0 col-md-4 d-flex align-items-end justify-content-end ">
+      <div class="col-12 mb-2 mb-md-0 col-md-3 d-flex align-items-end justify-content-end ">
         <ul class="pagination mb-0">
           <li>
             <button (click)="goPrevPage()" *ngIf="prevPage != 0" class="btn btn-outline-light">Previo</button>
@@ -58,7 +61,7 @@
       </div>
     </div>
     <div
-      *ngIf="products.length > 0"
+      *ngIf="products.length > 0 && !loaderFlag"
       class="table-responsive rounded-3 mt-3 mb-3 border border-1 border-white"
     >
       <table class="table table-dark align-middle mb-0">
@@ -66,14 +69,14 @@
           <tr>
             <th class="text-nowrap text-center">Codigo / Sku</th>
             <th class="text-center">Proveedor</th>
-            <th>Categoria</th>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Accion</th>
+            <th class="text-center">Categoria</th>
+            <th class="text-center">Producto</th>
+            <th class="text-center">Precio</th>
+            <th class="text-center">Accion</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let product of products | atoZ | search:productFilter | pagination: prevPage:nextPage | filterCategory: categoryFilter | filterByPrice: priceFilter">
+          <tr *ngFor="let product of products | atoZ:categoryFilter:priceFilter | search:productFilter | pagination: prevPage:nextPage">
             <td>
               <div class="d-flex align-items-center">
                 <img
@@ -96,21 +99,21 @@
               </p>
             </td>
             <td>
-              <p class="fw-normal mb-1 text-nowrap">{{ product.category.categoryName }}</p>
+              <p class="fw-normal mb-1 text-nowrap text-center">{{ product.category.categoryName }}</p>
             </td>
             <td>
-              <p class="fw-normal mb-1 text-nowrap">{{ product.productName }}</p>
+              <p class="fw-normal mb-1 text-nowrap text-center">{{ product.productName }}</p>
             </td>
             <td>
-              <p class="fw-normal mb-1 text-nowrap">${{ product.price }}</p>
+              <p class="fw-normal mb-1 text-nowrap text-center">${{ product.price }}</p>
             </td>
             <td>
-              <div class="d-flex">
+              <div class="d-flex justify-content-center">
                 <i *ngIf="product.active"
                 (click)="getProductById(product.id)" data-bs-toggle="modal" data-bs-target="#exampleModal"
                   class="btn btn-danger bx bx-trash me-2"
                 ></i>
-                <i
+                <i *ngIf="product.active"
                   [routerLink]="['/productos-servicios/form/', product.id]"
                   class="btn btn-primary bx bx-edit-alt me-2"
                 ></i>

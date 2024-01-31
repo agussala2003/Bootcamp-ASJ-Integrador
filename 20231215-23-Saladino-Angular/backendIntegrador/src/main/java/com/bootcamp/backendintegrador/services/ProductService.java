@@ -42,13 +42,35 @@ public class ProductService {
 		return productsRepository.findById(id);
 	}
 	
+	public List<Product> getProductsByPriceAsc(){
+		return productsRepository.findAllByOrderByPriceAsc();
+	}
+	
+	public List<Product> getProductsByPriceDesc(){
+		return productsRepository.findAllByOrderByPriceDesc();
+	}
+	
 	public Optional<List<Product>> getProductBySupplierId(Integer supplierId) {
 		Supplier supplier = supplierService.getSupplierById(supplierId).orElseThrow(() ->
         new EntityNotFoundException("Supplier with ID " + supplierId + " not found"));
 		return Optional.ofNullable(productsRepository.findBySupplier(supplier));
 	}
 	
+	public Optional<List<Product>> getProductByCategoryId(Integer categoryId) {
+		Category category = categoryService.getCategoryById(categoryId).orElseThrow(() ->
+        new EntityNotFoundException("Category with ID " + categoryId + " not found"));
+		return Optional.ofNullable(productsRepository.findByCategory(category));
+	}
+	
 	public Product postProduct(Product product) {
+		
+		List<Product> products = getProducts();
+    	
+    	for (Product product2 : products) {
+			if(product2.getSku().equalsIgnoreCase(product.getSku())) {
+				return null;
+			}
+		}
 		
 		if(validateProductInput(product)) {
 			if (product.getCreatedAt() == null) {
@@ -124,7 +146,8 @@ public class ProductService {
     }
 	
 	private boolean validateProductInput(Product product) {
-		String regex1 = "^[0-9]{4,8}$";
+		
+		String regex1 = "^[0-9]{8}$";
 		String regex2 = "^(ftp|http|https):\\/\\/[^ \"]+$";
 		String regex3 = "^[0-9 A-Z a-z]{3,50}$";
 		

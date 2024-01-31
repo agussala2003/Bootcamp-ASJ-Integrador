@@ -29,7 +29,6 @@
           <label for="codProv" class="form-label text-light">Codigo:</label>
           <div class="underline"></div>
           <input
-            [disabled]="!flagCode"
             [(ngModel)]="this.supplierViewModel.supplierCode"
             required
             name="proveedor"
@@ -38,9 +37,12 @@
             placeholder="Ingrese su código"
             class="form-control"
             minlength="4"
-            maxlength="4"
+            maxlength="8"
             (keyup)="supplierCodeExists()"
           />
+          <div *ngIf="formProv.controls['proveedor']?.hasError('minlength')" class="col-auto">
+            <span class="form-text text-light" [class.required-field]="formProv.controls['proveedor'].touched">Al menos 4 caracteres</span>
+          </div>
           <div *ngIf="this.existsCode" class="col-auto">
             <span class="form-text text-light">El código ya está en uso</span>
           </div>
@@ -75,7 +77,14 @@
           </div>
         </div>
         <div class="col-12 col-md-auto mb-2">
-          <label for="rubro" class="form-label text-light">Rubro:</label>
+          <label for="rubro" class="form-label text-light position-relative labelRubro">Rubro: 
+            <div class="containerTooltip position-absolute end-0 bottom-0">
+              <span class="hover-me text-white" routerLink="/rubros/form" >Agregar</span>
+              <div class="tooltip">
+                <p>Clickea aqui para agregar un nuevo rubro</p>
+              </div>
+            </div>
+          </label>
           <select
           [(ngModel)]="this.supplierViewModel.industry.id"
           for="rubro"
@@ -360,7 +369,6 @@
         <div class="col-12 col-md-auto mb-2">
           <label for="cuit" class="form-label text-light">CUIT:</label>
           <input
-            [disabled]="!flagCode"
             [(ngModel)]="this.supplierViewModel.cuit"
             required
             name="cuit"

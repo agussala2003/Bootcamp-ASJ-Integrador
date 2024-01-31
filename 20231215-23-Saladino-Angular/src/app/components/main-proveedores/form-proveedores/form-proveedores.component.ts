@@ -28,7 +28,7 @@ import { LocationService } from '../../../services/location.service';
 })
 export class FormProveedoresComponent implements OnInit {
 
-  industryViewModel: Industry = { id: '', industryName: '' };
+  industryViewModel: Industry = { id: '', industryName: '', active: true};
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -80,6 +80,8 @@ export class FormProveedoresComponent implements OnInit {
   industries: Industry[] = [];
   suppliers: Supplier[] = [];
   ivaConditions: IvaCondition[] = [];
+  loaderFlag: boolean = false;
+  initSupplierCode: string = '';
 
   constructor(
     private supplierService: SupplierService,
@@ -104,6 +106,7 @@ export class FormProveedoresComponent implements OnInit {
         this.getAddressBySupplierId(this.idSupplier);
       } else {
         this.setupNewSupplier();
+        this.openModal('Informacion para que tengas en cuenta');
       }
     });
 
@@ -123,7 +126,7 @@ export class FormProveedoresComponent implements OnInit {
   }
   getIndustries() {
     this.industryService.getIndustries().subscribe((data: Industry[]) => {
-      this.industries = data;
+      this.industries = data.filter((item: Industry) => item.active === true);
     });
   }
   getCountries() {
@@ -145,6 +148,7 @@ export class FormProveedoresComponent implements OnInit {
   getSupplierById(id:string): void {
     this.supplierService.getSupplierById(id).subscribe((data: Supplier) => {
       this.supplierViewModel = data;
+      this.initSupplierCode = this.supplierViewModel.supplierCode;
     });
     this.flagCode = false;
   }
@@ -178,6 +182,9 @@ export class FormProveedoresComponent implements OnInit {
   }
 
   submitSupplier(form: NgForm): void {
+    if(this.initSupplierCode !== this.supplierViewModel.supplierCode) {
+      this.supplierCodeExists();
+    }
     if (this.validateForm()) {
       if(this.idSupplier !== undefined) {
         this.putSupplier(this.idSupplier,this.supplierViewModel);
@@ -291,7 +298,7 @@ export class FormProveedoresComponent implements OnInit {
     return true;
   }
   validarStringAlfanumericoDe4Digitos(str: string): boolean {
-    const regex = /^(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z]{4}$/;
+    const regex = /^(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z]{4,8}$/;
     return regex.test(str);
   }
   validarStringAlfanumericoEntre3y50Caracteres(str: string): boolean {
@@ -319,7 +326,7 @@ export class FormProveedoresComponent implements OnInit {
     return regex.test(cuit);
   }
   supplierCodeExists(): void {
-    if (this.idSupplier === undefined) {
+    if (this.initSupplierCode !== this.supplierViewModel.supplierCode) {
       this.existsCode = this.suppliers.some(
         (item: Supplier) => item.supplierCode === this.supplierViewModel.supplierCode
       );
@@ -377,7 +384,7 @@ export class FormProveedoresComponent implements OnInit {
     mensajes.push('Completar todos los campos correctamente.');
     mensajes.push('Respeta los formatos ejemplificados.');
     mensajes.push('Evita dejar espacios en el comienzo, final o entre palabras.');
-    mensajes.push('El código debe ser alfanumérico y contener exactamente 4 caracteres.');
+    mensajes.push('El código debe ser alfanumérico y contener entre 4 y 8 caracteres.');
     mensajes.push('Verifica que el teléfono siga el formato correcto, por ejemplo: +54-11-12345678.');
     mensajes.push('El correo electrónico debe tener el formato adecuado, por ejemplo: correo@example.com.');
     mensajes.push('La URL del sitio web y la Imagen debe comenzar con "https://" y seguir un formato válido.');
@@ -402,6 +409,7 @@ export class FormProveedoresComponent implements OnInit {
       industry: {
         id: '',
         industryName: '',
+        active: true,
       },
       ivaCondition: {
         id: '',

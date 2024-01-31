@@ -64,6 +64,16 @@ public class OrderController {
         }
     }
     
+    @GetMapping("/status/{statusId}")
+    public ResponseEntity<?> getOrdersByStatusId(@PathVariable Integer statusId) {
+        try {
+            List<Order> statusOrders = orderService.getOrdersByStatusId(statusId);
+            return ResponseEntity.ok(statusOrders);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleted orders");
+        }
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderById(@PathVariable Integer id) {
         try {

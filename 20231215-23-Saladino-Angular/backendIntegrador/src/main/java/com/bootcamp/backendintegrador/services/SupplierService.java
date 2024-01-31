@@ -41,8 +41,24 @@ public class SupplierService {
     public Optional<Supplier> getSupplierById(Integer id) {
         return supplierRepository.findById(id);
     }
+    
+    public List<Supplier> getSuppliersByBusinessNameAsc() {
+        return supplierRepository.findAllByOrderByBusinessNameAsc();
+    }
+    
+    public List<Supplier> getSuppliersByBusinessNameDesc() {
+        return supplierRepository.findAllByOrderByBusinessNameDesc();
+    }
 
     public Supplier postSupplier(Supplier supplier) {
+    	
+    	List<Supplier> suppliers = getSuppliers();
+    	
+    	for (Supplier supplier2 : suppliers) {
+			if(supplier2.getSupplierCode().equalsIgnoreCase(supplier.getSupplierCode())) {
+				return null;
+			}
+		}
     	
     	if(validateSupplierInput(supplier)) {
             if (supplier.getCreatedAt() == null) {
@@ -89,6 +105,7 @@ public class SupplierService {
             IvaCondition ivaCondition = ivaConditionService.getIvaConditionById(updatedSupplier.getIvaCondition().getId())
                     .orElseThrow(() -> new EntityNotFoundException("IvaCondition not found")); // Handle properly
 
+            existingSupplier.setSupplierCode(updatedSupplier.getSupplierCode());
             existingSupplier.setIndustry(industry);
             existingSupplier.setBusinessName(updatedSupplier.getBusinessName());
             existingSupplier.setEmail(updatedSupplier.getEmail());
@@ -119,12 +136,13 @@ public class SupplierService {
     }
     
     private boolean validateSupplierInput(Supplier supplier) {
+    	
     	String regex1 = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
     	String regex2 = "^[0-9 A-Z a-z]{3,50}$";
     	String regex3 = "^\\+\\d{1,4}-\\d{1,6}-\\d{4,20}$";
     	String regex4 = "^(ftp|http|https):\\/\\/[^ \"]+$";
     	String regex5 = "^\\d{2}-\\d{8}-\\d{1}$";
-    	String regex6 = "^(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z]{4}$";
+    	String regex6 = "^(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z]{4,8}$";
     	
     	if(!supplier.getBusinessName().matches(regex2)) {
     		return false;

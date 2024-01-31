@@ -1,7 +1,10 @@
 <div class="bg-dark">
+  <div *ngIf="loaderFlag" class="d-flex justify-content-center align-items-center mt-5 loader">
+    <app-loader></app-loader>
+  </div>
   <div *ngIf="userState == true" class="container py-5 p-md-5">
     <!-- Ruteo -->
-    <div class="row">
+    <div *ngIf="!loaderFlag" class="row">
       <!-- Breadcrumb -->
       <div class="col-12 col-md-9 d-flex align-items-center">
         <a class="text-light text-decoration-none" routerLink="/proveedores">Proveedores</a>
@@ -14,25 +17,26 @@
       </div>
     </div>
     <!-- Ruteo -->
-    <div class="row">
+    <div *ngIf="!loaderFlag" class="row">
       <div class="col-12 mb-2 mb-md-0 col-md-2">
         <input class="searchInput mt-4" type="text" placeholder="Buscar" [(ngModel)]="supplierFilter">
       </div>
-      <div class="col-12 mb-2 col-md-auto d-flex align-items-end">
+      <div class="col-12 mb-2 col-md-2 d-flex align-items-end">
         <p class="text-light m-0 me-2">Ver eliminados</p>
         <div class="cntr">
           <button (click)="changeState()" id="cbx" [ngClass]="this.isActiveItems ? '' : 'checked' " class="hidden-xs-up"></button>
           <label for="cbx" class="cbx"></label>
         </div>
       </div>
-      <div class="col-12 mb-2 mb-md-0 col-md-auto align-items-end justify-content-start ">
+      <div class="col-12 mb-2 mb-md-0 col-md-3 align-items-end justify-content-start ">
         <label class="form-label text-light" for="price">Ordernar por Razon Social</label>
-        <select for="price" name="price" id="price" class="form-select" [(ngModel)]="businessNameFilter" aria-label="Default select example">
-          <option value="0">Ascendente</option>
-          <option value="1">Descendente</option>
+        <select (change)="onBusinessNameFilterChange()" for="price" name="price" id="price" class="form-select" [(ngModel)]="businessNameFilter" aria-label="Default select example">
+          <option value="0">Sin orden</option>
+          <option value="1">Ascendente</option>
+          <option value="2">Descendente</option>
         </select>
       </div>
-      <div class="col-12 mb-2 mb-md-0 col-md-4 d-flex align-items-end justify-content-end ">
+      <div class="col-12 mb-2 mb-md-0 col-md-5 d-flex align-items-end justify-content-end ">
           <ul class="pagination mb-0">
             <li>
               <button (click)="goPrevPage()" *ngIf="prevPage != 0" class="btn btn-outline-light">Previo</button>
@@ -43,20 +47,21 @@
           </ul>
       </div>
     </div>
-    <div *ngIf="suppliers.length > 0" class="table-responsive rounded-3 mt-3 mb-3 border border-1 border-white">
+    <div *ngIf="suppliers.length > 0 && !loaderFlag" class="table-responsive rounded-3 mt-3 mb-3 border border-1 border-white">
       <table class="table table-dark align-middle mb-0">
         <thead>
           <tr>
             <th class="text-center">Codigo</th>
-            <th>Razon Social</th>
-            <th>Medios</th>
-            <th>Contacto</th>
-            <th>Accion</th>
+            <th class="text-center">Razon Social</th>
+            <th class="text-center">Direccion</th>
+            <th class="text-center">Contacto</th>
+            <th class="text-center">Medios de contacto</th>
+            <th class="text-center">Accion</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let supplier of suppliers | search: supplierFilter | pagination: prevPage:nextPage | filterByBusinessName: businessNameFilter ">
-            <td >
+          <tr *ngFor="let supplier of suppliers | search: supplierFilter | pagination: prevPage:nextPage">
+            <td>
               <div class="d-flex align-items-center">
                 <img
                   src="{{ supplier.image }}"
@@ -71,24 +76,29 @@
               </div>
             </td>
             <td>
-              <p class="fw-normal mb-1 text-nowrap">
+              <p class="fw-normal mb-1 text-nowrap text-center ">
                 {{ supplier.businessName }}
               </p>
             </td>
             <td>
-              <p class="fw-normal mb-1 text-nowrap">{{ supplier.phoneNumber }}</p>
-              <p class="fw-normal mb-1 text-nowrap">{{ supplier.email }}</p>
-              <p class="fw-normal mb-1 text-nowrap"><a target="_blank" href="{{ supplier.website }}">{{ supplier.website }}</a></p>
+              <p class="fw-normal mb-1 text-nowrap text-center">
+                {{ getAddressBySupplierId(supplier.id) }}
+              </p>
             </td>
             <td>
-              <p class="fw-normal mb-1 text-nowrap" >
+              <p class="fw-normal mb-1 text-nowrap text-center" >
                 {{ getContactBySupplierId(supplier.id) }}
               </p>
             </td>
             <td>
-              <div class="d-flex">
+              <p class="fw-normal mb-1 text-nowrap text-center">{{ supplier.phoneNumber }}</p>
+              <p class="fw-normal mb-1 text-nowrap text-center">{{ supplier.email }}</p>
+              <p class="fw-normal mb-1 text-nowrap text-center"><a target="_blank" href="{{ supplier.website }}">{{ supplier.website }}</a></p>
+            </td>
+            <td>
+              <div class="d-flex justify-content-center">
                 <i *ngIf="supplier.active" (click)="getSupplierById(supplier.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash me-2"></i>
-                <i [routerLink]="['/proveedores/form/',supplier.id]" class="btn btn-primary bx bx-edit-alt me-2"></i>
+                <i *ngIf="supplier.active" [routerLink]="['/proveedores/form/',supplier.id]" class="btn btn-primary bx bx-edit-alt me-2"></i>
                 <i [routerLink]="['/proveedores/detalle/',supplier.id]" class="btn btn-success bx bx-info-circle"></i>
                 <i *ngIf="!supplier.active" (click)="getSupplierById(supplier.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary bx bx-check ms-2"></i>
               </div>

@@ -1,6 +1,9 @@
 <div class="bg-dark">
+    <div *ngIf="loaderFlag" class="d-flex justify-content-center align-items-center mt-5 loader">
+      <app-loader></app-loader>
+    </div>
     <div *ngIf="userState == true" class="container py-5 p-md-5">
-        <div class="row">
+        <div *ngIf="!loaderFlag" class="row">
             <!-- Breadcrumb -->
             <div class="col-12 col-md-9 d-flex align-items-center">
               <a class="text-light text-decoration-none" routerLink="/categorias">Categorias</a>
@@ -12,7 +15,7 @@
               >
             </div>
           </div>
-          <div class="row">
+          <div *ngIf="!loaderFlag" class="row">
             <div *ngFor="let category of categories" class="col-12 col-sm-auto mb-3">
                 <div class="card bg-dark border border-1 border-white">
                   <div class="card-content">
@@ -20,8 +23,9 @@
                       <div class="d-flex">
                         <div class="text-start overflow-y-auto w-100">
                             <div class="d-flex align-items-center justify-content-between">
-                              <h5 class="text-nowrap text-white">{{category.categoryName}}</h5>
-                            <i (click)="getCategoryById(category.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash ms-4"></i>
+                              <h5 class="text-nowrap text-white me-2 mb-0">{{category.categoryName}}</h5>
+                            <i *ngIf="searchUsedCategories(category.id)" (click)="getCategoryById(category.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash ms-4"></i>
+                            <i [routerLink]="['/categorias/form/',category.id]" class="btn btn-primary bx bx-edit ms-2"></i>
                           </div>
                         </div>
                       </div>

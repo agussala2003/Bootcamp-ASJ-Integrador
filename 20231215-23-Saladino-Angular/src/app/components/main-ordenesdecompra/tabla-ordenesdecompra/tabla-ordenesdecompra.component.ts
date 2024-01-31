@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { OrderService } from '../../../services/ordenes.service';
 import { Order } from '../../../models/Order';
 import { User } from '../../../models/User';
@@ -8,11 +7,11 @@ import { Industry } from '../../../models/Industry';
 import { IvaCondition } from '../../../models/IvaCondition';
 import { Supplier } from '../../../models/Supplier';
 import { Status } from '../../../models/Status';
-import { ProductService } from '../../../services/productosyservicios.service';
 import { Product } from '../../../models/Product';
 import { SupplierService } from '../../../services/proveedores.service';
 import { OrderDetailService } from '../../../services/order-detail.service';
 import { OrderDetail } from '../../../models/OrderDetail';
+import { StatusService } from '../../../services/status-service.service';
 
 @Component({
   selector: 'app-tabla-ordenesdecompra',
@@ -22,9 +21,9 @@ import { OrderDetail } from '../../../models/OrderDetail';
 export class TablaOrdenesdecompraComponent implements OnInit {
   constructor(
     private orderService: OrderService,
-    private productService: ProductService,
     private orderDetailService: OrderDetailService,
-    private supplierService: SupplierService
+    private supplierService: SupplierService,
+    private statusService: StatusService
   ) {}
 
   roleViewModel: Role = {
@@ -45,7 +44,7 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     updatedAt: '',
   };
 
-  industryViewModel: Industry = { id: '', industryName: '' };
+  industryViewModel: Industry = { id: '', industryName: '',active: true};
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -85,17 +84,19 @@ export class TablaOrdenesdecompraComponent implements OnInit {
   orders: Order[] = [];
   products: Product[] = [];
   suppliers: Supplier[] = [];
+  statuses: Status[] = [];
   orderDetails: OrderDetail[] = [];
   userState: any;
   total: string = '';
-  orderFilter: string = '';
   prevPage: number = 0;
   nextPage: number = 5;
-  isActiveItems: boolean = true;
+  stateFilter: string = '0';
+  loaderFlag = false;
 
   ngOnInit(): void {
-    this.getActiveOrders();
+    this.getOrders();
     this.getOrderDetails();
+    this.getStaus();
     this.userState = this.orderService.getUserState();
   }
 
@@ -103,7 +104,8 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     this.orderService.deleteOrder(id).subscribe((data: Order) => {
       console.log('You deleted a order');
       console.log(data);
-      this.getActiveOrders();
+      this.getOrders();
+      this.loader();
     });
   }
 
@@ -130,31 +132,44 @@ export class TablaOrdenesdecompraComponent implements OnInit {
       console.log(data);
       this.orders = data;
       this.formatDates(this.orders);
+      this.loader();
     });
+  }
+  getStaus() {
+    this.statusService.getStatus().subscribe((data: Status[]) => {
+      console.log('You get statuses');
+      console.log(data);
+      this.statuses = data;
+    });
+  }
+  getOrderByStatus(id: string) {
+    this.orderService.getOrderByStatus(id).subscribe((data: Order[]) => {
+      console.log('You get a order by status');
+      console.log(data);
+      this.orders = data;
+      this.formatDates(this.orders);
+      this.loader();
+    });
+  }
+  onStatusFilterChange() {
+    if (this.stateFilter === '0') {
+      this.getOrders();
+    } else {
+      this.getOrderByStatus(this.stateFilter);
+    }
+  }
+
+  loader() {
+    this.loaderFlag = true;
+    setTimeout(() => {
+      this.loaderFlag = false;
+    }, 1000);
   }
 
   formatDates(orders: Order[]) {
     orders.forEach((order) => {
       order.issuanceDate = this.getFormattedDate(new Date(order.issuanceDate));
       order.deliveryDate = this.getFormattedDate(new Date(order.deliveryDate));
-    });
-  }
-
-  getActiveOrders() {
-    this.orderService.getActiveOrders().subscribe((data: Order[]) => {
-      console.log('You get active orders');
-      console.log(data);
-      this.orders = data;
-      this.formatDates(this.orders);
-    });
-  }
-
-  getDeletedOrders() {
-    this.orderService.getDeletedOrders().subscribe((data: Order[]) => {
-      console.log('You get deleted orders');
-      console.log(data);
-      this.orders = data;
-      this.formatDates(this.orders);
     });
   }
 
@@ -170,8 +185,8 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     this.orderService.undeleteOrder(id).subscribe((data: Order) => {
       console.log('You undeleted a order');
       console.log(data);
-      this.isActiveItems = !this.isActiveItems;
-      this.getActiveOrders();
+      this.getOrders();
+      this.loader();
     });
   }
 
@@ -190,6 +205,11 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     });
   }
 
+  onFilterChange() {
+    this.prevPage = 0;
+    this.nextPage = 5;
+  }
+
   goPrevPage() {
     if (this.prevPage >= 5) {
       this.prevPage -= 5;
@@ -202,16 +222,4 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     this.nextPage += 5;
   }
 
-  changeState() {
-    this.isActiveItems = !this.isActiveItems;
-    if (this.isActiveItems) {
-      this.prevPage = 0;
-      this.nextPage = 5;
-      this.getActiveOrders();
-    } else {
-      this.getDeletedOrders();
-      this.prevPage = 0;
-      this.nextPage = 5;
-    }
-  }
 }

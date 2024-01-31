@@ -6,12 +6,16 @@ import { Product } from '../models/Product';
 })
 export class AtoZPipe implements PipeTransform {
 
-  transform(value: Product[], ...args: any): any {
+  transform(value: Product[], arg1: any,arg2: any): any {
     if (!value || value.length === 0) {
-      return value; // Devuelve el array sin cambios si está vacío o nulo
+      return value;
     }
-    // Utiliza el método sort para ordenar el array por el nombre del proveedor, el LocalCompare compara entre los dos strings del producto
-    return value.sort((a, b) => a.productName.localeCompare(b.productName));
+    if(arg1!== '0' || arg2 !== '0'){
+      return value
+    }
+    if(arg1 === '0' && arg2 === '0'){
+      return value.sort((a, b) => a.productName.localeCompare(b.productName));
+    }
   }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,7 +52,7 @@ public class IndustryController {
     }
 
     @PostMapping()
-    public ResponseEntity<Object> postIndustry(@Valid @RequestBody Industry industry, BindingResult bindingResult) {
+    public ResponseEntity<?> postIndustry(@Valid @RequestBody Industry industry, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
                 Map<String, String> errors = ErrorHandler.validation(bindingResult);
@@ -59,6 +60,20 @@ public class IndustryController {
             }
             Industry createdIndustry = industryService.createIndustry(industry);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdIndustry);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating industry: " + e.getMessage());
+        }
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateIndustry (@PathVariable Integer id, @Valid @RequestBody Industry industry, BindingResult bindingResult) {
+    	try {
+            if (bindingResult.hasErrors()) {
+                Map<String, String> errors = ErrorHandler.validation(bindingResult);
+                return ResponseEntity.badRequest().body(errors);
+            }
+            Industry updatedIndustry = industryService.updateIndustry(id,industry);
+            return ResponseEntity.status(HttpStatus.CREATED).body(updatedIndustry);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating industry: " + e.getMessage());
         }

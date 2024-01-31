@@ -63,6 +63,26 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleted products");
         }
     }
+    
+    @GetMapping("/priceAsc")
+    public ResponseEntity<?> getProductsByPriceAsc() {
+        try {
+            List<Product> products = productsService.getProductsByPriceAsc();
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleted products");
+        }
+    }
+    
+    @GetMapping("/priceDesc")
+    public ResponseEntity<?> getProductsByPriceDesc() {
+        try {
+            List<Product> products = productsService.getProductsByPriceDesc();
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleted products");
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProductById(@PathVariable Integer id) {
@@ -78,6 +98,16 @@ public class ProductController {
     public ResponseEntity<?> getProductBySupplierId(@PathVariable Integer supplierId) {
         try {
             Optional<List<Product>> products = productsService.getProductBySupplierId(supplierId);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching products by supplier id");
+        }
+    }
+    
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<?> getProductByCategoryId(@PathVariable Integer categoryId) {
+        try {
+            Optional<List<Product>> products = productsService.getProductByCategoryId(categoryId);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching products by supplier id");

@@ -22,6 +22,10 @@ public class Industry {
     @NotBlank(message = "Industry name must be complete")
     @Column(name = "industry_name", nullable = false)
     private String industryName;
+    
+    @NotNull(message = "Active is required")
+    @Column(name = "active", nullable = false)
+    private Boolean active;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -35,12 +39,14 @@ public class Industry {
 
     public Industry(Integer id,
             String industryName,
+            Boolean active,
             Timestamp createdAt,
             Timestamp updatedAt) {
         this.id = id;
         this.industryName = industryName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.active = active;
     }
 
     public Integer getId() {
@@ -74,4 +80,13 @@ public class Industry {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+    
 }

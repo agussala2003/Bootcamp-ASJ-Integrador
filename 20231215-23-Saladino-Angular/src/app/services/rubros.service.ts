@@ -21,7 +21,11 @@ export class RubrosService {
   public postIndustry(industry:Industry): Observable<Industry> {
     return this.http.post<Industry>(this.baseUrl, industry);
   }
-  
+
+  public putIndustry(industry:Industry): Observable<Industry> {
+    return this.http.put<Industry>(this.baseUrl + '/' + industry.id, industry);
+  }
+
   public deleteIndustry(id:string): Observable<Industry> {
     return this.http.delete<Industry>(this.baseUrl + '/' + id);
   }

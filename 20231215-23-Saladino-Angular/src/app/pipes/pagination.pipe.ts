@@ -13,7 +13,8 @@ export class PaginationPipe implements PipeTransform {
     const startIndex = Math.max(prev, 0);
     const endIndex = Math.min(next, value.length);
 
-    return value.slice(startIndex, endIndex);
+    // Devolver una nueva matriz sin afectar el orden original
+    return value.slice(startIndex, endIndex).slice();
   }
 
 }

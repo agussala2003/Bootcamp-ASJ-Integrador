@@ -27,7 +27,7 @@ export class FormProductosyserviciosComponent implements OnInit {
     private router2: Router
   ) {}
 
-  industryViewModel: Industry = { id: '', industryName: '' };
+  industryViewModel: Industry = { id: '', industryName: '', active: true};
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -48,6 +48,7 @@ export class FormProductosyserviciosComponent implements OnInit {
   categoryViewModel: Category = {
     id: '',
     categoryName: '',
+    active: true,
     createdAt: '',
     updatedAt: '',
   };
@@ -72,6 +73,8 @@ export class FormProductosyserviciosComponent implements OnInit {
   categories: Category[] = [];
   products: Product[] = [];
   isActiveSku: any = false;
+  supplierImg: string = '';
+  initProductCode: string = '';
 
   flagCode: boolean = true;
   isNumberCode: boolean = true;
@@ -103,7 +106,7 @@ export class FormProductosyserviciosComponent implements OnInit {
     this.categoryService.getCategories().subscribe((data: Category[]) => {
       console.log('You get categories');
       console.log(data);
-      this.categories = data;
+      this.categories = data.filter((item: Category) => item.active === true);
     });
   }
   getProducts() {
@@ -119,6 +122,8 @@ export class FormProductosyserviciosComponent implements OnInit {
       console.log('You get product by id');
       console.log(data);
       this.productViewModel = data;
+      this.supplierImg = this.productViewModel.supplier.image;
+      this.initProductCode = this.productViewModel.sku;
     });
     this.flagCode = false;
   }
@@ -128,7 +133,14 @@ export class FormProductosyserviciosComponent implements OnInit {
     this.resetProductData();
   }
 
+  onSupplierChange() {
+    this.supplierImg = this.suppliers.find((item: Supplier) => item.id == this.productViewModel.supplier.id)?.image || '';
+  }
+
   submitProduct(form: NgForm) {
+    if(this.initProductCode !== this.productViewModel.sku) {
+      this.skuExists();
+    }
     if (this.validateForm()) {
       if (this.idProduct !== undefined) {
         this.putProduct(this.idProduct, this.productViewModel);
@@ -198,7 +210,7 @@ export class FormProductosyserviciosComponent implements OnInit {
   }
 
   skuExists() {
-    if (this.idProduct === undefined) {
+    if (this.initProductCode !== this.productViewModel.sku) {
       if (!/^\d+$/.test(this.productViewModel.sku)) {
         console.log('El código debe ser numérico');
         this.isNumberCode = false;
@@ -235,7 +247,7 @@ export class FormProductosyserviciosComponent implements OnInit {
   }
 
   resetProductData() {
-    this.industryViewModel = { id: '', industryName: '' };
+    this.industryViewModel = { id: '', industryName: '', active: true};
     this.ivaConditionViewModel = { id: '', taxCondition: '' };
     this.supplierViewModel = {
       id: '',
@@ -256,6 +268,7 @@ export class FormProductosyserviciosComponent implements OnInit {
     this.categoryViewModel = {
       id: '',
       categoryName: '',
+      active: true,
       createdAt: '',
       updatedAt: '',
     };
