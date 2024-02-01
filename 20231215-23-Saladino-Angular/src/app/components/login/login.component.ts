@@ -1,52 +1,62 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { User } from '../../models/User';
+import { AlertsService } from '../../services/alerts.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
-export class LoginComponent implements OnInit{
-  constructor(public service: LoginService){}
-  
+export class LoginComponent implements OnInit {
+  constructor(
+    private service: LoginService,
+    private alertService: AlertsService
+  ) {}
+
   users: User[] = [];
 
-  userViewModel:User = {
+  userViewModel: User = {
     id: '',
     role: {
       id: '',
-      roleName: ''
+      roleName: '',
     },
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     createdAt: '',
-    updatedAt: ''
-  }
-  
+    updatedAt: '',
+  };
+
   ngOnInit(): void {
     this.updateUsers();
   }
 
   updateUsers() {
-    this.service.getUsers().subscribe((data:User[]) => {
+    this.service.getUsers().subscribe((data: User[]) => {
       console.log(data);
       this.users = data;
-    })
+    }, (error) => {
+      console.error(error);
+      this.alertService.errorNotification('Error al cargar los usuarios');
+    });
   }
 
   validateUser() {
-    const usuarioValido = this.users.find(user => user.email === this.userViewModel.email && user.password === this.userViewModel.password);
-  
+    const usuarioValido = this.users.find(
+      (user) =>
+        user.email === this.userViewModel.email &&
+        user.password === this.userViewModel.password
+    );
+
     if (usuarioValido) {
       this.service.validateLogin();
-      alert('Iniciaste sesión correctamente');
-      window.location.pathname = '/proveedores';
+      this.alertService.successNotification('Bienvenido');
+      window.location.pathname = '/inicio';
     } else {
-      alert('Los datos no coinciden');
+      this.alertService.errorNotification('Usuario o contraseña incorrectos');
     }
   }
-  
 }

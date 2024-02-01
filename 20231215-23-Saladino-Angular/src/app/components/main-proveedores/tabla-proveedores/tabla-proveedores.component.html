@@ -7,6 +7,8 @@
     <div *ngIf="!loaderFlag" class="row">
       <!-- Breadcrumb -->
       <div class="col-12 col-md-9 d-flex align-items-center">
+        <a class="text-light text-decoration-none" routerLink="/inicio">Inicio</a>
+              <i class='bx bx-chevron-right text-light fs-4' ></i>
         <a class="text-light text-decoration-none" routerLink="/proveedores">Proveedores</a>
       </div>
       <!-- Breadcrumb -->
@@ -18,44 +20,62 @@
     </div>
     <!-- Ruteo -->
     <div *ngIf="!loaderFlag" class="row">
-      <div class="col-12 mb-2 mb-md-0 col-md-2">
-        <input class="searchInput mt-4" type="text" placeholder="Buscar" [(ngModel)]="supplierFilter">
-      </div>
-      <div class="col-12 mb-2 col-md-2 d-flex align-items-end">
-        <p class="text-light m-0 me-2">Ver eliminados</p>
-        <div class="cntr">
-          <button (click)="changeState()" id="cbx" [ngClass]="this.isActiveItems ? '' : 'checked' " class="hidden-xs-up"></button>
-          <label for="cbx" class="cbx"></label>
-        </div>
-      </div>
-      <div class="col-12 mb-2 mb-md-0 col-md-3 align-items-end justify-content-start ">
-        <label class="form-label text-light" for="price">Ordernar por Razon Social</label>
-        <select (change)="onBusinessNameFilterChange()" for="price" name="price" id="price" class="form-select" [(ngModel)]="businessNameFilter" aria-label="Default select example">
-          <option value="0">Sin orden</option>
-          <option value="1">Ascendente</option>
-          <option value="2">Descendente</option>
-        </select>
-      </div>
-      <div class="col-12 mb-2 mb-md-0 col-md-5 d-flex align-items-end justify-content-end ">
-          <ul class="pagination mb-0">
+      <div class="d-flex flex-row justify-content-between align-items-end gap-4">
+        <div >
+          <ul class="pagination mb-0 d-flex gap-2">
             <li>
               <button (click)="goPrevPage()" *ngIf="prevPage != 0" class="btn btn-outline-light">Previo</button>
             </li>
             <li>
-              <button (click)="goNextPage()" *ngIf="nextPage < suppliers.length" class="ms-2 btn btn-outline-light">Siguiente</button>
+              <button (click)="goNextPage()" *ngIf="nextPage < suppliers.length" class="btn btn-outline-light">Siguiente</button>
             </li>
           </ul>
+      </div>
+        <div class="input-wrapper">
+          <button class="icon">
+            <svg
+              width="20px"
+              height="20px"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
+                stroke="#fff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M22 22L20 20"
+                stroke="#fff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+          <input class="mt-4 input" type="text" placeholder="Buscar" [(ngModel)]="supplierFilter">
+        </div>
+
       </div>
     </div>
     <div *ngIf="suppliers.length > 0 && !loaderFlag" class="table-responsive rounded-3 mt-3 mb-3 border border-1 border-white">
       <table class="table table-dark align-middle mb-0">
         <thead>
-          <tr>
+          <tr class="h-100">
             <th class="text-center">Codigo</th>
-            <th class="text-center">Razon Social</th>
+            <th class="text-center position-relative py-2 text-nowrap">
+              Razon Social
+              <div class="toggleButton">
+                <span (click)="onBusinessNameFilterChange(0)" *ngIf="businessNameFilter === '0'"><i class='text-light bx fs-4 bx-dots-horizontal-rounded'></i></span>
+                <span (click)="onBusinessNameFilterChange(1)" *ngIf="businessNameFilter === '1'"><i class='text-light bx fs-4 bx-chevrons-up'></i></span>
+                <span (click)="onBusinessNameFilterChange(2)" *ngIf="businessNameFilter === '2'"><i class='text-light bx fs-4 bx-chevrons-down'></i></span>
+              </div>
+            </th>
             <th class="text-center">Direccion</th>
             <th class="text-center">Contacto</th>
-            <th class="text-center">Medios de contacto</th>
             <th class="text-center">Accion</th>
           </tr>
         </thead>
@@ -86,14 +106,14 @@
               </p>
             </td>
             <td>
-              <p class="fw-normal mb-1 text-nowrap text-center" >
-                {{ getContactBySupplierId(supplier.id) }}
+              <p class="fw-normal mb-1 text-nowrap text-center d-flex justify-content-center align-items-center" >
+                {{ getContactBySupplierId(supplier.id) }} <i class="bx bx-info-circle text-light fs-5 ms-2" placement="top" [ngbTooltip]="tipContent"></i>
+                <ng-template #tipContent>
+                  <p class="fw-normal mb-1 text-nowrap text-center">{{ supplier.phoneNumber }}</p>
+                  <p class="fw-normal mb-1 text-nowrap text-center">{{ supplier.email }}</p>
+                  <p class="fw-normal mb-1 text-nowrap text-center">{{ supplier.website }}</p>
+                </ng-template>
               </p>
-            </td>
-            <td>
-              <p class="fw-normal mb-1 text-nowrap text-center">{{ supplier.phoneNumber }}</p>
-              <p class="fw-normal mb-1 text-nowrap text-center">{{ supplier.email }}</p>
-              <p class="fw-normal mb-1 text-nowrap text-center"><a target="_blank" href="{{ supplier.website }}">{{ supplier.website }}</a></p>
             </td>
             <td>
               <div class="d-flex justify-content-center">
@@ -106,6 +126,13 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div *ngIf="deletedLength && !loaderFlag" class="d-flex justify-content-end ">
+      <p class="text-light m-0 me-2">Ver eliminados</p>
+      <div class="cntr">
+        <button (click)="changeState()" id="cbx" [ngClass]="this.isActiveItems ? '' : 'checked' " class="hidden-xs-up"></button>
+        <label for="cbx" class="cbx"></label>
+      </div>
     </div>
     <!-- Mostramos un mensaje si no tiene productos -->
     <div *ngIf="suppliers.length == 0">

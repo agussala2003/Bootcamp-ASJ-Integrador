@@ -11,6 +11,7 @@ import { Supplier } from '../../../models/Supplier';
 import { Industry } from '../../../models/Industry';
 import { IvaCondition } from '../../../models/IvaCondition';
 import { Product } from '../../../models/Product';
+import { AlertsService } from '../../../services/alerts.service';
 
 @Component({
   selector: 'app-form-productosyservicios',
@@ -22,12 +23,13 @@ export class FormProductosyserviciosComponent implements OnInit {
     private productService: ProductService,
     private supplierService: SupplierService,
     private categoryService: CategoriasService,
+    private alertService: AlertsService,
     private modalService: NgbModal,
     private router: ActivatedRoute,
     private router2: Router
   ) {}
 
-  industryViewModel: Industry = { id: '', industryName: '', active: true};
+  industryViewModel: Industry = { id: '', industryName: '', active: true };
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -86,6 +88,7 @@ export class FormProductosyserviciosComponent implements OnInit {
         this.getProductById(this.idProduct);
       } else {
         this.setupNewProduct();
+        this.openModal('Informacion del formulario');
       }
     });
 
@@ -95,50 +98,85 @@ export class FormProductosyserviciosComponent implements OnInit {
     this.getProducts();
   }
 
-  getActiveSuppliers() {
-    this.supplierService.getActiveSuppliers().subscribe((data: Supplier[]) => {
-      console.log('You get Active Suppliers');
-      console.log(data);
-      this.suppliers = data;
-    });
-  }
-  getCategories() {
-    this.categoryService.getCategories().subscribe((data: Category[]) => {
-      console.log('You get categories');
-      console.log(data);
-      this.categories = data.filter((item: Category) => item.active === true);
-    });
-  }
-  getProducts() {
-    this.productService.getProducts().subscribe((data: Product[]) => {
-      console.log('You get all products');
-      console.log(data);
-      this.products = data;
-    });
-  }
-
-  getProductById(id: string) {
-    this.productService.getProductById(id).subscribe((data: Product) => {
-      console.log('You get product by id');
-      console.log(data);
-      this.productViewModel = data;
-      this.supplierImg = this.productViewModel.supplier.image;
-      this.initProductCode = this.productViewModel.sku;
-    });
-    this.flagCode = false;
-  }
-
   setupNewProduct() {
     this.flagCode = true;
     this.resetProductData();
   }
 
+  getActiveSuppliers() {
+    this.supplierService.getActiveSuppliers().subscribe(
+      (data: Supplier[]) => {
+        console.log('You get Active Suppliers');
+        console.log(data);
+        this.suppliers = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification(
+          'No se pudo obtener la lista de proveedores'
+        );
+      }
+    );
+  }
+
+  getCategories() {
+    this.categoryService.getCategories().subscribe(
+      (data: Category[]) => {
+        console.log('You get categories');
+        console.log(data);
+        this.categories = data.filter((item: Category) => item.active === true);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification(
+          'No se pudo obtener la lista de categorias'
+        );
+      }
+    );
+  }
+
+  getProducts() {
+    this.productService.getProducts().subscribe(
+      (data: Product[]) => {
+        console.log('You get all products');
+        console.log(data);
+        this.products = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification(
+          'No se pudo obtener la lista de productos'
+        );
+      }
+    );
+  }
+
+  getProductById(id: string) {
+    this.productService.getProductById(id).subscribe(
+      (data: Product) => {
+        console.log('You get product by id');
+        console.log(data);
+        this.productViewModel = data;
+        this.supplierImg = this.productViewModel.supplier.image;
+        this.initProductCode = this.productViewModel.sku;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('No se pudo obtener el producto');
+      }
+    );
+    this.flagCode = false;
+  }
+
   onSupplierChange() {
-    this.supplierImg = this.suppliers.find((item: Supplier) => item.id == this.productViewModel.supplier.id)?.image || '';
+    this.supplierImg =
+      this.suppliers.find(
+        (item: Supplier) => item.id == this.productViewModel.supplier.id
+      )?.image || '';
   }
 
   submitProduct(form: NgForm) {
-    if(this.initProductCode !== this.productViewModel.sku) {
+    if (this.initProductCode !== this.productViewModel.sku) {
       this.skuExists();
     }
     if (this.validateForm()) {
@@ -153,23 +191,39 @@ export class FormProductosyserviciosComponent implements OnInit {
   }
 
   postProduct(product: Product) {
-    this.productService.postProduct(product).subscribe((data: Product) => {
-      console.log('You posted a product');
-      console.log(data);
-      this.productViewModel = data;
-      this.resetProductData();
-      this.router2.navigate(['/productos-servicios']);
-    });
+    this.productService.postProduct(product).subscribe(
+      (data: Product) => {
+        console.log('You posted a product');
+        console.log(data);
+        this.productViewModel = data;
+        this.resetProductData();
+        this.alertService.successNotification('Producto creado con exito');
+        this.router2.navigate(['/productos-servicios']);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('No se pudo crear el producto');
+      }
+    );
   }
 
   putProduct(id: string, product: Product) {
-    this.productService.putProduct(id, product).subscribe((data: Product) => {
-      console.log('You put a product');
-      console.log(data);
-      this.productViewModel = data;
-      this.resetProductData();
-      this.router2.navigate(['/productos-servicios']);
-    });
+    this.productService.putProduct(id, product).subscribe(
+      (data: Product) => {
+        console.log('You put a product');
+        console.log(data);
+        this.productViewModel = data;
+        this.resetProductData();
+        this.alertService.successNotification('Producto actualizado con exito');
+        this.router2.navigate(['/productos-servicios']);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification(
+          'No se pudo actualizar el producto'
+        );
+      }
+    );
   }
 
   validateForm(): boolean {
@@ -196,14 +250,17 @@ export class FormProductosyserviciosComponent implements OnInit {
     const regex = /^[0-9]{8}$/;
     return regex.test(str);
   }
+
   validarStringAlfanumericoEntre3y50Caracteres(str: string): boolean {
     const regex = /^[0-9 A-Z a-z]{3,50}$/;
     return regex.test(str);
   }
+
   validarStringAlfanumericoEntre15y250Caracteres(str: string): boolean {
     const long = str.length;
     return long > 14;
   }
+
   validarUrl(sitioWeb: string): boolean {
     const regex = /^(ftp|http|https):\/\/[^ "]+$/;
     return regex.test(sitioWeb);
@@ -247,7 +304,7 @@ export class FormProductosyserviciosComponent implements OnInit {
   }
 
   resetProductData() {
-    this.industryViewModel = { id: '', industryName: '', active: true};
+    this.industryViewModel = { id: '', industryName: '', active: true };
     this.ivaConditionViewModel = { id: '', taxCondition: '' };
     this.supplierViewModel = {
       id: '',

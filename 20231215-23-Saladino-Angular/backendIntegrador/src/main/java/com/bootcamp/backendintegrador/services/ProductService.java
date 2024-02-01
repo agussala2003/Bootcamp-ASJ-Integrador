@@ -68,7 +68,7 @@ public class ProductService {
     	
     	for (Product product2 : products) {
 			if(product2.getSku().equalsIgnoreCase(product.getSku())) {
-				return null;
+				throw new EntityNotFoundException("The sku is used");
 			}
 		}
 		

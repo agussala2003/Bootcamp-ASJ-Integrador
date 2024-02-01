@@ -6,6 +6,7 @@ import { IvaCondition } from '../../../models/IvaCondition';
 import { Supplier } from '../../../models/Supplier';
 import { Category } from '../../../models/Category';
 import { Product } from '../../../models/Product';
+import { AlertsService } from '../../../services/alerts.service';
 
 @Component({
   selector: 'app-detalle-prod',
@@ -14,12 +15,13 @@ import { Product } from '../../../models/Product';
 })
 export class DetalleProdComponent {
   constructor(
-    public productService: ProductService,
-    public router: ActivatedRoute,
-    public router2: Router
+    private productService: ProductService,
+    private alertService: AlertsService,
+    private router: ActivatedRoute,
+    private router2: Router
   ) {}
 
-  industryViewModel: Industry = { id: '', industryName: '', active: true};
+  industryViewModel: Industry = { id: '', industryName: '', active: true };
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -59,7 +61,6 @@ export class DetalleProdComponent {
     category: this.categoryViewModel,
   };
 
-
   idProduct: string = '';
   userState: any;
 
@@ -70,30 +71,47 @@ export class DetalleProdComponent {
     });
     this.userState = this.productService.getUserState();
   }
-  
-  getProductById(id: string):void {
-    this.productService.getProductById(id).subscribe((data: Product) => {
-      console.log("You get product by id");
-      console.log(data);
-      this.productViewModel = data;
-    }
+
+  getProductById(id: string): void {
+    this.productService.getProductById(id).subscribe(
+      (data: Product) => {
+        console.log('You get product by id');
+        console.log(data);
+        this.productViewModel = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener el producto');
+      }
     );
   }
 
   deleteProduct(id: string) {
     this.productService.deleteProduct(id).subscribe(
-      () => {
+      (data) => {
         console.log('You delteed a product');
+        this.alertService.successNotification('Producto eliminado');
         this.router2.navigate(['/productos-servicios']);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al eliminar el producto');
       }
     );
   }
 
-  undeleteProductById(id:string) {
-    this.productService.patchProduct(id).subscribe((data:Product) => {
-      console.log("You undeleted a product");
-      console.log(data);
-      this.router2.navigate(['/productos-servicios']);
-    })
+  undeleteProductById(id: string) {
+    this.productService.patchProduct(id).subscribe(
+      (data: Product) => {
+        console.log('You undeleted a product');
+        console.log(data);
+        this.alertService.successNotification('Producto reactivado');
+        this.router2.navigate(['/productos-servicios']);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al reactivar el producto');
+      }
+    );
   }
 }

@@ -59,7 +59,7 @@ public class OrderService {
     	
     	for (Order order2 : orders) {
 			if(order2.getOrderNumber().equalsIgnoreCase(newOrder.getOrderNumber())) {
-				return null;
+				throw new EntityNotFoundException("The order number is used");
 			}
 		}
     	
@@ -126,6 +126,7 @@ public class OrderService {
             existingOrder.setDeliveryDate(updatedOrder.getDeliveryDate());
             existingOrder.setIssuanceDate(updatedOrder.getIssuanceDate());
             existingOrder.setReceptionInfo(updatedOrder.getReceptionInfo());
+            existingOrder.setOrderNumber(updatedOrder.getOrderNumber());
 
             existingOrder.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 

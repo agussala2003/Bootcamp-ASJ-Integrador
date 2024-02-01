@@ -6,6 +6,7 @@ import { Industry } from '../../../models/Industry';
 import { IvaCondition } from '../../../models/IvaCondition';
 import { Supplier } from '../../../models/Supplier';
 import { CategoriasService } from '../../../services/categorias.service';
+import { AlertsService } from '../../../services/alerts.service';
 
 @Component({
   selector: 'app-tabla-productosyservicios',
@@ -13,8 +14,7 @@ import { CategoriasService } from '../../../services/categorias.service';
   styleUrls: ['./tabla-productosyservicios.component.css'],
 })
 export class TablaProductosyserviciosComponent implements OnInit {
-
-  industryViewModel: Industry = { id: '', industryName: '', active: true};
+  industryViewModel: Industry = { id: '', industryName: '', active: true };
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -37,9 +37,9 @@ export class TablaProductosyserviciosComponent implements OnInit {
     categoryName: '',
     active: true,
     createdAt: '',
-    updatedAt: ''
-  }
-  
+    updatedAt: '',
+  };
+
   productViewModel: Product = {
     id: '',
     sku: '',
@@ -51,130 +51,223 @@ export class TablaProductosyserviciosComponent implements OnInit {
     createdAt: '',
     updatedAt: '',
     supplier: this.supplierViewModel,
-    category: this.categoryViewModel
-  }
+    category: this.categoryViewModel,
+  };
 
   products: Product[] = [];
   categories: Category[] = [];
   userState: any;
-  productFilter:string = '';
-  categoryFilter:string = '0';
-  priceFilter:string = '0';
+  productFilter: string = '';
+  categoryFilter: string = '0';
+  priceFilter: string = '0';
   prevPage: number = 0;
   nextPage: number = 5;
   isActiveItems: boolean = true;
   loaderFlag = false;
+  deletedLength: number = 0;
 
   constructor(
     private productService: ProductService,
-    private categoryService: CategoriasService
+    private categoryService: CategoriasService,
+    private alertService: AlertsService
   ) {}
 
   ngOnInit(): void {
     this.getActiveProducts();
     this.getCategories();
+    this.getDeletedLength();
     this.userState = this.productService.getUserState();
   }
 
-  deleteProduct(id: string): void {
-    this.productService.deleteProduct(id).subscribe((data: Product) => {
-      console.log('You deleted a product');
-      console.log(data);
-      this.getActiveProducts();
-      this.loader();
-    });
-  }
-
-  undeleteProduct(id: string): void {
-    this.productService.patchProduct(id).subscribe((data: Product) => {
-      console.log('You undeleted a product');
-      console.log(data);
-      this.isActiveItems = !this.isActiveItems;
-      this.getActiveProducts();
-      this.loader();
-    });
-  }
-
   getCategories() {
-    this.categoryService.getCategories().subscribe((data: Category[]) => {
-      console.log('You get Categories');
-      console.log(data);
-      this.categories = data.filter((item: Category) => item.active === true);
-    });
+    this.categoryService.getCategories().subscribe(
+      (data: Category[]) => {
+        console.log('You get Categories');
+        console.log(data);
+        this.categories = data.filter((item: Category) => item.active === true);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener las categorias');
+      }
+    );
   }
 
-  getProductById(id:string) {
-    this.productService.getProductById(id).subscribe((data:Product) => {
-      console.log('You get a product by Id');
-      console.log(data);
-      this.productViewModel = data;
-    })
+  getDeletedLength() {
+    this.productService.getDeletedProducts().subscribe(
+      (data: Product[]) => {
+        console.log('You get deleted products');
+        console.log(data);
+        this.deletedLength = data.length;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener los productos');
+      }
+    );
+  }
+
+  getProductById(id: string) {
+    this.productService.getProductById(id).subscribe(
+      (data: Product) => {
+        console.log('You get a product by Id');
+        console.log(data);
+        this.productViewModel = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener el producto');
+      }
+    );
   }
 
   getActiveProducts(): void {
-    this.productService.getActiveProducts().subscribe((data: Product[]) => {
-      console.log('You get active products');
-      console.log(data);
-      this.loader();
-      this.products = data;
-    })
+    this.productService.getActiveProducts().subscribe(
+      (data: Product[]) => {
+        console.log('You get active products');
+        console.log(data);
+        this.loader();
+        this.priceFilter = '0';
+        this.categoryFilter = '0';
+        this.products = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener los productos');
+      }
+    );
   }
 
   getDeletedProducts(): void {
-    this.productService.getDeletedProducts().subscribe((data: Product[]) => {
-      console.log('You get active products');
-      console.log(data);
-      this.loader();
-      this.products = data;
-    })
+    this.productService.getDeletedProducts().subscribe(
+      (data: Product[]) => {
+        console.log('You get active products');
+        console.log(data);
+        this.loader();
+        this.priceFilter = '0';
+        this.categoryFilter = '0';
+        this.products = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener los productos');
+      }
+    );
   }
 
   getProductsByPriceAsc(): void {
-    this.productService.getProductsByPriceAsc().subscribe((data: Product[]) => {
-      console.log('You get products by price asc');
-      console.log(data);
-      this.loader();
-      this.products = data.filter((item: Product) => item.active === this.isActiveItems);
-    })
+    this.productService.getProductsByPriceAsc().subscribe(
+      (data: Product[]) => {
+        console.log('You get products by price asc');
+        console.log(data);
+        this.loader();
+        this.products = data.filter(
+          (item: Product) => item.active === this.isActiveItems
+        );
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener los productos');
+      }
+    );
   }
 
   getProductsByPriceDesc(): void {
-    this.productService.getProductsByPriceDesc().subscribe((data: Product[]) => {
-      console.log('You get products by price desc');
-      console.log(data);
-      this.loader();
-      this.products = data.filter((item: Product) => item.active === this.isActiveItems);
-    })
+    this.productService.getProductsByPriceDesc().subscribe(
+      (data: Product[]) => {
+        console.log('You get products by price desc');
+        console.log(data);
+        this.loader();
+        this.products = data.filter(
+          (item: Product) => item.active === this.isActiveItems
+        );
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener los productos');
+      }
+    );
   }
 
   getProductByCategory(categoryId: string): void {
-    this.productService.getProductsByCategory(categoryId).subscribe((data: Product[]) => {
-      console.log('You get products by category');
-      console.log(data);
-      this.loader();
-      this.products = data.filter((item: Product) => item.active === this.isActiveItems);
-    })
+    this.productService.getProductsByCategory(categoryId).subscribe(
+      (data: Product[]) => {
+        console.log('You get products by category');
+        console.log(data);
+        this.loader();
+        this.products = data.filter(
+          (item: Product) => item.active === this.isActiveItems
+        );
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener los productos');
+      }
+    );
   }
 
-  onPriceFilterChange() {
+  deleteProduct(id: string): void {
+    this.productService.deleteProduct(id).subscribe(
+      (data: Product) => {
+        console.log('You deleted a product');
+        console.log(data);
+        this.getActiveProducts();
+        this.getDeletedLength();
+        this.priceFilter = '0';
+        this.categoryFilter = '0';
+        this.alertService.successNotification('Producto eliminado');
+        this.loader();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al eliminar el producto');
+      }
+    );
+  }
+
+  undeleteProduct(id: string): void {
+    this.productService.patchProduct(id).subscribe(
+      (data: Product) => {
+        console.log('You undeleted a product');
+        console.log(data);
+        this.isActiveItems = !this.isActiveItems;
+        this.getActiveProducts();
+        this.getDeletedLength();
+        this.priceFilter = '0';
+        this.categoryFilter = '0';
+        this.alertService.successNotification('Producto reactivado');
+        this.loader();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al reactivar el producto');
+      }
+    );
+  }
+
+  onPriceFilterChange(number: number) {
     if (this.priceFilter === '0') {
-      if(this.isActiveItems) {
+      this.getProductsByPriceAsc();
+      this.priceFilter = '1';
+      this.categoryFilter = '0';
+    } else if (this.priceFilter === '1') {
+      this.getProductsByPriceDesc();
+      this.priceFilter = '2';
+      this.categoryFilter = '0';
+    } else if (this.priceFilter === '2') {
+      this.priceFilter = '0';
+      this.categoryFilter = '0';
+      if (this.isActiveItems) {
         this.getActiveProducts();
       } else {
         this.getDeletedProducts();
       }
-    } else if (this.priceFilter === '1') {
-      this.getProductsByPriceAsc();
-      this.categoryFilter = '0';
-    } else if (this.priceFilter === '2') {
-      this.getProductsByPriceDesc();
-      this.categoryFilter = '0';
     }
   }
 
   onCategoryFilterChange() {
     if (this.categoryFilter === '0') {
-      if(this.isActiveItems) {
+      if (this.isActiveItems) {
         this.getActiveProducts();
       } else {
         this.getDeletedProducts();
@@ -183,6 +276,11 @@ export class TablaProductosyserviciosComponent implements OnInit {
       this.getProductByCategory(this.categoryFilter);
       this.priceFilter = '0';
     }
+  }
+
+  onFilterChange() {
+    this.prevPage = 0;
+    this.nextPage = 5;
   }
 
   loader() {
@@ -196,17 +294,13 @@ export class TablaProductosyserviciosComponent implements OnInit {
     productoyservicio.Imagen = '../../../../assets/img/logoGenerico.png';
   }
 
-  onFilterChange() {
-    this.prevPage = 0;
-    this.nextPage = 5;
-  }
-
   goPrevPage() {
     if (this.prevPage >= 5) {
       this.prevPage -= 5;
       this.nextPage -= 5;
     }
   }
+
   goNextPage() {
     this.prevPage += 5;
     this.nextPage += 5;

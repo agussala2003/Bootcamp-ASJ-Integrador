@@ -3,14 +3,19 @@ import { CategoriasService } from '../../../services/categorias.service';
 import { Category } from '../../../models/Category';
 import { ProductService } from '../../../services/productosyservicios.service';
 import { Product } from '../../../models/Product';
+import { AlertsService } from '../../../services/alerts.service';
 
 @Component({
   selector: 'app-tabla-categorias',
   templateUrl: './tabla-categorias.component.html',
-  styleUrl: './tabla-categorias.component.css'
+  styleUrl: './tabla-categorias.component.css',
 })
-export class TablaCategoriasComponent implements OnInit{
-  constructor(private categoryService: CategoriasService, private productService: ProductService){}
+export class TablaCategoriasComponent implements OnInit {
+  constructor(
+    private categoryService: CategoriasService,
+    private productService: ProductService,
+    private alertService: AlertsService
+  ) {}
 
   categories: Category[] = [];
   products: Product[] = [];
@@ -20,10 +25,10 @@ export class TablaCategoriasComponent implements OnInit{
     categoryName: '',
     active: true,
     createdAt: '',
-    updatedAt: ''
+    updatedAt: '',
   };
 
-  userState:any;
+  userState: any;
   loaderFlag = false;
 
   ngOnInit(): void {
@@ -32,21 +37,63 @@ export class TablaCategoriasComponent implements OnInit{
     this.getProducts();
   }
 
-  getProducts() {
-    this.productService.getProducts().subscribe((data: Product[]) => {
-      console.log("You get all Products");
-      console.log(data);
-      this.products = data;
-    });
+  refreshCategories() {
+    this.categoryService.getCategories().subscribe(
+      (data: Category[]) => {
+        console.log('You Get All categories');
+        console.log(data);
+        this.categories = data.filter((item: Category) => item.active === true);
+        this.loader();
+      },
+      (error) => {
+        console.error(error);
+        this.alertService.errorNotification('Error al cargar las categorias');
+      }
+    );
   }
 
-  refreshCategories() {
-    this.categoryService.getCategories().subscribe((data: Category[]) => {
-      console.log("You Get All categories")
-      console.log(data);
-      this.categories = data.filter((item: Category) => item.active === true);
-      this.loader();
-    });
+  getProducts() {
+    this.productService.getProducts().subscribe(
+      (data: Product[]) => {
+        console.log('You get all Products');
+        console.log(data);
+        this.products = data;
+      },
+      (error) => {
+        console.error(error);
+        this.alertService.errorNotification('Error al cargar los productos');
+      }
+    );
+  }
+
+  getCategoryById(id: string) {
+    this.categoryService.getCategoryById(id).subscribe(
+      (data: Category) => {
+        console.log('You Get By id');
+        console.log(data);
+        this.categoryViewModel = data;
+      },
+      (error) => {
+        console.error(error);
+        this.alertService.errorNotification('Error al cargar la categoria');
+      }
+    );
+  }
+
+  deleteCategory(id: string) {
+    this.categoryService.deleteCategory(id).subscribe(
+      (data: Category) => {
+        console.log('You Deleted');
+        console.log(data);
+        this.refreshCategories();
+        this.loader();
+        this.alertService.successNotification('Categoria Eliminada');
+      },
+      (error) => {
+        console.error(error);
+        this.alertService.errorNotification('Error al eliminar');
+      }
+    );
   }
 
   searchUsedCategories(id: string) {
@@ -59,28 +106,10 @@ export class TablaCategoriasComponent implements OnInit{
     return used;
   }
 
-  
-  deleteCategory(id:string) {
-    this.categoryService.deleteCategory(id).subscribe((data: Category) => {
-      console.log("You Deleted")
-      console.log(data)
-      this.refreshCategories();
-      this.loader();
-    })
-  }
-
   loader() {
     this.loaderFlag = true;
     setTimeout(() => {
       this.loaderFlag = false;
     }, 1000);
-  }
-
-  getCategoryById(id: string) {
-    this.categoryService.getCategoryById(id).subscribe((data: Category) => {
-      console.log("You Get By id");
-      console.log(data);
-      this.categoryViewModel = data;
-    })
   }
 }

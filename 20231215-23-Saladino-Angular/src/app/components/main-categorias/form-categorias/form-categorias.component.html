@@ -3,9 +3,11 @@
         <div class="row">
             <!-- Breadcrumb -->
             <div class="col-12 col-md-9 d-flex align-items-center">
-              <a class="text-light text-decoration-none" routerLink="/productos-servicios">Categorias</a>
+              <a class="text-light text-decoration-none" routerLink="/inicio">Inicio</a>
               <i class='bx bx-chevron-right text-light fs-4' ></i>
-              <p class="m-0 text-light text-md-nowrap"><span>Nueva</span></p>
+              <a class="text-light text-decoration-none" routerLink="/categorias">Categorias</a>
+              <i class='bx bx-chevron-right text-light fs-4' ></i>
+              <p class="m-0 text-light text-md-nowrap"><span>{{this.categoryViewModel.categoryName}}</span></p>
             </div>
             <!-- Breadcrumb -->
             <div class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end my-3 ">

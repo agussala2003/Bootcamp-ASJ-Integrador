@@ -7,6 +7,8 @@
     <div *ngIf="!loaderFlag" class="row">
       <!-- Breadcrumb -->
       <div class="col-12 col-md-8 d-flex align-items-center">
+        <a class="text-light text-decoration-none" routerLink="/inicio">Inicio</a>
+              <i class='bx bx-chevron-right text-light fs-4' ></i>
         <a
           class="text-light text-decoration-none"
           routerLink="/productos-servicios"
@@ -24,40 +26,52 @@
     </div>
     <!-- Ruteo -->
     <div *ngIf="!loaderFlag" class="row">
-      <div class="col-12 mb-2 mb-md-0 col-md-2">
-        <input class="searchInput mt-4" type="text" placeholder="Buscar" [(ngModel)]="productFilter">
-      </div>
-      <div class="col-12 mb-2 col-md-2 d-flex align-items-end">
-        <p class="text-light m-0 me-2">Ver eliminados</p>
-        <div class="cntr">
-          <button (click)="changeState()" id="cbx" [ngClass]="this.isActiveItems ? '' : 'checked' " class="hidden-xs-up"></button>
-          <label for="cbx" class="cbx"></label>
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-end gap-2">
+        <div class="d-flex flex-column flex-md-row gap-2">
+          <div>
+            <ul class="pagination mb-0 d-flex gap-md-2">
+              <li>
+                <button (click)="goPrevPage()" *ngIf="prevPage != 0" class="btn btn-outline-light">Previo</button>
+              </li>
+              <li>
+                <button (click)="goNextPage()" *ngIf="nextPage < products.length" class="btn btn-outline-light">Siguiente</button>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <select (change)="onCategoryFilterChange()" for="category" name="category" id="category" class="form-select" [(ngModel)]="categoryFilter" aria-label="Default select example">
+              <option value="0">Categoria</option>
+              <option *ngFor="let category of categories" value="{{category.id}}">{{category.categoryName}}</option>
+            </select>
+          </div>
         </div>
-      </div>
-      <div class="col-12 mb-2 mb-md-0 col-md-3 align-items-end justify-content-start ">
-        <label class="form-label text-light" for="category">Filtra por categoria</label>
-        <select (change)="onCategoryFilterChange()" for="category" name="category" id="category" class="form-select" [(ngModel)]="categoryFilter" aria-label="Default select example">
-          <option value="0">Sin filtro</option>
-          <option *ngFor="let category of categories" value="{{category.id}}">{{category.categoryName}}</option>
-        </select>
-      </div>
-      <div class="col-12 mb-2 mb-md-0 col-md-2 align-items-end justify-content-start ">
-        <label class="form-label text-light" for="price">Ordernar por Precio</label>
-        <select (change)="onPriceFilterChange()" for="price" name="price" id="price" class="form-select" [(ngModel)]="priceFilter" aria-label="Default select example">
-          <option value="0">Sin Orden</option>
-          <option value="1">Ascendente</option>
-          <option value="2">Descendente</option>
-        </select>
-      </div>
-      <div class="col-12 mb-2 mb-md-0 col-md-3 d-flex align-items-end justify-content-end ">
-        <ul class="pagination mb-0">
-          <li>
-            <button (click)="goPrevPage()" *ngIf="prevPage != 0" class="btn btn-outline-light">Previo</button>
-          </li>
-          <li>
-            <button (click)="goNextPage()" *ngIf="nextPage < products.length" class="ms-2 btn btn-outline-light">Siguiente</button>
-          </li>
-        </ul>
+        <div class="input-wrapper">
+          <button class="icon">
+            <svg
+              width="20px"
+              height="20px"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
+                stroke="#fff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M22 22L20 20"
+                stroke="#fff"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+          <input class="mt-4 input" type="text" placeholder="Buscar" [(ngModel)]="productFilter">
+        </div>
       </div>
     </div>
     <div
@@ -71,7 +85,14 @@
             <th class="text-center">Proveedor</th>
             <th class="text-center">Categoria</th>
             <th class="text-center">Producto</th>
-            <th class="text-center">Precio</th>
+            <th class="text-center position-relative py-2 text-nowrap">
+              Precio
+              <div class="toggleButton">
+                <span (click)="onPriceFilterChange(0)" *ngIf="priceFilter === '0'"><i class='text-light bx fs-4 bx-dots-horizontal-rounded'></i></span>
+                <span (click)="onPriceFilterChange(1)" *ngIf="priceFilter === '1'"><i class='text-light bx fs-4 bx-chevrons-up'></i></span>
+                <span (click)="onPriceFilterChange(2)" *ngIf="priceFilter === '2'"><i class='text-light bx fs-4 bx-chevrons-down'></i></span>
+              </div>
+            </th>
             <th class="text-center">Accion</th>
           </tr>
         </thead>
@@ -127,6 +148,13 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div *ngIf="deletedLength && !loaderFlag" class="d-flex justify-content-end ">
+      <p class="text-light m-0 me-2">Ver eliminados</p>
+      <div class="cntr">
+        <button (click)="changeState()" id="cbx" [ngClass]="this.isActiveItems ? '' : 'checked' " class="hidden-xs-up"></button>
+        <label for="cbx" class="cbx"></label>
+      </div>
     </div>
     <!-- Mostramos un mensaje cuando no hay productos -->
     <div *ngIf="products.length == 0">

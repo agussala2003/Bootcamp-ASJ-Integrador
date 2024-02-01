@@ -12,6 +12,7 @@ import { SupplierService } from '../../../services/proveedores.service';
 import { OrderDetailService } from '../../../services/order-detail.service';
 import { OrderDetail } from '../../../models/OrderDetail';
 import { StatusService } from '../../../services/status-service.service';
+import { AlertsService } from '../../../services/alerts.service';
 
 @Component({
   selector: 'app-tabla-ordenesdecompra',
@@ -23,7 +24,8 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     private orderService: OrderService,
     private orderDetailService: OrderDetailService,
     private supplierService: SupplierService,
-    private statusService: StatusService
+    private statusService: StatusService,
+    private alertService: AlertsService
   ) {}
 
   roleViewModel: Role = {
@@ -44,7 +46,7 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     updatedAt: '',
   };
 
-  industryViewModel: Industry = { id: '', industryName: '',active: true};
+  industryViewModel: Industry = { id: '', industryName: '', active: true };
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -100,57 +102,144 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     this.userState = this.orderService.getUserState();
   }
 
+  getOrderDetails() {
+    this.orderDetailService.getOrderDetails().subscribe(
+      (data: OrderDetail[]) => {
+        console.log('You get order details');
+        console.log(data);
+        this.orderDetails = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification(
+          'Error al obtener los detalles de la orden'
+        );
+      }
+    );
+  }
+
+  getOrders() {
+    this.orderService.getOrders().subscribe(
+      (data: Order[]) => {
+        console.log('You get orders');
+        console.log(data);
+        this.orders = data;
+        this.formatDates(this.orders);
+        this.loader();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification(
+          'Error al obtener las ordenes de compra'
+        );
+      }
+    );
+  }
+
+  getStaus() {
+    this.statusService.getStatus().subscribe(
+      (data: Status[]) => {
+        console.log('You get statuses');
+        console.log(data);
+        this.statuses = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener los estados');
+      }
+    );
+  }
+
+  getOrderByStatus(id: string) {
+    this.orderService.getOrderByStatus(id).subscribe(
+      (data: Order[]) => {
+        console.log('You get a order by status');
+        console.log(data);
+        this.orders = data;
+        this.formatDates(this.orders);
+        this.loader();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification(
+          'Error al obtener las ordenes de compra'
+        );
+      }
+    );
+  }
+
+  getActiveSuppliers(): void {
+    this.supplierService.getActiveSuppliers().subscribe(
+      (data: Supplier[]) => {
+        console.log('You get active suppliers');
+        console.log(data);
+        this.suppliers = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener los proveedores');
+      }
+    );
+  }
+
+  getOrderById(id: string) {
+    this.orderService.getOrderById(id).subscribe(
+      (data: Order) => {
+        console.log('You get a order by Id');
+        console.log(data);
+        this.orderViewModel = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification(
+          'Error al obtener la orden de compra'
+        );
+      }
+    );
+  }
+
   deleteOrder(id: string): void {
-    this.orderService.deleteOrder(id).subscribe((data: Order) => {
-      console.log('You deleted a order');
-      console.log(data);
-      this.getOrders();
-      this.loader();
-    });
+    this.orderService.deleteOrder(id).subscribe(
+      (data: Order) => {
+        console.log('You deleted a order');
+        console.log(data);
+        this.getOrders();
+        this.alertService.successNotification('Orden cancelada');
+        this.loader();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al cancelar la orden');
+      }
+    );
+  }
+
+  undeleteOrder(id: string): void {
+    this.orderService.undeleteOrder(id).subscribe(
+      (data: Order) => {
+        console.log('You undeleted a order');
+        console.log(data);
+        this.getOrders();
+        this.alertService.successNotification('Orden reactivada');
+        this.loader();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al reactivar la orden');
+      }
+    );
   }
 
   calculateTotal(order: Order): number {
-   let total = 0;
-   this.orderDetails.forEach((orderDetail) => {
-    if (orderDetail.order.id === order.id){
-      total += orderDetail.quantity * orderDetail.product.price;
-    }
+    let total = 0;
+    this.orderDetails.forEach((orderDetail) => {
+      if (orderDetail.order.id === order.id) {
+        total += orderDetail.quantity * orderDetail.product.price;
+      }
     });
     return total;
   }
 
-  getOrderDetails(){
-    this.orderDetailService.getOrderDetails().subscribe((data: OrderDetail[]) => {
-      console.log('You get order details');
-      console.log(data);
-      this.orderDetails = data;
-    });
-  }
-  getOrders() {
-    this.orderService.getOrders().subscribe((data: Order[]) => {
-      console.log('You get orders');
-      console.log(data);
-      this.orders = data;
-      this.formatDates(this.orders);
-      this.loader();
-    });
-  }
-  getStaus() {
-    this.statusService.getStatus().subscribe((data: Status[]) => {
-      console.log('You get statuses');
-      console.log(data);
-      this.statuses = data;
-    });
-  }
-  getOrderByStatus(id: string) {
-    this.orderService.getOrderByStatus(id).subscribe((data: Order[]) => {
-      console.log('You get a order by status');
-      console.log(data);
-      this.orders = data;
-      this.formatDates(this.orders);
-      this.loader();
-    });
-  }
   onStatusFilterChange() {
     if (this.stateFilter === '0') {
       this.getOrders();
@@ -173,36 +262,11 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     });
   }
 
-  getOrderById(id: string) {
-    this.orderService.getOrderById(id).subscribe((data: Order) => {
-      console.log('You get a order by Id');
-      console.log(data);
-      this.orderViewModel = data;
-    });
-  }
-
-  undeleteOrder(id: string): void {
-    this.orderService.undeleteOrder(id).subscribe((data: Order) => {
-      console.log('You undeleted a order');
-      console.log(data);
-      this.getOrders();
-      this.loader();
-    });
-  }
-
   getFormattedDate(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = (date.getDate() + 1).toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
-  }
-
-  getActiveSuppliers(): void {
-    this.supplierService.getActiveSuppliers().subscribe((data: Supplier[]) => {
-      console.log('You get active suppliers');
-      console.log(data);
-      this.suppliers = data;
-    });
   }
 
   onFilterChange() {
@@ -221,5 +285,4 @@ export class TablaOrdenesdecompraComponent implements OnInit {
     this.prevPage += 5;
     this.nextPage += 5;
   }
-
 }

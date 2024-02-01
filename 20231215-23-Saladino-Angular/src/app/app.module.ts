@@ -35,6 +35,7 @@ import { FilterCategoryPipe } from './pipes/filter-category.pipe';
 import { FilterByPricePipe } from './pipes/filter-by-price.pipe';
 import { FilterByBusinessNamePipe } from './pipes/filter-by-business-name.pipe';
 import { LoaderComponent } from './components/loader/loader.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2'
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { LoaderComponent } from './components/loader/loader.component';
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    SweetAlert2Module
   ],
   providers: [],
   bootstrap: [AppComponent]

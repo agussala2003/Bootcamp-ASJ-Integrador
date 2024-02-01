@@ -11,6 +11,7 @@ import { AddressService } from '../../../services/address.service';
 import { ContactService } from '../../../services/contact.service';
 import { Industry } from '../../../models/Industry';
 import { IvaCondition } from '../../../models/IvaCondition';
+import { AlertsService } from '../../../services/alerts.service';
 
 @Component({
   selector: 'app-detalle',
@@ -25,12 +26,12 @@ export class DetalleComponent implements OnInit {
     id: '',
     industryName: '',
     active: true,
-  }
+  };
 
   ivaConditionViewModel: IvaCondition = {
     id: '',
     taxCondition: '',
-  }
+  };
   supplierViewModel: Supplier = {
     id: '',
     supplierCode: '',
@@ -88,11 +89,12 @@ export class DetalleComponent implements OnInit {
   };
 
   constructor(
-    public supplierService: SupplierService,
-    public addressService: AddressService,
-    public contactService: ContactService,
-    public router: ActivatedRoute,
-    public router2: Router
+    private supplierService: SupplierService,
+    private addressService: AddressService,
+    private contactService: ContactService,
+    private alertService: AlertsService,
+    private router: ActivatedRoute,
+    private router2: Router
   ) {}
 
   ngOnInit(): void {
@@ -105,35 +107,70 @@ export class DetalleComponent implements OnInit {
     this.userState = this.supplierService.getUserState();
   }
 
-  getSupplierById(id:string): void {
+  getSupplierById(id: string): void {
     this.supplierService.getSupplierById(id).subscribe(
-      (data: Supplier) => (this.supplierViewModel = data)
+      (data: Supplier) => {
+        this.supplierViewModel = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('No se pudo obtener el proveedor');
+      }
     );
   }
-  getContactBySupplierId(id:string) {
-    this.contactService.getContactBySupplierId(id).subscribe((data: Contact[]) => {
-      this.contactViewModel = data[0];
-    })
+
+  getContactBySupplierId(id: string) {
+    this.contactService.getContactBySupplierId(id).subscribe(
+      (data: Contact[]) => {
+        this.contactViewModel = data[0];
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('No se pudo obtener el contacto');
+      }
+    );
   }
-  getAddressBySupplierId(id:string) {
-    this.addressService.getAddressBySupplierId(id).subscribe((data: Address[]) => {
-      this.addressViewModel = data[0];
-    })
+
+  getAddressBySupplierId(id: string) {
+    this.addressService.getAddressBySupplierId(id).subscribe(
+      (data: Address[]) => {
+        this.addressViewModel = data[0];
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('No se pudo obtener la direccion');
+      }
+    );
   }
 
   deleteSupplier(id: string): void {
     this.supplierService.deleteSupplier(id).subscribe(
       () => {
         console.log('You deleted a supplier');
+        this.alertService.successNotification('Proveedor eliminado');
         this.router2.navigate(['/proveedores']);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('No se pudo eliminar el proveedor');
       }
     );
   }
-  undeleteSupplierById(id:string) {
-    this.supplierService.patchSupplier(id).subscribe((data:Supplier) => {
-      console.log("You undeleted a supplier");
-      console.log(data);
-      this.router2.navigate(['/proveedores']);
-    })
+
+  undeleteSupplierById(id: string) {
+    this.supplierService.patchSupplier(id).subscribe(
+      (data: Supplier) => {
+        console.log('You undeleted a supplier');
+        console.log(data);
+        this.alertService.successNotification('Proveedor recuperado');
+        this.router2.navigate(['/proveedores']);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification(
+          'No se pudo recuperar el proveedor'
+        );
+      }
+    );
   }
 }

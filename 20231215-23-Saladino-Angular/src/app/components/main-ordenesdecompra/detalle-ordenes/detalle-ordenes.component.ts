@@ -12,6 +12,7 @@ import { Order } from '../../../models/Order';
 import { Category } from '../../../models/Category';
 import { Product } from '../../../models/Product';
 import { OrderDetail } from '../../../models/OrderDetail';
+import { AlertsService } from '../../../services/alerts.service';
 
 @Component({
   selector: 'app-detalle-ordenes',
@@ -37,7 +38,7 @@ export class DetalleOrdenesComponent implements OnInit {
     updatedAt: '',
   };
 
-  industryViewModel: Industry = { id: '', industryName: '', active: true};
+  industryViewModel: Industry = { id: '', industryName: '', active: true };
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
     id: '',
@@ -114,68 +115,86 @@ export class DetalleOrdenesComponent implements OnInit {
     private route: ActivatedRoute,
     private orderService: OrderService,
     private orderDetailService: OrderDetailService,
+    private alertService: AlertsService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.idOrder = params['idOrder'];
-      this.loadOrdenData(this.idOrder);
+      this.loadOrderData(this.idOrder);
       this.getOrderDetailsByOrderId(this.idOrder);
-      this.getOrderDetails();
     });
     this.userState = this.orderService.getUserState();
+  }
+
+  getOrderDetailsByOrderId(id: string): void {
+    this.orderDetailService.getOrderDetailsByOrderId(id).subscribe(
+      (data: OrderDetail[]) => {
+        console.log('You get order details by order Id');
+        console.log(data);
+        this.orderDetails = data;
+      },
+      (error) => {
+        console.error(error);
+        this.alertService.errorNotification(
+          'Error al cargar los detalles de la orden'
+        );
+      }
+    );
+  }
+
+  deleteOrder(id: string): void {
+    this.orderService.deleteOrder(id).subscribe(
+      (data) => {
+        console.log('You deleted a order');
+        console.log(data);
+        this.alertService.successNotification('Orden cancelada');
+        this.router.navigate(['/ordenes']);
+      },
+      (error) => {
+        console.error(error);
+        this.alertService.errorNotification('Error al cancelar la orden');
+      }
+    );
+  }
+
+  undeleteOrder(id: string): void {
+    this.orderService.undeleteOrder(id).subscribe(
+      (data) => {
+        console.log('You undeleted a order');
+        console.log(data);
+        this.alertService.successNotification('Orden reactivada');
+        this.router.navigate(['/ordenes']);
+      },
+      (error) => {
+        console.error(error);
+        this.alertService.errorNotification('Error al reactivar la orden');
+      }
+    );
   }
 
   calculateTotal(order: Order): number {
     let total = 0;
     this.orderDetails.forEach((orderDetail) => {
-     if (orderDetail.order.id === order.id){
-       total += orderDetail.quantity * orderDetail.product.price;
-     }
-     });
-     return total;
-   }
-
-    getOrderDetails(){
-    this.orderDetailService.getOrderDetails().subscribe((data: OrderDetail[]) => {
-      console.log('You get order details');
-      console.log(data);
-      this.orderDetails = data;
+      if (orderDetail.order.id === order.id) {
+        total += orderDetail.quantity * orderDetail.product.price;
+      }
     });
+    return total;
   }
 
-
-  loadOrdenData(id:string): void {
-    this.orderService.getOrderById(id).subscribe((data: Order) => {
-      console.log(this.orderViewModel);
-      console.log('You get order by Id');
-      this.orderViewModel = data;
-    });
-  }
-  getOrderDetailsByOrderId(id: string): void {
-    this.orderDetailService
-      .getOrderDetailsByOrderId(id)
-      .subscribe((data: OrderDetail[]) => {
-        console.log('You get order details by order Id');
-        console.log(data);
-        this.orderDetails = data;
-      });
-  }
-
-  deleteOrder(id: string): void {
-    this.orderService.deleteOrder(id).subscribe((data) => {
-      console.log('You deleted a order');
-      console.log(data);
-    });
-    this.router.navigate(['/ordenes']);
-  }
-
-  undeleteOrder(id: string): void {
-    this.orderService.undeleteOrder(id).subscribe((data) => {
-      console.log('You undeleted a order');
-      console.log(data);
-    });
-    this.router.navigate(['/ordenes']);
+  loadOrderData(id: string): void {
+    this.orderService.getOrderById(id).subscribe(
+      (data: Order) => {
+        console.log(this.orderViewModel);
+        console.log('You get order by Id');
+        this.orderViewModel = data;
+      },
+      (error) => {
+        console.error(error);
+        this.alertService.errorNotification('Error al cargar la orden');
+      }
+    );
   }
 }

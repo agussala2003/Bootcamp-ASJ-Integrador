@@ -4,13 +4,15 @@
     <div class="row">
       <!-- Breadcrumb -->
       <div class="col-12 col-md-9 d-flex align-items-center">
+        <a class="text-light text-decoration-none" routerLink="/inicio">Inicio</a>
+              <i class='bx bx-chevron-right text-light fs-4' ></i>
         <a class="text-light text-decoration-none" routerLink="/proveedores"
           >Proveedores</a
         >
         <i *ngIf="this.supplierViewModel.supplierCode != ''" class="bx bx-chevron-right text-light fs-4"></i>
         <p class="m-0 text-light text-md-nowrap">
           <span *ngIf="this.supplierViewModel.supplierCode != ''"
-            >Proveedor {{ this.supplierViewModel.supplierCode }}</span
+            >{{ this.supplierViewModel.businessName }}</span
           >
         </p>
       </div>
@@ -58,7 +60,7 @@
             name="razonsocial"
             id="rs"
             type="text"
-            placeholder="Ingese Razon Social"
+            placeholder="Ingrese Razon Social"
             class="form-control"
             minlength="3"
             maxlength="30"
@@ -111,7 +113,7 @@
             name="telefonoproveedor"
             id="telefonoproveedor"
             type="text"
-            placeholder="Ingese telefono"
+            placeholder="Ingrese telefono"
             class="form-control"
             minlength="8"
             maxlength="30"
@@ -139,7 +141,7 @@
             name="emailProv"
             id="emailProv"
             type="text"
-            placeholder="Ingese email"
+            placeholder="Ingrese email"
             class="form-control"
             minlength="5"
             maxlength="30"
@@ -167,7 +169,7 @@
             name="sitioProv"
             id="sitioProv"
             type="text"
-            placeholder="Ingese sitio web"
+            placeholder="Ingrese sitio web"
             class="form-control"
             minlength="5"
             maxlength="30"
@@ -195,7 +197,7 @@
             name="imgProv"
             id="imgProv"
             type="text"
-            placeholder="Ingese URL"
+            placeholder="Ingrese URL"
             class="form-control"
             minlength="5"
           />
@@ -267,7 +269,7 @@
             name="localidad"
             type="text"
             id="localidad"
-            placeholder="Ingese localidad"
+            placeholder="Ingrese localidad"
             class="form-control"
             minlength="3"
             maxlength="30"
@@ -293,7 +295,7 @@
             name="calle"
             type="text"
             id="calle"
-            placeholder="Ingese su calle"
+            placeholder="Ingrese su calle"
             class="form-control"
             minlength="3"
             maxlength="30"
@@ -319,7 +321,7 @@
             name="num"
             type="number"
             id="num"
-            placeholder="Ingese numero"
+            placeholder="Ingrese numero"
             class="form-control"
             min="1"
           />
@@ -344,7 +346,7 @@
             name="codigopostal"
             type="text"
             id="cp"
-            placeholder="Ingese codigo postal"
+            placeholder="Ingrese codigo postal"
             class="form-control"
             minlength="4"
             maxlength="8"
@@ -374,7 +376,7 @@
             name="cuit"
             type="text"
             id="cuit"
-            placeholder="Ingese su CUIT"
+            placeholder="Ingrese su CUIT"
             class="form-control"
             minlength="13"
             (keyup)="isCuitValidation()"
@@ -426,7 +428,7 @@
             name="nombrecontacto"
             type="text"
             id="nombreContacto"
-            placeholder="Ingese su nombre"
+            placeholder="Ingrese su nombre"
             class="form-control"
             minlength="3"
             maxlength="30"
@@ -454,7 +456,7 @@
             name="apellidocontacto"
             type="text"
             id="apellidoContacto"
-            placeholder="Ingese su apellido"
+            placeholder="Ingrese su apellido"
             class="form-control"
             minlength="3"
             maxlength="30"
@@ -482,7 +484,7 @@
             name="telefonocontacto"
             type="text"
             id="telefonoContacto"
-            placeholder="Ingese su telefono"
+            placeholder="Ingrese su telefono"
             class="form-control"
             minlength="8"
             maxlength="30"
@@ -510,7 +512,7 @@
             name="emailcontacto"
             type="email"
             id="emailContacto"
-            placeholder="Ingese su email"
+            placeholder="Ingrese su email"
             class="form-control"
             minlength="3"
             maxlength="30"
@@ -536,7 +538,7 @@
             name="rol"
             type="text"
             id="rol"
-            placeholder="Ingese su rol"
+            placeholder="Ingrese su rol"
             class="form-control"
             minlength="3"
             maxlength="30"

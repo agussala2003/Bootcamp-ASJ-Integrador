@@ -4,6 +4,8 @@
     <div class="row">
       <!-- Breadcrumb -->
       <div class="col-12 col-md-9 d-flex align-items-center">
+        <a class="text-light text-decoration-none" routerLink="/inicio">Inicio</a>
+        <i class='bx bx-chevron-right text-light fs-4' ></i>
         <a class="text-light text-decoration-none" routerLink="/ordenes"
           >Ordenes</a
         >
@@ -71,7 +73,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 col-xl-4 col-sm-6 mb-3">
+        <div class="col-12 col-sm-6 mb-3">
           <div class="card bg-dark border border-1 border-white">
             <div class="card-content">
               <div class="card-body">
@@ -87,7 +89,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 col-xl-4 col-sm-6 mb-3">
+        <div class="col-12 col-sm-6 mb-3">
           <div class="card bg-dark border border-1 border-white">
             <div class="card-content">
               <div class="card-body">
@@ -103,13 +105,13 @@
             </div>
           </div>
         </div>
-        <div class="col-12 col-xl-4 col-sm-6 mb-3">
+        <div class="col-12 mb-3">
           <div class="card bg-dark border border-1 border-white">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
-                    <h5 class="text-nowrap">
+                    <h5>
                       {{ this.orderViewModel.receptionInfo }}
                     </h5>
                     <span>Informacion de recepcion</span>
@@ -184,16 +186,21 @@
           </div>
         </div>
         <!-- Acciones desde el detalle -->
-        <div *ngIf="this.orderViewModel.active === true" class="d-flex">
-          <a
+        <div class="d-flex">
+          <a *ngIf="this.orderViewModel.active" 
             data-bs-toggle="modal" data-bs-target="#exampleModal" 
             class="btn btn-danger me-2"
             >Eliminar</a
           >
-          <a
+          <a *ngIf="this.orderViewModel.active" 
             [routerLink]="['/ordenes/form/', this.orderViewModel.id]"
             class="btn btn-primary me-2"
             >Editar</a
+          >
+          <a *ngIf="!this.orderViewModel.active" 
+            data-bs-toggle="modal" data-bs-target="#exampleModal" 
+            class="btn btn-success me-2"
+            >Dar de alta</a
           >
         </div>
         <!-- Acciones desde el detalle -->
@@ -214,11 +221,12 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-           Deseas cancelar la orden "{{this.orderViewModel.orderNumber}}"?
+           Deseas {{this.orderViewModel.active ? 'cancelar' : 'dar de alta'}} la orden "{{this.orderViewModel.orderNumber}}"?
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteOrder(this.orderViewModel.id)">Aceptar</button>
+          <button *ngIf="this.orderViewModel.active"  type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteOrder(this.orderViewModel.id)">Aceptar</button>
+          <button *ngIf="!this.orderViewModel.active"  type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="undeleteOrder(this.orderViewModel.id)">Aceptar</button>
         </div>
       </div>
     </div>

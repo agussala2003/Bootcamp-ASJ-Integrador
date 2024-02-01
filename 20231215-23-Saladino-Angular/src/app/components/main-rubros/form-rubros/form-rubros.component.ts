@@ -3,6 +3,7 @@ import { RubrosService } from '../../../services/rubros.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { Industry } from '../../../models/Industry';
+import { AlertsService } from '../../../services/alerts.service';
 
 @Component({
   selector: 'app-form-rubros',
@@ -10,7 +11,12 @@ import { Industry } from '../../../models/Industry';
   styleUrl: './form-rubros.component.css',
 })
 export class FormRubrosComponent implements OnInit {
-  constructor(private industryService: RubrosService, private router: Router, private router2: ActivatedRoute) {}
+  constructor(
+    private industryService: RubrosService,
+    private alertService: AlertsService,
+    private router: Router,
+    private router2: ActivatedRoute
+  ) {}
 
   userState: any;
   industries: Industry[] = [];
@@ -37,11 +43,17 @@ export class FormRubrosComponent implements OnInit {
   }
 
   getIndustryById(id: string) {
-    this.industryService.getIndustryById(id).subscribe((data: Industry) => {
-      console.log('You get Industry By id');
-      console.log(data);
-      this.industryViewModel = data;
-    });
+    this.industryService.getIndustryById(id).subscribe(
+      (data: Industry) => {
+        console.log('You get Industry By id');
+        console.log(data);
+        this.industryViewModel = data;
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener el rubro');
+      }
+    );
   }
 
   postIndustry(form: NgForm) {
@@ -53,18 +65,32 @@ export class FormRubrosComponent implements OnInit {
   }
 
   putIndustry(industry: Industry) {
-    this.industryService.putIndustry(industry).subscribe((data: Industry) => {
-      console.log('You put');
-      console.log(data);
-      this.router.navigate(['/rubros']);
-    });
+    this.industryService.putIndustry(industry).subscribe(
+      (data: Industry) => {
+        console.log('You put');
+        console.log(data);
+        this.alertService.successNotification('Rubro actualizado');
+        this.router.navigate(['/rubros']);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al actualizar el rubro');
+      }
+    );
   }
 
   createIndustry(industry: Industry) {
-    this.industryService.postIndustry(industry).subscribe((data: Industry) => {
-      console.log('You created');
-      console.log(data);
-      this.router.navigate(['/rubros']);
-    });
+    this.industryService.postIndustry(industry).subscribe(
+      (data: Industry) => {
+        console.log('You created');
+        console.log(data);
+        this.alertService.successNotification('Rubro creado');
+        this.router.navigate(['/rubros']);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al crear el rubro');
+      }
+    );
   }
 }

@@ -56,7 +56,7 @@ public class SupplierService {
     	
     	for (Supplier supplier2 : suppliers) {
 			if(supplier2.getSupplierCode().equalsIgnoreCase(supplier.getSupplierCode())) {
-				return null;
+				throw new EntityNotFoundException("The supplier code is used");
 			}
 		}
     	

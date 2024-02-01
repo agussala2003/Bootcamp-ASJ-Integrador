@@ -4,13 +4,15 @@
     <div class="row">
       <!-- Breadcrumb -->
       <div class="col-12 col-md-9 d-flex align-items-center">
+        <a class="text-light text-decoration-none" routerLink="/inicio">Inicio</a>
+              <i class='bx bx-chevron-right text-light fs-4' ></i>
         <a class="text-light text-decoration-none" routerLink="/proveedores"
           >Proveedores</a
         >
         <i *ngIf="this.supplierViewModel.supplierCode != ''" class="bx bx-chevron-right text-light fs-4"></i>
         <p class="m-0 text-light text-md-nowrap">
           <span *ngIf="this.supplierViewModel.supplierCode != ''"
-            >Proveedor {{ this.supplierViewModel.supplierCode }}</span
+            >{{ this.supplierViewModel.businessName }}</span
           >
         </p>
       </div>
@@ -123,6 +125,8 @@
             </div>
           </div>
         </div>
+      <div class="row">
+        <h3 class="my-3 text-light">Direccion</h3>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
           <div class="card bg-dark border border-1 border-white">
             <div class="card-content">
@@ -207,6 +211,7 @@
             </div>
           </div>
         </div>
+      </div>
       </div>
       <div class="row">
         <h3 class="my-3 text-light">Datos Fiscales</h3>
@@ -335,6 +340,7 @@
           >Eliminar</a
         >
         <a
+        *ngIf="this.supplierViewModel.active"
           [routerLink]="['/proveedores/form/', this.supplierViewModel.id]"
           class="btn btn-primary me-2"
           >Editar</a
