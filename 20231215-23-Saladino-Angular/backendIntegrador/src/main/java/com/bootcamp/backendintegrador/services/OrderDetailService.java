@@ -60,18 +60,18 @@ public class OrderDetailService {
 
 
 
-    public List<OrderDetail> updateOrderDetails(Integer id, List<OrderDetail> updatedOrderDetailsList) {   
-    	
-        
-        Order order = orderService.getOrderById(id).orElseThrow(() ->
-        new EntityNotFoundException("Order with ID " + id + " not found"));
-        List<OrderDetail> updatedOrderDetails = orderDetailsRepository.findByOrder(order);
-        updatedOrderDetails.forEach(item -> {
-        	deleteOrderDetails(item.getId());
-        });
-        
-        return createOrderDetails(updatedOrderDetailsList);
-    }
+//    public List<OrderDetail> updateOrderDetails(Integer id, List<OrderDetail> updatedOrderDetailsList) {   
+//    	
+//        
+//        Order order = orderService.getOrderById(id).orElseThrow(() ->
+//        new EntityNotFoundException("Order with ID " + id + " not found"));
+//        List<OrderDetail> updatedOrderDetails = orderDetailsRepository.findByOrder(order);
+//        updatedOrderDetails.forEach(item -> {
+//        	deleteOrderDetails(item.getId());
+//        });
+//        
+//        return createOrderDetails(updatedOrderDetailsList);
+//    }
 
     
     public Optional<List<OrderDetail>> getOrderDetailByOrderId(Integer orderId) {

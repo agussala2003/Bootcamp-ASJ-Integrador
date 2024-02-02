@@ -8,33 +8,30 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { MainPrincipalComponent } from './components/main-principal/main-principal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TablaProveedoresComponent } from './components/main-proveedores/tabla-proveedores/tabla-proveedores.component';
-import { FormProveedoresComponent } from './components/main-proveedores/form-proveedores/form-proveedores.component';
-import { FormProductosyserviciosComponent } from './components/main-productosyservicios/form-productosyservicios/form-productosyservicios.component';
-import { TablaProductosyserviciosComponent } from './components/main-productosyservicios/tabla-productosyservicios/tabla-productosyservicios.component';
-import { TablaOrdenesdecompraComponent } from './components/main-ordenesdecompra/tabla-ordenesdecompra/tabla-ordenesdecompra.component';
-import { FormOrdenesdecompraComponent } from './components/main-ordenesdecompra/form-ordenesdecompra/form-ordenesdecompra.component';
+import { TableSupplierComponent } from './components/main-proveedores/table-supplier/table-supplier.component';
+import { FormSupplierComponent } from './components/main-proveedores/form-supplier/form-supplier.component';
+import { FormProductsComponent } from './components/main-productosyservicios/form-products/form-products.component';
+import { TableProductsComponent } from './components/main-productosyservicios/table-products/table-products.component';
+import { TableOrdersComponent } from './components/main-ordenesdecompra/table-orders/table-orders.component';
+import { FormOrdersComponent } from './components/main-ordenesdecompra/form-orders/form-orders.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { DetalleComponent } from './components/main-proveedores/detalle/detalle.component';
+import { DetailSupplierComponent } from './components/main-proveedores/detail-supplier/detail-supplier.component';
 import { LoginComponent } from './components/login/login.component';
-import { DetalleProdComponent } from './components/main-productosyservicios/detalle-prod/detalle-prod.component';
+import { DetailProductsComponent } from './components/main-productosyservicios/detail-products/detail-products.component';
 import { AtoZPipe } from './pipes/ato-z.pipe';
-import { DetalleOrdenesComponent } from './components/main-ordenesdecompra/detalle-ordenes/detalle-ordenes.component';
+import { DetailOrdersComponent } from './components/main-ordenesdecompra/detail-orders/detail-orders.component';
 import { NavigationHomeComponent } from './components/navigation-home/navigation-home.component';
-import { TablaRubrosComponent } from './components/main-rubros/tabla-rubros/tabla-rubros.component';
-import { FormRubrosComponent } from './components/main-rubros/form-rubros/form-rubros.component';
-import { TablaCategoriasComponent } from './components/main-categorias/tabla-categorias/tabla-categorias.component';
-import { FormCategoriasComponent } from './components/main-categorias/form-categorias/form-categorias.component';
+import { TableIndustriesComponent } from './components/main-rubros/table-industries/table-industries.component';
+import { FormIndustriesComponent } from './components/main-rubros/form-industries/form-industries.component';
+import { TableCategoriesComponent } from './components/main-categorias/table-categories/table-categories.component';
+import { FormCategoriesComponent } from './components/main-categorias/form-categories/form-categories.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { EmptyListComponent } from './components/empty-list/empty-list.component';
 import { SearchPipe } from './pipes/search.pipe';
 import { PaginationPipe } from './pipes/pagination.pipe';
-import { StateItemsPipe } from './pipes/state-items.pipe';
-import { FilterCategoryPipe } from './pipes/filter-category.pipe';
-import { FilterByPricePipe } from './pipes/filter-by-price.pipe';
-import { FilterByBusinessNamePipe } from './pipes/filter-by-business-name.pipe';
 import { LoaderComponent } from './components/loader/loader.component';
+
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2'
 
 @NgModule({
@@ -44,30 +41,26 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2'
     SidebarComponent,
     FooterComponent,
     MainPrincipalComponent,
-    TablaProveedoresComponent,
-    FormProveedoresComponent,
-    FormProductosyserviciosComponent,
-    TablaProductosyserviciosComponent,
-    TablaOrdenesdecompraComponent,
-    FormOrdenesdecompraComponent,
-    DetalleComponent,
+    TableSupplierComponent,
+    FormSupplierComponent,
+    FormProductsComponent,
+    TableProductsComponent,
+    TableOrdersComponent,
+    FormOrdersComponent,
+    DetailSupplierComponent,
     LoginComponent,
-    DetalleProdComponent,
+    DetailProductsComponent,
     AtoZPipe,
-    DetalleOrdenesComponent,
+    DetailOrdersComponent,
     NavigationHomeComponent,
-    TablaRubrosComponent,
-    FormRubrosComponent,
-    TablaCategoriasComponent,
-    FormCategoriasComponent,
+    TableIndustriesComponent,
+    FormIndustriesComponent,
+    TableCategoriesComponent,
+    FormCategoriesComponent,
     ModalComponent,
     EmptyListComponent,
     SearchPipe,
     PaginationPipe,
-    StateItemsPipe,
-    FilterCategoryPipe,
-    FilterByPricePipe,
-    FilterByBusinessNamePipe,
     LoaderComponent
   ],
   imports: [

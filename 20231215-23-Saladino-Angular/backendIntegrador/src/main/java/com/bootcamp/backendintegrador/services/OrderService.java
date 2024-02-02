@@ -58,7 +58,7 @@ public class OrderService {
     	List<Order> orders = getAllOrders();
     	
     	for (Order order2 : orders) {
-			if(order2.getOrderNumber().equalsIgnoreCase(newOrder.getOrderNumber())) {
+			if(order2.getOrderNumber().equals(newOrder.getOrderNumber())) {
 				throw new EntityNotFoundException("The order number is used");
 			}
 		}
@@ -86,8 +86,9 @@ public class OrderService {
             newOrder.setUser(orderUser);
 
             return orderRepository.save(newOrder);
+    	} else {
+    		throw new EntityNotFoundException("Values are wrong");
     	}
-    	return null;
     }
 
 
@@ -102,13 +103,24 @@ public class OrderService {
             orderToDeactivate.setActive(false);
             orderToDeactivate.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return orderRepository.save(orderToDeactivate);
+        } else {
+        	throw new EntityNotFoundException("Order can't be canceled");
         }
-
-        return null;
     }
 
     public Order updateOrder(Integer orderId, Order updatedOrder) {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        
+        String initOrderNumber = optionalOrder.get().getOrderNumber();
+        
+        if(!initOrderNumber.equals(updatedOrder.getOrderNumber())) {
+        	List<Order> orders = getAllOrders();
+        	for (Order order2 : orders) {
+    			if(order2.getOrderNumber().equals(updatedOrder.getOrderNumber())) {
+    				throw new EntityNotFoundException("The order number is used");
+    			}
+    		}
+        }
 
         if (optionalOrder.isPresent() && validateOrder(updatedOrder)) {
             Order existingOrder = optionalOrder.get();
@@ -131,9 +143,9 @@ public class OrderService {
             existingOrder.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
             return orderRepository.save(existingOrder);
+        } else {	
+        	throw new EntityNotFoundException("Values are wrong");
         }
-
-        return null;
     }
     
     private boolean validateOrder(Order order) {
@@ -163,8 +175,8 @@ public class OrderService {
             orderToUndelete.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
             return orderRepository.save(orderToUndelete);
+        } else {
+        	throw new EntityNotFoundException("Order can't be activated");
         }
-
-        return null;
     }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SupplierService } from '../../services/proveedores.service';
-import { ProductService } from '../../services/productosyservicios.service';
-import { OrderService } from '../../services/ordenes.service';
+import { SupplierService } from '../../services/supplier.service';
+import { ProductService } from '../../services/product.service';
+import { OrderService } from '../../services/order.service';
 import { Supplier } from '../../models/Supplier';
 import { Product } from '../../models/Product';
 import { Order } from '../../models/Order';

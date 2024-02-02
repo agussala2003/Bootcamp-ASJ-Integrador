@@ -1,0 +1,216 @@
+<div class="bg-dark">
+  <div *ngIf="userState == true" class="container py-5 p-md-5">
+    <!-- Ruteo -->
+    <div class="row">
+      <!-- Breadcrumb -->
+      <div class="col-12 col-md-9 d-flex align-items-center">
+        <a class="text-light text-decoration-none" routerLink="/inicio">Inicio</a>
+              <i class='bx bx-chevron-right text-light fs-4' ></i>
+        <a class="text-light text-decoration-none" routerLink="/productos-servicios">Productos y Servicios</a>
+        <i *ngIf="this.productViewModel.sku != ''" class='bx bx-chevron-right text-light fs-4' ></i>
+        <p class="m-0 text-light text-md-nowrap"><span *ngIf="this.productViewModel.sku != ''">{{this.productViewModel.productName}}</span></p>
+      </div>
+      <!-- Breadcrumb -->
+      <div class="col-12 col-md-3 d-flex justify-content-start justify-content-md-end my-3 ">
+        <a routerLink="/productos-servicios" class="btn btn-primary">Volver a la lista</a>
+      </div>
+    </div>
+    <!-- Ruteo -->
+    <form #formProdyServ="ngForm" (ngSubmit)="submitProduct(formProdyServ)">
+    <div class="row">
+      <h4 class="text-light my-2">Datos Productos y Servicios <i (click)="openModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class='bx bx-info-circle text-white ms-2'></i> </h4>
+      <div class="col-12 col-md-auto mb-2">
+        <label for="sku" class="form-label text-light">Codigo / Sku:</label>
+        <input
+          [(ngModel)]="this.productViewModel.sku"
+          required
+          type="text"
+          id="sku"
+          name="sku"
+          placeholder="Ingrese Codigo / Sku"
+          class="form-control"
+          minlength="8"
+          maxlength="8"
+          (keyup)="skuExists()"
+        />
+        <div *ngIf="formProdyServ.controls['sku']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProdyServ.controls['sku']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Codigo de 8 o mas digitos</span>
+        </div>
+        <div *ngIf="!this.isNumberCode" class="col-auto">
+          <span class="form-text text-light">Debe ser numerico</span>
+        </div>
+        <div *ngIf="this.isActiveSku" class="col-auto">
+          <span class="form-text text-light"> Ingresa un codigo que no exista </span>
+        </div>
+      </div>
+      <div class="col-12 col-md-auto mb-2">
+        <label for="seleccCodProv" class="form-label text-light position-relative labelProv"
+          >Codigo Proveedor: <img class="rounded-circle position-absolute end-0 bottom-0" *ngIf="this.productViewModel.supplier.id != ''" src="{{supplierImg}}" style="width: 30px; height: 30px" alt=""></label
+        >
+        <select
+          [(ngModel)]="this.productViewModel.supplier.id"
+          for="seleccCodProv"
+          id="seleccCodProv"
+          name="seleccCodProv"
+          class="form-select"
+          aria-label="Default select example"
+          required
+          (change)="onSupplierChange()"
+        >
+          <option selected disabled>Selecciona un proveedor</option>
+          <option *ngFor="let supplier of suppliers" value="{{ supplier.id }}">{{supplier.businessName}}</option>
+        </select>
+        <div *ngIf="formProdyServ.controls['seleccCodProv']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+      </div>
+      <div class="col-12 col-md-auto mb-2">
+        <label for="categoria" class="form-label text-light position-relative labelCat">Categoria:
+          <div class="containerTooltip position-absolute end-0 bottom-0">
+            <span class="hover-me text-white" (click)="categoryFlag = true" >Agregar</span>
+            <div [ngClass]="categoryFlag ? 'tooltipClicked' : 'tooltip' ">
+              <form class="d-flex gap-2" #categoryForm="ngForm" (ngSubmit)="postCategory()">
+                <input [(ngModel)]="newCategory" placeholder="Ingrese categoria" name="addIndustry" id="addIndustry" minlength="3" maxlength="50" class="form-control border border-dark" type="text">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+              </form>                
+            </div>
+          </div>
+        </label>
+        <select
+          [(ngModel)]="this.productViewModel.category.id"
+          for="categoria"
+          id="categoria"
+          name="categoria"
+          class="form-select"
+          aria-label="Default select example"
+          required
+        >
+          <option selected disabled>Selecciona una categoria</option>
+          <option *ngFor="let category of categories" value="{{category.id}}">{{category.categoryName}}</option>
+        </select>
+        <div *ngIf="formProdyServ.controls['categoria']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+      </div>
+      <div class="col-12 col-md-auto mb-2">
+        <label for="nomProd" class="form-label text-light"
+          >Nombre del producto:</label
+        >
+        <input
+          [(ngModel)]="this.productViewModel.productName"
+          required
+          type="text"
+          id="nomProd"
+          name="nomProd"
+          placeholder="Ingrese nombre del producto"
+          class="form-control"
+          minlength="3"
+        />
+        <div *ngIf="formProdyServ.controls['nomProd']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProdyServ.controls['nomProd']?.hasError('minlength')" class="col-auto">
+          <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+        </div>
+      </div>
+      <div class="col-12 col-md-auto mb-2">
+        <label for="precio" class="form-label text-light">Precio:</label>
+        <input
+          [(ngModel)]="this.productViewModel.price"
+          required
+          type="number"
+          id="precio"
+          name="precio"
+          placeholder="Ingrese precio"
+          class="form-control"
+          min="1"
+        />
+        <div *ngIf="formProdyServ.controls['precio']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+        <div *ngIf="formProdyServ.controls['precio']?.hasError('min')" class="col-auto">
+          <span class="form-text text-light">Ingrese precio mayor a 1</span>
+        </div>
+      </div>
+      <div class="col-12 col-md-auto mb-2">
+        <label for="imagen" class="form-label text-light">Imagen:</label>
+        <input
+          [(ngModel)]="this.productViewModel.imageUrl"
+          type="text"
+          id="imagen"
+          name="imagen"
+          placeholder="Ingrese imagen del producto"
+          class="form-control"
+          required
+        />
+        <div *ngIf="formProdyServ.controls['imagen']?.hasError('required')" class="col-auto">
+          <span class="form-text text-light">El dato es obligatorio</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-5 mb-2">
+          <label for="descripcion" class="form-label text-light"
+            >Descripcion:</label
+          >
+          <textarea
+            [(ngModel)]="this.productViewModel.description"
+            required
+            type="text"
+            id="descripcion"
+            name="descripcion"
+            placeholder="Ingrese descripcion"
+            class="form-control"
+            minlength="15"
+            maxlength="250"
+            rows="3"
+          ></textarea>
+          <div *ngIf="formProdyServ.controls['descripcion']?.hasError('required')" class="col-auto">
+            <span class="form-text text-light">El dato es obligatorio</span>
+          </div>
+          <div *ngIf="formProdyServ.controls['descripcion']?.hasError('minlength')" class="col-auto">
+            <span class="form-text text-light">Ingrese 15 o mas digitos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mt-2">
+        <button
+          data-bs-toggle="modal" data-bs-target="#exampleModal" 
+          [disabled]="!formProdyServ.valid || this.isActiveSku || !this.isNumberCode"
+          type="button"
+          class="btn btn-success">
+          {{this.flagCode ? 'Agregar' : 'Actualizar'}}
+        </button>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Deseas {{this.flagCode ? 'agregar' : 'actualizar'}} el producto "{{this.productViewModel.productName}}"?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+  </form>
+  </div>
+  <!-- Verificamos el estado del usuario -->
+  <div *ngIf="userState == null" class="container py-5 p-md-5">
+    <app-navigation-home></app-navigation-home>
+  </div>
+  <!-- Verificamos el estado del usuario -->
+</div>

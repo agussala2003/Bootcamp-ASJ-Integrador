@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainPrincipalComponent } from './components/main-principal/main-principal.component';
-import { FormProveedoresComponent } from './components/main-proveedores/form-proveedores/form-proveedores.component';
-import { TablaProveedoresComponent } from './components/main-proveedores/tabla-proveedores/tabla-proveedores.component';
-import { TablaProductosyserviciosComponent } from './components/main-productosyservicios/tabla-productosyservicios/tabla-productosyservicios.component';
-import { FormProductosyserviciosComponent } from './components/main-productosyservicios/form-productosyservicios/form-productosyservicios.component';
-import { TablaOrdenesdecompraComponent } from './components/main-ordenesdecompra/tabla-ordenesdecompra/tabla-ordenesdecompra.component';
-import { FormOrdenesdecompraComponent } from './components/main-ordenesdecompra/form-ordenesdecompra/form-ordenesdecompra.component';
-import { DetalleComponent } from './components/main-proveedores/detalle/detalle.component';
+import { FormSupplierComponent } from './components/main-proveedores/form-supplier/form-supplier.component';
+import { TableSupplierComponent } from './components/main-proveedores/table-supplier/table-supplier.component';
+import { TableProductsComponent } from './components/main-productosyservicios/table-products/table-products.component';
+import { FormProductsComponent } from './components/main-productosyservicios/form-products/form-products.component';
+import { TableOrdersComponent } from './components/main-ordenesdecompra/table-orders/table-orders.component';
+import { FormOrdersComponent } from './components/main-ordenesdecompra/form-orders/form-orders.component';
+import { DetailSupplierComponent } from './components/main-proveedores/detail-supplier/detail-supplier.component';
 import { LoginComponent } from './components/login/login.component';
-import { DetalleProdComponent } from './components/main-productosyservicios/detalle-prod/detalle-prod.component';
-import { DetalleOrdenesComponent } from './components/main-ordenesdecompra/detalle-ordenes/detalle-ordenes.component';
-import { TablaCategoriasComponent } from './components/main-categorias/tabla-categorias/tabla-categorias.component';
-import { FormCategoriasComponent } from './components/main-categorias/form-categorias/form-categorias.component';
-import { TablaRubrosComponent } from './components/main-rubros/tabla-rubros/tabla-rubros.component';
-import { FormRubrosComponent } from './components/main-rubros/form-rubros/form-rubros.component';
+import { DetailProductsComponent } from './components/main-productosyservicios/detail-products/detail-products.component';
+import { DetailOrdersComponent } from './components/main-ordenesdecompra/detail-orders/detail-orders.component';
+import { TableCategoriesComponent } from './components/main-categorias/table-categories/table-categories.component';
+import { FormCategoriesComponent } from './components/main-categorias/form-categories/form-categories.component';
+import { TableIndustriesComponent } from './components/main-rubros/table-industries/table-industries.component';
+import { FormIndustriesComponent } from './components/main-rubros/form-industries/form-industries.component';
 
 const routes: Routes = [
   {
@@ -26,19 +26,19 @@ const routes: Routes = [
     children: [ 
       {
         path: "",
-        component: TablaProveedoresComponent
+        component: TableSupplierComponent
       },
       {
         path: "form/:idSupplier",
-        component: FormProveedoresComponent
+        component: FormSupplierComponent
       },
       {
         path: "form",
-        component: FormProveedoresComponent
+        component: FormSupplierComponent
       },
       {
         path: "detalle/:idSupplier",
-        component: DetalleComponent
+        component: DetailSupplierComponent
       },
     ]
   },
@@ -47,19 +47,19 @@ const routes: Routes = [
     children: [ 
       {
         path: "",
-        component: TablaProductosyserviciosComponent
+        component: TableProductsComponent
       },
       {
         path: "form/:idProduct",
-        component: FormProductosyserviciosComponent
+        component: FormProductsComponent
       },
       {
         path: "form",
-        component: FormProductosyserviciosComponent
+        component: FormProductsComponent
       },
       {
         path: "detalle/:idProduct",
-        component: DetalleProdComponent
+        component: DetailProductsComponent
       },
     ]
   },
@@ -68,19 +68,19 @@ const routes: Routes = [
     children: [ 
       {
         path: "",
-        component: TablaOrdenesdecompraComponent
+        component: TableOrdersComponent
       },
       {
         path: "form/:idOrder",
-        component: FormOrdenesdecompraComponent
+        component: FormOrdersComponent
       },
       {
         path: "form",
-        component: FormOrdenesdecompraComponent
+        component: FormOrdersComponent
       },
       {
         path: "detalle/:idOrder",
-        component: DetalleOrdenesComponent
+        component: DetailOrdersComponent
       },
     ]
   },
@@ -93,15 +93,15 @@ const routes: Routes = [
     children: [
       {
         path:'',
-        component:TablaCategoriasComponent
+        component:TableCategoriesComponent
       },
       {
         path:'form',
-        component:FormCategoriasComponent
+        component:FormCategoriesComponent
       },
       {
         path:'form/:idCategory',
-        component:FormCategoriasComponent
+        component:FormCategoriesComponent
       }
     ]
   },
@@ -110,15 +110,15 @@ const routes: Routes = [
     children: [
       {
         path:'',
-        component:TablaRubrosComponent
+        component:TableIndustriesComponent
       },
       {
         path:'form',
-        component:FormRubrosComponent
+        component:FormIndustriesComponent
       },
       {
         path:'form/:idIndustry',
-        component:FormRubrosComponent
+        component:FormIndustriesComponent
       }
     ]
   },

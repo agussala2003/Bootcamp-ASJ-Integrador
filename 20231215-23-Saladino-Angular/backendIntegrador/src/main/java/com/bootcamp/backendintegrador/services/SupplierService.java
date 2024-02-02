@@ -55,7 +55,7 @@ public class SupplierService {
     	List<Supplier> suppliers = getSuppliers();
     	
     	for (Supplier supplier2 : suppliers) {
-			if(supplier2.getSupplierCode().equalsIgnoreCase(supplier.getSupplierCode())) {
+			if(supplier2.getSupplierCode().equals(supplier.getSupplierCode())) {
 				throw new EntityNotFoundException("The supplier code is used");
 			}
 		}
@@ -76,8 +76,9 @@ public class SupplierService {
             
 
             return supplierRepository.save(supplier);
+    	} else {
+    		throw new EntityNotFoundException("The values are wrong");
     	}
-    	return null;
     }
 
     public Supplier deleteSupplier(Integer id) {
@@ -88,13 +89,25 @@ public class SupplierService {
             supplier.setActive(false);
             supplier.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return supplierRepository.save(supplier);
+        } else {
+        	throw new EntityNotFoundException("Supplier can't be deleted");
         }
 
-        return null;
     }
 
     public Supplier putSupplier(Integer id, Supplier updatedSupplier) {
         Optional<Supplier> existingSupplierOptional = supplierRepository.findById(id);
+        
+        String initSupplierCode = existingSupplierOptional.get().getSupplierCode();
+        
+        if(!initSupplierCode.equals(updatedSupplier.getSupplierCode())) {
+        	List<Supplier> suppliers = getSuppliers();
+        	for (Supplier supplier2 : suppliers) {
+    			if(supplier2.getSupplierCode().equals(updatedSupplier.getSupplierCode())) {
+    				throw new EntityNotFoundException("The supplier code is used");
+    			}
+    		}
+        }
 
         if (existingSupplierOptional.isPresent() && validateSupplierInput(updatedSupplier)) {
             Supplier existingSupplier = existingSupplierOptional.get();
@@ -107,6 +120,7 @@ public class SupplierService {
 
             existingSupplier.setSupplierCode(updatedSupplier.getSupplierCode());
             existingSupplier.setIndustry(industry);
+            existingSupplier.setCuit(updatedSupplier.getCuit());
             existingSupplier.setBusinessName(updatedSupplier.getBusinessName());
             existingSupplier.setEmail(updatedSupplier.getEmail());
             existingSupplier.setWebsite(updatedSupplier.getWebsite());
@@ -117,9 +131,9 @@ public class SupplierService {
             existingSupplier.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
             return supplierRepository.save(existingSupplier);
+        } else {
+        	throw new EntityNotFoundException("The values are wrong");
         }
-
-        return null;
     }
 
     public Supplier undeleteSupplierById(Integer id) {
@@ -130,9 +144,9 @@ public class SupplierService {
             supplier.setActive(true);
             supplier.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return supplierRepository.save(supplier);
+        } else {
+        	throw new EntityNotFoundException("Supplier can't be undeleted");
         }
-
-        return null;
     }
     
     private boolean validateSupplierInput(Supplier supplier) {

@@ -67,7 +67,7 @@ public class ProductService {
 		List<Product> products = getProducts();
     	
     	for (Product product2 : products) {
-			if(product2.getSku().equalsIgnoreCase(product.getSku())) {
+			if(product2.getSku().equals(product.getSku())) {
 				throw new EntityNotFoundException("The sku is used");
 			}
 		}
@@ -85,9 +85,9 @@ public class ProductService {
 			product.setSupplier(supplier.get());
 			product.setCategory(category.get());
 			return productsRepository.save(product);
-		}
-		
-		return null;
+		} else {
+			throw new EntityNotFoundException("Values are wrong");
+		}		
 	}
 	
 	public Product deleteProductById(Integer id){
@@ -98,13 +98,24 @@ public class ProductService {
 			product.setActive(false);
 			product.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return productsRepository.save(product);
+		} else {
+			throw new EntityNotFoundException("Product can't be deleted");
 		}
-		
-		return null;
 	}
 	
 	public Product putProduct(Integer id, Product product){
 		Optional<Product> optionalProduct = productsRepository.findById(id);
+		
+		String initSku = optionalProduct.get().getSku();
+		
+		if(!initSku.equals(product.getSku())) {
+			List<Product> products = getProducts();
+	    	for (Product product2 : products) {
+				if(product2.getSku().equals(product.getSku())) {
+					throw new EntityNotFoundException("The sku is used");
+				}
+			}
+		}
 		
 		if(optionalProduct.isPresent() && validateProductInput(product)) {
 			Product existingProduct = optionalProduct.get();
@@ -125,8 +136,9 @@ public class ProductService {
 			existingProduct.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
 	        return productsRepository.save(existingProduct);
+		} else {
+			throw new EntityNotFoundException("Values are wrong");
 		}
-		return null;
 	}
 	
 	public Product undeleteProductById(Integer id) {
@@ -140,9 +152,9 @@ public class ProductService {
             product.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
             return productsRepository.save(product);
-        }
-
-        return null;
+        } else {
+			throw new EntityNotFoundException("Product can't be undeleted");
+		}
     }
 	
 	private boolean validateProductInput(Product product) {
