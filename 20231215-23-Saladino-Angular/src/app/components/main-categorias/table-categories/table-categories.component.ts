@@ -10,15 +10,14 @@ import { AlertsService } from '../../../services/alerts.service';
   templateUrl: './table-categories.component.html',
   styleUrl: './table-categories.component.css',
 })
+
 export class TableCategoriesComponent implements OnInit {
+  
   constructor(
     private categoryService: CategoryService,
     private productService: ProductService,
     private alertService: AlertsService
   ) {}
-
-  categories: Category[] = [];
-  products: Product[] = [];
 
   categoryViewModel: Category = {
     id: '',
@@ -28,16 +27,18 @@ export class TableCategoriesComponent implements OnInit {
     updatedAt: '',
   };
 
+  categories: Category[] = [];
+  products: Product[] = [];
   userState: any;
   loaderFlag = false;
 
   ngOnInit(): void {
     this.userState = this.categoryService.getUserState();
-    this.refreshCategories();
+    this.getCategories();
     this.getProducts();
   }
 
-  refreshCategories() {
+  getCategories() {
     this.categoryService.getCategories().subscribe(
       (data: Category[]) => {
         console.log('You Get All categories');
@@ -85,7 +86,7 @@ export class TableCategoriesComponent implements OnInit {
       (data: Category) => {
         console.log('You Deleted');
         console.log(data);
-        this.refreshCategories();
+        this.getCategories();
         this.loader();
         this.alertService.successNotification('Categoria Eliminada');
       },

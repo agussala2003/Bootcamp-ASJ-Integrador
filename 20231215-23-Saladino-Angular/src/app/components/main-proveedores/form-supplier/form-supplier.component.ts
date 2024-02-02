@@ -26,9 +26,28 @@ import { AlertsService } from '../../../services/alerts.service';
   templateUrl: './form-supplier.component.html',
   styleUrls: ['./form-supplier.component.css'],
 })
+
 export class FormSupplierComponent implements OnInit {
+
+  constructor(
+    private supplierService: SupplierService,
+    private industryService: IndustryService,
+    private contactService: ContactService,
+    private addressService: AddressService,
+    private countryService: CountryService,
+    private provinceService: ProvinceService,
+    private ivaConditionService: IvaConditionService,
+    private locationService: LocationService,
+    private alertService: AlertsService,
+    private modalService: NgbModal,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {}
+
   industryViewModel: Industry = { id: '', industryName: '', active: true };
+
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
+
   supplierViewModel: Supplier = {
     id: '',
     supplierCode: '',
@@ -44,6 +63,7 @@ export class FormSupplierComponent implements OnInit {
     createdAt: '',
     updatedAt: '',
   };
+
   contactViewModel: Contact = {
     id: '',
     firstName: '',
@@ -55,17 +75,21 @@ export class FormSupplierComponent implements OnInit {
     createdAt: '',
     updatedAt: '',
   };
+
   countryViewModel: Country = { id: '', countryName: '' };
+
   provinceViewModel: Province = {
     id: '',
     country: this.countryViewModel,
     provinceName: '',
   };
+
   locationViewModel: Location = {
     id: '',
     locationName: '',
     province: this.provinceViewModel,
   };
+
   addressViewModel: Address = {
     id: '',
     postalCode: '',
@@ -92,23 +116,8 @@ export class FormSupplierComponent implements OnInit {
   industryFlag: boolean = false;
   newIndustry: string = '';
 
-  constructor(
-    private supplierService: SupplierService,
-    private industryService: IndustryService,
-    private contactService: ContactService,
-    private addressService: AddressService,
-    private countryService: CountryService,
-    private provinceService: ProvinceService,
-    private ivaConditionService: IvaConditionService,
-    private locationService: LocationService,
-    private alertService: AlertsService,
-    private modalService: NgbModal,
-    private router: ActivatedRoute,
-    private router2: Router
-  ) {}
-
   ngOnInit(): void {
-    this.router.params.subscribe((data) => {
+    this.activatedRoute.params.subscribe((data) => {
       this.idSupplier = data['idSupplier'];
       if (this.idSupplier !== undefined) {
         this.getSupplierById(this.idSupplier);
@@ -344,7 +353,7 @@ export class FormSupplierComponent implements OnInit {
         this.addressViewModel = data;
         this.resetSupplierData();
         this.alertService.successNotification('Proveedor creado');
-        this.router2.navigate(['/proveedores']);
+        this.router.navigate(['/proveedores']);
       },
       (error) => {
         console.log(error);
@@ -416,7 +425,7 @@ export class FormSupplierComponent implements OnInit {
         this.addressViewModel = data;
         this.resetSupplierData();
         this.alertService.successNotification('Proveedor actualizado');
-        this.router2.navigate(['/proveedores']);
+        this.router.navigate(['/proveedores']);
       },
       (error) => {
         console.log(error);
@@ -429,41 +438,41 @@ export class FormSupplierComponent implements OnInit {
 
   validateForm(): boolean {
     if (
-      !this.validarStringAlfanumericoDe4Digitos(
+      !this.validateSupplierCode(
         this.supplierViewModel.supplierCode
       ) ||
-      !this.validarStringAlfanumericoEntre3y50Caracteres(
+      !this.validateRegularString(
         this.supplierViewModel.businessName
       ) ||
       this.supplierViewModel.industry.id === 'Selecciona un rubro' ||
-      !this.validarTelefono(this.supplierViewModel.phoneNumber) ||
-      !this.validarEmail(this.supplierViewModel.email) ||
+      !this.validatePhoneNumber(this.supplierViewModel.phoneNumber) ||
+      !this.validateEmail(this.supplierViewModel.email) ||
       (this.supplierViewModel.website &&
-        !this.validarUrl(this.supplierViewModel.website)) ||
+        !this.validateUrl(this.supplierViewModel.website)) ||
       (this.supplierViewModel.image &&
-        !this.validarUrl(this.supplierViewModel.image)) ||
+        !this.validateUrl(this.supplierViewModel.image)) ||
       this.addressViewModel.location.province.country.id ===
         'Selecciona Pais' ||
       this.addressViewModel.location.province.id === 'Selecciona Provincia' ||
-      !this.validarStringAlfanumericoEntre3y50Caracteres(
+      !this.validateRegularString(
         this.addressViewModel.location.locationName
       ) ||
-      !this.validarStringAlfanumericoEntre3y50Caracteres(
+      !this.validateRegularString(
         this.addressViewModel.streetName
       ) ||
       this.addressViewModel.streetNumber < 1 ||
-      !this.validarCodigoPostal(this.addressViewModel.postalCode) ||
-      !this.validarCUIT(this.supplierViewModel.cuit) ||
+      !this.validatePostalCode(this.addressViewModel.postalCode) ||
+      !this.validateCuit(this.supplierViewModel.cuit) ||
       this.supplierViewModel.ivaCondition.id === 'Selecciona Condicion' ||
-      !this.validarStringAlfanumericoEntre3y50Caracteres(
+      !this.validateRegularString(
         this.contactViewModel.firstName
       ) ||
-      !this.validarStringAlfanumericoEntre3y50Caracteres(
+      !this.validateRegularString(
         this.contactViewModel.lastName
       ) ||
-      !this.validarTelefono(this.contactViewModel.phoneNumber) ||
-      !this.validarEmail(this.contactViewModel.email) ||
-      !this.validarStringAlfanumericoEntre3y50Caracteres(
+      !this.validatePhoneNumber(this.contactViewModel.phoneNumber) ||
+      !this.validateEmail(this.contactViewModel.email) ||
+      !this.validateRegularString(
         this.contactViewModel.role
       ) ||
       this.existsCode
@@ -473,37 +482,37 @@ export class FormSupplierComponent implements OnInit {
     return true;
   }
 
-  validarStringAlfanumericoDe4Digitos(str: string): boolean {
+  validateSupplierCode(str: string): boolean {
     const regex = /^(?=.*[0-9])(?=.*[A-Za-z])[0-9A-Za-z]{4,8}$/;
     return regex.test(str);
   }
 
-  validarStringAlfanumericoEntre3y50Caracteres(str: string): boolean {
+  validateRegularString(str: string): boolean {
     const regex = /^[0-9 A-Z a-z]{3,50}$/;
     return regex.test(str);
   }
 
-  validarTelefono(telefono: string): boolean {
+  validatePhoneNumber(telefono: string): boolean {
     const regex = /^\+\d{1,4}-\d{1,6}-\d{4,20}$/;
     return regex.test(telefono);
   }
 
-  validarEmail(email: string): boolean {
+  validateEmail(email: string): boolean {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   }
 
-  validarUrl(sitioWeb: string): boolean {
+  validateUrl(sitioWeb: string): boolean {
     const regex = /^(ftp|http|https):\/\/[^ "]+$/;
     return regex.test(sitioWeb);
   }
 
-  validarCodigoPostal(codigoPostal: string): boolean {
+  validatePostalCode(codigoPostal: string): boolean {
     const regex = /^[0-9]{4,8}$/;
     return regex.test(codigoPostal);
   }
 
-  validarCUIT(cuit: string): boolean {
+  validateCuit(cuit: string): boolean {
     const regex = /^\d{2}-\d{8}-\d{1}$/;
     return regex.test(cuit);
   }

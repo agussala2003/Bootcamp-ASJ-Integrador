@@ -10,18 +10,15 @@ import { AlertsService } from '../../../services/alerts.service';
   templateUrl: './form-industries.component.html',
   styleUrl: './form-industries.component.css',
 })
+
 export class FormIndustriesComponent implements OnInit {
+
   constructor(
     private industryService: IndustryService,
     private alertService: AlertsService,
     private router: Router,
-    private router2: ActivatedRoute
+    private activatedRoute: ActivatedRoute
   ) {}
-
-  userState: any;
-  industries: Industry[] = [];
-  idIndustry: string = '';
-  loaderFlag: boolean = false;
 
   industryViewModel: Industry = {
     id: '',
@@ -31,10 +28,14 @@ export class FormIndustriesComponent implements OnInit {
     updatedAt: '',
   };
 
+  userState: any;
+  industries: Industry[] = [];
+  idIndustry: string = '';
+  loaderFlag: boolean = false;
+
   ngOnInit(): void {
-    this.router2.params.subscribe((params) => {
+    this.activatedRoute.params.subscribe((params) => {
       this.idIndustry = params['idIndustry'];
-      console.log(this.idIndustry);
       if (this.idIndustry != undefined) {
         this.getIndustryById(this.idIndustry);
       }

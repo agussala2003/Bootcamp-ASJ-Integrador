@@ -7,13 +7,22 @@ import { IvaCondition } from '../../../models/IvaCondition';
 import { Supplier } from '../../../models/Supplier';
 import { CategoryService } from '../../../services/category.service';
 import { AlertsService } from '../../../services/alerts.service';
+import { SearchPipe } from '../../../pipes/search.pipe';
 
 @Component({
   selector: 'app-table-products',
   templateUrl: './table-products.component.html',
   styleUrls: ['./table-products.component.css'],
 })
+
 export class TableProductsComponent implements OnInit {
+
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService,
+    private alertService: AlertsService
+  ) {}
+
   industryViewModel: Industry = { id: '', industryName: '', active: true };
   ivaConditionViewModel: IvaCondition = { id: '', taxCondition: '' };
   supplierViewModel: Supplier = {
@@ -56,6 +65,8 @@ export class TableProductsComponent implements OnInit {
 
   products: Product[] = [];
   categories: Category[] = [];
+  initActiveProducts: Product[] = [];
+  initDeletedProducts: Product[] = [];
   userState: any;
   productFilter: string = '';
   categoryFilter: string = '0';
@@ -65,12 +76,7 @@ export class TableProductsComponent implements OnInit {
   isActiveItems: boolean = true;
   loaderFlag = false;
   deletedLength: number = 0;
-
-  constructor(
-    private productService: ProductService,
-    private categoryService: CategoryService,
-    private alertService: AlertsService
-  ) {}
+  productLength: number = 0;
 
   ngOnInit(): void {
     this.getActiveProducts();
@@ -130,6 +136,8 @@ export class TableProductsComponent implements OnInit {
         this.priceFilter = '0';
         this.categoryFilter = '0';
         this.products = data;
+        this.initActiveProducts = data;
+        this.productLength = data.length;
       },
       (error) => {
         console.log(error);
@@ -146,7 +154,9 @@ export class TableProductsComponent implements OnInit {
         this.loader();
         this.priceFilter = '0';
         this.categoryFilter = '0';
+        this.initDeletedProducts = data;
         this.products = data;
+        this.productLength = data.length;
       },
       (error) => {
         console.log(error);
@@ -161,6 +171,7 @@ export class TableProductsComponent implements OnInit {
         console.log('You get products by price asc');
         console.log(data);
         this.loader();
+        this.productLength = data.length;
         this.products = data.filter(
           (item: Product) => item.active === this.isActiveItems
         );
@@ -178,6 +189,7 @@ export class TableProductsComponent implements OnInit {
         console.log('You get products by price desc');
         console.log(data);
         this.loader();
+        this.productLength = data.length;
         this.products = data.filter(
           (item: Product) => item.active === this.isActiveItems
         );
@@ -195,6 +207,7 @@ export class TableProductsComponent implements OnInit {
         console.log('You get products by category');
         console.log(data);
         this.loader();
+        this.productLength = data.length;
         this.products = data.filter(
           (item: Product) => item.active === this.isActiveItems
         );
@@ -215,6 +228,7 @@ export class TableProductsComponent implements OnInit {
         this.getDeletedLength();
         this.priceFilter = '0';
         this.categoryFilter = '0';
+        this.productFilter = '';
         this.alertService.successNotification('Producto eliminado');
         this.loader();
       },
@@ -235,6 +249,7 @@ export class TableProductsComponent implements OnInit {
         this.getDeletedLength();
         this.priceFilter = '0';
         this.categoryFilter = '0';
+        this.productFilter = '';
         this.alertService.successNotification('Producto reactivado');
         this.loader();
       },
@@ -245,22 +260,28 @@ export class TableProductsComponent implements OnInit {
     );
   }
 
-  onPriceFilterChange(number: number) {
+  onPriceFilterChange() {
     if (this.priceFilter === '0') {
       this.getProductsByPriceAsc();
+      this.resetPages();
       this.priceFilter = '1';
       this.categoryFilter = '0';
+      this.productFilter === ''
     } else if (this.priceFilter === '1') {
       this.getProductsByPriceDesc();
+      this.resetPages();;
       this.priceFilter = '2';
       this.categoryFilter = '0';
+      this.productFilter === ''
     } else if (this.priceFilter === '2') {
       this.priceFilter = '0';
       this.categoryFilter = '0';
       if (this.isActiveItems) {
         this.getActiveProducts();
+        this.resetPages();
       } else {
         this.getDeletedProducts();
+        this.resetPages();
       }
     }
   }
@@ -269,18 +290,42 @@ export class TableProductsComponent implements OnInit {
     if (this.categoryFilter === '0') {
       if (this.isActiveItems) {
         this.getActiveProducts();
+        this.resetPages();
       } else {
         this.getDeletedProducts();
+        this.resetPages();
       }
     } else {
+      this.resetPages();
       this.getProductByCategory(this.categoryFilter);
       this.priceFilter = '0';
+      this.productFilter = '';
     }
   }
 
-  onFilterChange() {
+  resetPages() {
     this.prevPage = 0;
     this.nextPage = 5;
+  }
+
+  onFilterChange() {
+    this.resetPages();
+    if(this.productFilter === '' ){
+      if(this.isActiveItems)
+        this.getActiveProducts()
+      else
+        this.getDeletedProducts()
+    } else {
+      if(this.isActiveItems) {
+        const filterActive = new SearchPipe().transform(this.initActiveProducts, this.productFilter);
+        this.products = filterActive.filteredData;
+        this.productLength = filterActive.filteredDataLength;
+      } else {
+        const filterDeleted = new SearchPipe().transform(this.initDeletedProducts, this.productFilter);
+        this.products = filterDeleted.filteredData;
+        this.productLength = filterDeleted.filteredDataLength;
+      }
+    }
   }
 
   loader() {
@@ -309,13 +354,17 @@ export class TableProductsComponent implements OnInit {
   changeState() {
     this.isActiveItems = !this.isActiveItems;
     if (this.isActiveItems) {
-      this.prevPage = 0;
-      this.nextPage = 5;
+      this.resetPages();
+      this.priceFilter = '0';
+      this.categoryFilter = '0';
+      this.productFilter = '';
       this.getActiveProducts();
     } else {
       this.getDeletedProducts();
-      this.prevPage = 0;
-      this.nextPage = 5;
+      this.priceFilter = '0';
+      this.categoryFilter = '0';
+      this.productFilter = '';
+      this.resetPages();
     }
   }
 }

@@ -25,7 +25,9 @@ import { AlertsService } from '../../../services/alerts.service';
   templateUrl: './form-orders.component.html',
   styleUrl: './form-orders.component.css',
 })
+
 export class FormOrdersComponent implements OnInit {
+
   constructor(
     private orderService: OrderService,
     private productService: ProductService,
@@ -33,8 +35,8 @@ export class FormOrdersComponent implements OnInit {
     private orderDetailService: OrderDetailService,
     private statusService: StatusService,
     private alertService: AlertsService,
-    private router: ActivatedRoute,
-    private router2: Router,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private modalService: NgbModal
   ) {}
 
@@ -142,7 +144,7 @@ export class FormOrdersComponent implements OnInit {
   initOrderNumber: string = '';
 
   ngOnInit(): void {
-    this.router.params.subscribe((data) => {
+    this.activatedRoute.params.subscribe((data) => {
       this.idOrder = data['idOrder'];
       if (this.idOrder !== undefined) {
         this.getOrderById(this.idOrder);
@@ -321,7 +323,7 @@ export class FormOrdersComponent implements OnInit {
     this.ordersDetail.push(orderDetailViewModel);
     this.calculateTotal();
     this.resetOrderDetailData();
-    this.validacionProveedor();
+    this.validateSupplier();
   }
 
   validateProduct(): boolean {
@@ -340,7 +342,7 @@ export class FormOrdersComponent implements OnInit {
     );
     this.alertService.successNotification('Producto eliminado');
     this.calculateTotal();
-    this.validacionProveedor();
+    this.validateSupplier();
   }
 
   submitOrder(form: NgForm) {
@@ -390,7 +392,7 @@ export class FormOrdersComponent implements OnInit {
         console.log(data);
         ordersDetails = data;
         this.alertService.successNotification('Orden creada');
-        this.router2.navigate(['/ordenes']);
+        this.router.navigate(['/ordenes']);
       },
       (error) => {
         console.log('Error posting order detail');
@@ -413,8 +415,7 @@ export class FormOrdersComponent implements OnInit {
         console.log(data);
         this.orderViewModel = data;
         this.alertService.successNotification('Orden actualizada');
-        this.router2.navigate(['/ordenes']);
-        // this.putOrderDetail(this.ordersDetail);
+        this.router.navigate(['/ordenes']);
       },
       (error) => {
         console.log('Error updating order');
@@ -428,14 +429,14 @@ export class FormOrdersComponent implements OnInit {
     today.setDate(today.getDate() - 1);
 
     if (
-      !this.validarCodigoNumericoDe1a12Digitos(
+      !this.validateOrderNumber(
         this.orderViewModel.orderNumber
       ) ||
       this.validateStringDates(
         this.orderViewModel.issuanceDate,
         this.orderViewModel.deliveryDate
       ) ||
-      !this.validarStringAlfanumericoEntre15y250Caracteres(
+      !this.validateStringLength(
         this.orderViewModel.receptionInfo
       )
     ) {
@@ -447,12 +448,12 @@ export class FormOrdersComponent implements OnInit {
     return true;
   }
 
-  validarCodigoNumericoDe1a12Digitos(str: string): boolean {
+  validateOrderNumber(str: string): boolean {
     const regex = /^[0-9]{1,12}$/;
     return regex.test(str);
   }
 
-  validarStringAlfanumericoEntre15y250Caracteres(str: string): boolean {
+  validateStringLength(str: string): boolean {
     const long = str.length;
     return long > 14;
   }
@@ -463,7 +464,7 @@ export class FormOrdersComponent implements OnInit {
     return dateDate >= currentDateDate;
   }
 
-  validacionProveedor() {
+  validateSupplier() {
     this.isProductsInOrden = this.ordersDetail.length > 0;
   }
 

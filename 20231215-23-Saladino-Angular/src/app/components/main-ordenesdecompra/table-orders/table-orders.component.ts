@@ -19,7 +19,9 @@ import { AlertsService } from '../../../services/alerts.service';
   templateUrl: './table-orders.component.html',
   styleUrls: ['./table-orders.component.css'], // Ajustado el nombre de la propiedad
 })
+
 export class TableOrdersComponent implements OnInit {
+
   constructor(
     private orderService: OrderService,
     private orderDetailService: OrderDetailService,

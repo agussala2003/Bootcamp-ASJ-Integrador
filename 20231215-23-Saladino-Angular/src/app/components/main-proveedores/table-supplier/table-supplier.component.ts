@@ -11,6 +11,7 @@ import { Industry } from '../../../models/Industry';
 import { IvaCondition } from '../../../models/IvaCondition';
 import { SupplierService } from '../../../services/supplier.service';
 import { AlertsService } from '../../../services/alerts.service';
+import { SearchPipe } from '../../../pipes/search.pipe';
 
 @Component({
   selector: 'app-table-supplier',
@@ -24,18 +25,6 @@ export class TableSupplierComponent implements OnInit {
     private contactService: ContactService,
     private alertService: AlertsService
   ) {}
-
-  suppliers: Supplier[] = [];
-  addresses: Address[] = [];
-  contacts: Contact[] = [];
-  userState: any;
-  supplierFilter: string = '';
-  businessNameFilter: string = '0';
-  prevPage: number = 0;
-  nextPage: number = 5;
-  isActiveItems: boolean = true;
-  loaderFlag: boolean = false;
-  deletedLength: number = 0;
 
   industryViewModel: Industry = {
     id: '',
@@ -103,21 +92,39 @@ export class TableSupplierComponent implements OnInit {
     updatedAt: '',
   };
 
+  suppliers: Supplier[] = [];
+  addresses: Address[] = [];
+  contacts: Contact[] = [];
+  initActiveSuppliers: Supplier[] = [];
+  initDeletedSuppliers: Supplier[] = [];
+  userState: any;
+  supplierFilter: string = '';
+  businessNameFilter: string = '0';
+  prevPage: number = 0;
+  nextPage: number = 5;
+  isActiveItems: boolean = true;
+  loaderFlag: boolean = false;
+  deletedLength: number = 0;
+  supplierLength: number = 0;
+
+
   ngOnInit(): void {
     this.userState = this.supplierService.getUserState();
-    this.refreshSuppliers();
-    this.refreshContacts();
-    this.refreshAddresses();
+    this.getActiveSuppliers();
+    this.getContacts();
+    this.getAddresses();
     this.getDeletedLenght();
   }
 
-  refreshSuppliers() {
+  getActiveSuppliers() {
     this.supplierService.getActiveSuppliers().subscribe(
       (data: Supplier[]) => {
         console.log('You get active Suppliers');
         console.log(data);
         this.suppliers = data;
         this.isActiveItems = true;
+        this.supplierLength = data.length;
+        this.initActiveSuppliers = data;
         this.loader();
       },
       (error) => {
@@ -129,7 +136,7 @@ export class TableSupplierComponent implements OnInit {
     );
   }
 
-  refreshContacts() {
+  getContacts() {
     this.contactService.getContacts().subscribe(
       (data: Contact[]) => {
         console.log('You get contacts');
@@ -145,7 +152,7 @@ export class TableSupplierComponent implements OnInit {
     );
   }
 
-  refreshAddresses() {
+  getAddresses() {
     this.addressService.getAddresses().subscribe(
       (data: Address[]) => {
         console.log('You get addresses');
@@ -202,6 +209,8 @@ export class TableSupplierComponent implements OnInit {
         console.log(data);
         this.suppliers = data;
         this.businessNameFilter = '0';
+        this.supplierLength = data.length;
+        this.initDeletedSuppliers = data;
         this.loader();
       },
       (error) => {
@@ -267,9 +276,9 @@ export class TableSupplierComponent implements OnInit {
     this.supplierService.deleteSupplier(id).subscribe(
       () => {
         console.log('You deleted a Supplier');
-        this.refreshSuppliers();
-        this.refreshContacts();
-        this.refreshAddresses();
+        this.getActiveSuppliers();
+        this.getContacts();
+        this.getAddresses();
         this.getDeletedLenght();
         this.businessNameFilter = '0';
         this.alertService.successNotification(`Proveedor dado de baja`);
@@ -290,9 +299,9 @@ export class TableSupplierComponent implements OnInit {
         console.log('You undeleted a supplier');
         console.log(data);
         this.isActiveItems = !this.isActiveItems;
-        this.refreshSuppliers();
-        this.refreshContacts();
-        this.refreshAddresses();
+        this.getActiveSuppliers();
+        this.getContacts();
+        this.getAddresses();
         this.getDeletedLenght();
         this.businessNameFilter = '0';
         this.alertService.successNotification(`Proveedor fue dado de alta`);
@@ -311,12 +320,15 @@ export class TableSupplierComponent implements OnInit {
     if (this.businessNameFilter === '0') {
       this.getSuppliersByBusinessNameAsc();
       this.businessNameFilter = '1';
+      this.supplierFilter = '';
     } else if (this.businessNameFilter === '1') {
       this.getSuppliersByBusinessNameDesc();
       this.businessNameFilter = '2';
+      this.supplierFilter = '';
     } else if (this.businessNameFilter === '2') {
-      this.refreshSuppliers();
+      this.getActiveSuppliers();
       this.businessNameFilter = '0';
+      this.supplierFilter = '';
     }
   }
 
@@ -327,6 +339,32 @@ export class TableSupplierComponent implements OnInit {
     }, 1000);
   }
 
+  resetPages() {
+    this.prevPage = 0;
+    this.nextPage = 5;
+  }
+
+  onFilterChange() {
+    this.resetPages();
+    if(this.supplierFilter === '' ){
+      if(this.isActiveItems)
+        this.getActiveSuppliers()
+      else
+        this.getDeletedSuppliers()
+    } else {
+      if(this.isActiveItems) {
+        this.businessNameFilter = '0';
+        const filterActive = new SearchPipe().transform(this.initActiveSuppliers, this.supplierFilter);
+        this.suppliers = filterActive.filteredData;
+        this.supplierLength = filterActive.filteredDataLength;
+      } else {
+        this.businessNameFilter = '0';
+        const filterDeleted = new SearchPipe().transform(this.initDeletedSuppliers, this.supplierFilter);
+        this.suppliers = filterDeleted.filteredData;
+        this.supplierLength = filterDeleted.filteredDataLength;
+      }
+    }
+  }
   handleImageError(supplier: Supplier) {
     supplier.image = '../../../../assets/img/logoGenerico.png';
   }
@@ -346,15 +384,17 @@ export class TableSupplierComponent implements OnInit {
   changeState() {
     this.isActiveItems = !this.isActiveItems;
     if (this.isActiveItems) {
-      this.prevPage = 0;
-      this.nextPage = 5;
-      this.refreshSuppliers();
-      this.refreshContacts();
-      this.refreshAddresses();
+      this.resetPages();
+      this.businessNameFilter = '0';
+      this.supplierFilter = '';
+      this.getActiveSuppliers();
+      this.getContacts();
+      this.getAddresses();
     } else {
+      this.businessNameFilter = '0';
+      this.supplierFilter = '';
       this.getDeletedSuppliers();
-      this.prevPage = 0;
-      this.nextPage = 5;
+      this.resetPages();
     }
   }
 }

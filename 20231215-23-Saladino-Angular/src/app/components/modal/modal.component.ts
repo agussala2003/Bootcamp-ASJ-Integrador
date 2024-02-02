@@ -7,10 +7,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./modal.component.css']
 })
 export class ModalComponent {
+  
+  constructor(public activeModal: NgbActiveModal) {}
+
   aviso:string = '';
   listado: string[] = [];
 
-  constructor(public activeModal: NgbActiveModal) {}
 
   closeModal() {
     this.activeModal.close();

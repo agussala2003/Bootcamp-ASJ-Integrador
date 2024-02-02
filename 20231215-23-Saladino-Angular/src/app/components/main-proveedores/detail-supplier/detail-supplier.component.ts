@@ -18,9 +18,17 @@ import { AlertsService } from '../../../services/alerts.service';
   templateUrl: './detail-supplier.component.html',
   styleUrls: ['./detail-supplier.component.css'], // Arreglado el nombre del atributo
 })
+
 export class DetailSupplierComponent implements OnInit {
-  idSupplier: string = '';
-  userState: any;
+
+  constructor(
+    private supplierService: SupplierService,
+    private addressService: AddressService,
+    private contactService: ContactService,
+    private alertService: AlertsService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {}
 
   industryViewModel: Industry = {
     id: '',
@@ -32,6 +40,7 @@ export class DetailSupplierComponent implements OnInit {
     id: '',
     taxCondition: '',
   };
+
   supplierViewModel: Supplier = {
     id: '',
     supplierCode: '',
@@ -88,17 +97,11 @@ export class DetailSupplierComponent implements OnInit {
     updatedAt: '',
   };
 
-  constructor(
-    private supplierService: SupplierService,
-    private addressService: AddressService,
-    private contactService: ContactService,
-    private alertService: AlertsService,
-    private router: ActivatedRoute,
-    private router2: Router
-  ) {}
+  idSupplier: string = '';
+  userState: any;
 
   ngOnInit(): void {
-    this.router.params.subscribe((data) => {
+    this.activatedRoute.params.subscribe((data) => {
       this.idSupplier = data['idSupplier'];
       this.getSupplierById(this.idSupplier);
       this.getContactBySupplierId(this.idSupplier);
@@ -148,7 +151,7 @@ export class DetailSupplierComponent implements OnInit {
       () => {
         console.log('You deleted a supplier');
         this.alertService.successNotification('Proveedor eliminado');
-        this.router2.navigate(['/proveedores']);
+        this.router.navigate(['/proveedores']);
       },
       (error) => {
         console.log(error);
@@ -163,7 +166,7 @@ export class DetailSupplierComponent implements OnInit {
         console.log('You undeleted a supplier');
         console.log(data);
         this.alertService.successNotification('Proveedor recuperado');
-        this.router2.navigate(['/proveedores']);
+        this.router.navigate(['/proveedores']);
       },
       (error) => {
         console.log(error);

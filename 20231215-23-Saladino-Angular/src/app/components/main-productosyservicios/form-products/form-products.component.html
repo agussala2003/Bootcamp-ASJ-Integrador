@@ -19,7 +19,7 @@
     <form #formProdyServ="ngForm" (ngSubmit)="submitProduct(formProdyServ)">
     <div class="row">
       <h4 class="text-light my-2">Datos Productos y Servicios <i (click)="openModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class='bx bx-info-circle text-white ms-2'></i> </h4>
-      <div class="col-12 col-md-auto mb-2">
+      <div class="col-12 col-md-3 mb-3">
         <label for="sku" class="form-label text-light">Codigo / Sku:</label>
         <input
           [(ngModel)]="this.productViewModel.sku"
@@ -46,7 +46,7 @@
           <span class="form-text text-light"> Ingresa un codigo que no exista </span>
         </div>
       </div>
-      <div class="col-12 col-md-auto mb-2">
+      <div class="col-12 col-md-3 mb-3">
         <label for="seleccCodProv" class="form-label text-light position-relative labelProv"
           >Codigo Proveedor: <img class="rounded-circle position-absolute end-0 bottom-0" *ngIf="this.productViewModel.supplier.id != ''" src="{{supplierImg}}" style="width: 30px; height: 30px" alt=""></label
         >
@@ -67,10 +67,10 @@
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
       </div>
-      <div class="col-12 col-md-auto mb-2">
+      <div class="col-12 col-md-3 mb-3">
         <label for="categoria" class="form-label text-light position-relative labelCat">Categoria:
           <div class="containerTooltip position-absolute end-0 bottom-0">
-            <span class="hover-me text-white" (click)="categoryFlag = true" >Agregar</span>
+            <span class="hover-me text-white" (click)="categoryFlag = !categoryFlag" >Agregar</span>
             <div [ngClass]="categoryFlag ? 'tooltipClicked' : 'tooltip' ">
               <form class="d-flex gap-2" #categoryForm="ngForm" (ngSubmit)="postCategory()">
                 <input [(ngModel)]="newCategory" placeholder="Ingrese categoria" name="addIndustry" id="addIndustry" minlength="3" maxlength="50" class="form-control border border-dark" type="text">
@@ -95,7 +95,7 @@
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
       </div>
-      <div class="col-12 col-md-auto mb-2">
+      <div class="col-12 col-md-3 mb-3">
         <label for="nomProd" class="form-label text-light"
           >Nombre del producto:</label
         >
@@ -116,7 +116,7 @@
           <span class="form-text text-light">Ingrese 3 o mas digitos</span>
         </div>
       </div>
-      <div class="col-12 col-md-auto mb-2">
+      <div class="col-12 col-md-3 mb-3">
         <label for="precio" class="form-label text-light">Precio:</label>
         <input
           [(ngModel)]="this.productViewModel.price"
@@ -135,8 +135,8 @@
           <span class="form-text text-light">Ingrese precio mayor a 1</span>
         </div>
       </div>
-      <div class="col-12 col-md-auto mb-2">
-        <label for="imagen" class="form-label text-light">Imagen:</label>
+      <div class="col-12 col-md-3 mb-3">
+        <label for="imagen" class="form-label text-light position-relative labelProv">Imagen:  <img class="rounded-circle position-absolute end-0 bottom-0" *ngIf="this.productViewModel.imageUrl != ''" src="{{this.productViewModel.imageUrl}}" style="width: 30px; height: 30px" alt=""></label>
         <input
           [(ngModel)]="this.productViewModel.imageUrl"
           type="text"
@@ -150,8 +150,8 @@
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12 col-md-5 mb-2">
+      <!-- <div class="row"> -->
+        <div class="col-12 col-md-6 mb-3">
           <label for="descripcion" class="form-label text-light"
             >Descripcion:</label
           >
@@ -165,7 +165,7 @@
             class="form-control"
             minlength="15"
             maxlength="250"
-            rows="3"
+            rows="1"
           ></textarea>
           <div *ngIf="formProdyServ.controls['descripcion']?.hasError('required')" class="col-auto">
             <span class="form-text text-light">El dato es obligatorio</span>
@@ -173,7 +173,7 @@
           <div *ngIf="formProdyServ.controls['descripcion']?.hasError('minlength')" class="col-auto">
             <span class="form-text text-light">Ingrese 15 o mas digitos</span>
           </div>
-        </div>
+        <!-- </div> -->
       </div>
     </div>
     <div class="row">

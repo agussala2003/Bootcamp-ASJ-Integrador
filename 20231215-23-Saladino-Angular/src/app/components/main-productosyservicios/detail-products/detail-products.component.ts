@@ -13,12 +13,14 @@ import { AlertsService } from '../../../services/alerts.service';
   templateUrl: './detail-products.component.html',
   styleUrl: './detail-products.component.css',
 })
+
 export class DetailProductsComponent {
+
   constructor(
     private productService: ProductService,
     private alertService: AlertsService,
-    private router: ActivatedRoute,
-    private router2: Router
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   industryViewModel: Industry = { id: '', industryName: '', active: true };
@@ -65,7 +67,7 @@ export class DetailProductsComponent {
   userState: any;
 
   ngOnInit(): void {
-    this.router.params.subscribe((data) => {
+    this.activatedRoute.params.subscribe((data) => {
       this.idProduct = data['idProduct'];
       this.getProductById(this.idProduct);
     });
@@ -91,7 +93,7 @@ export class DetailProductsComponent {
       (data) => {
         console.log('You delteed a product');
         this.alertService.successNotification('Producto eliminado');
-        this.router2.navigate(['/productos-servicios']);
+        this.router.navigate(['/productos-servicios']);
       },
       (error) => {
         console.log(error);
@@ -106,7 +108,7 @@ export class DetailProductsComponent {
         console.log('You undeleted a product');
         console.log(data);
         this.alertService.successNotification('Producto reactivado');
-        this.router2.navigate(['/productos-servicios']);
+        this.router.navigate(['/productos-servicios']);
       },
       (error) => {
         console.log(error);

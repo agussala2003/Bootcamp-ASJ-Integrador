@@ -10,12 +10,14 @@ import { AlertsService } from '../../../services/alerts.service';
   templateUrl: './form-categories.component.html',
   styleUrl: './form-categories.component.css',
 })
+
 export class FormCategoriesComponent implements OnInit {
+
   constructor(
     private categoryService: CategoryService,
     private alertService: AlertsService,
     private router: Router,
-    private router2: ActivatedRoute
+    private activatedRoute: ActivatedRoute
   ) {}
 
   userState: any;
@@ -31,9 +33,8 @@ export class FormCategoriesComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.router2.params.subscribe((params) => {
+    this.activatedRoute.params.subscribe((params) => {
       this.idCategory = params['idCategory'];
-      console.log(this.idCategory);
       if (this.idCategory != undefined) {
         this.getIndustryById(this.idCategory);
       }

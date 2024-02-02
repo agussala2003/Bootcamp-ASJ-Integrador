@@ -18,15 +18,17 @@ import { AlertsService } from '../../../services/alerts.service';
   templateUrl: './form-products.component.html',
   styleUrl: './form-products.component.css',
 })
+
 export class FormProductsComponent implements OnInit {
+
   constructor(
     private productService: ProductService,
     private supplierService: SupplierService,
     private categoryService: CategoryService,
     private alertService: AlertsService,
     private modalService: NgbModal,
-    private router: ActivatedRoute,
-    private router2: Router
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   industryViewModel: Industry = { id: '', industryName: '', active: true };
@@ -83,7 +85,7 @@ export class FormProductsComponent implements OnInit {
   isNumberCode: boolean = true;
 
   ngOnInit(): void {
-    this.router.params.subscribe((data) => {
+    this.activatedRoute.params.subscribe((data) => {
       this.idProduct = data['idProduct'];
       if (this.idProduct !== undefined) {
         this.getProductById(this.idProduct);
@@ -221,7 +223,7 @@ export class FormProductsComponent implements OnInit {
         this.productViewModel = data;
         this.resetProductData();
         this.alertService.successNotification('Producto creado con exito');
-        this.router2.navigate(['/productos-servicios']);
+        this.router.navigate(['/productos-servicios']);
       },
       (error) => {
         console.log(error);
@@ -238,7 +240,7 @@ export class FormProductsComponent implements OnInit {
         this.productViewModel = data;
         this.resetProductData();
         this.alertService.successNotification('Producto actualizado con exito');
-        this.router2.navigate(['/productos-servicios']);
+        this.router.navigate(['/productos-servicios']);
       },
       (error) => {
         console.log(error);
@@ -251,40 +253,40 @@ export class FormProductsComponent implements OnInit {
 
   validateForm(): boolean {
     if (
-      !this.validarCodigoNumericoDe8Digitos(this.productViewModel.sku) ||
+      !this.validateSku(this.productViewModel.sku) ||
       this.productViewModel.supplier.id === 'Selecciona un proveedor' ||
       this.productViewModel.category.id === 'Selecciona una categoria' ||
       this.isActiveSku ||
-      !this.validarStringAlfanumericoEntre3y50Caracteres(
+      !this.validateRegularString(
         this.productViewModel.productName
       ) ||
-      !this.validarStringAlfanumericoEntre15y250Caracteres(
+      !this.validateLongString(
         this.productViewModel.description
       ) ||
       this.productViewModel.price < 1 ||
-      !this.validarUrl(this.productViewModel.imageUrl)
+      !this.validateUrl(this.productViewModel.imageUrl)
     ) {
       return false;
     }
     return true;
   }
 
-  validarCodigoNumericoDe8Digitos(str: string): boolean {
+  validateSku(str: string): boolean {
     const regex = /^[0-9]{8}$/;
     return regex.test(str);
   }
 
-  validarStringAlfanumericoEntre3y50Caracteres(str: string): boolean {
+  validateRegularString(str: string): boolean {
     const regex = /^[0-9 A-Z a-z]{3,50}$/;
     return regex.test(str);
   }
 
-  validarStringAlfanumericoEntre15y250Caracteres(str: string): boolean {
+  validateLongString(str: string): boolean {
     const long = str.length;
     return long > 14;
   }
 
-  validarUrl(sitioWeb: string): boolean {
+  validateUrl(sitioWeb: string): boolean {
     const regex = /^(ftp|http|https):\/\/[^ "]+$/;
     return regex.test(sitioWeb);
   }

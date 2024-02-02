@@ -19,7 +19,17 @@ import { AlertsService } from '../../../services/alerts.service';
   templateUrl: './detail-orders.component.html',
   styleUrls: ['./detail-orders.component.css'], // Ajustado el nombre de la propiedad
 })
+
 export class DetailOrdersComponent implements OnInit {
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private orderService: OrderService,
+    private orderDetailService: OrderDetailService,
+    private alertService: AlertsService,
+    private router: Router
+  ) {}
+
   roleViewModel: Role = {
     id: '',
     roleName: '',
@@ -111,18 +121,10 @@ export class DetailOrdersComponent implements OnInit {
   userState: any;
   orderDetails: OrderDetail[] = [];
 
-  constructor(
-    private route: ActivatedRoute,
-    private orderService: OrderService,
-    private orderDetailService: OrderDetailService,
-    private alertService: AlertsService,
-    private router: Router
-  ) {}
-
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
+    this.activatedRoute.params.subscribe((params) => {
       this.idOrder = params['idOrder'];
-      this.loadOrderData(this.idOrder);
+      this.getOrderById(this.idOrder);
       this.getOrderDetailsByOrderId(this.idOrder);
     });
     this.userState = this.orderService.getUserState();
@@ -184,7 +186,7 @@ export class DetailOrdersComponent implements OnInit {
     return total;
   }
 
-  loadOrderData(id: string): void {
+  getOrderById(id: string): void {
     this.orderService.getOrderById(id).subscribe(
       (data: Order) => {
         console.log(this.orderViewModel);

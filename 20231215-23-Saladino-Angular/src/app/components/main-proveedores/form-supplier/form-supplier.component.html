@@ -27,7 +27,7 @@
     <form #formProv="ngForm" (ngSubmit)="submitSupplier(formProv)">
       <div class="row mt-4">
         <h4 class="text-light my-2">Datos Proveedor <i (click)="openModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class='bx bx-info-circle text-white ms-2'></i> </h4>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="codProv" class="form-label text-light">Codigo:</label>
           <div class="underline"></div>
           <input
@@ -52,7 +52,7 @@
             <span class="form-text text-light" [class.required-field]="formProv.controls['proveedor'].touched">El campo es obligatorio</span>
           </div>
         </div>        
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="rs" class="form-label text-light">Razon Social:</label>
           <input
             [(ngModel)]="this.supplierViewModel.businessName"
@@ -78,10 +78,10 @@
             <span class="form-text text-light">Ingrese 3 o mas digitos</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="rubro" class="form-label text-light position-relative labelRubro">Rubro: 
             <div class="containerTooltip position-absolute end-0 bottom-0">
-              <span class="hover-me text-white" (click)="industryFlag = true" >Agregar</span>
+              <span class="hover-me text-white" (click)="industryFlag = !industryFlag" >Agregar</span>
               <div [ngClass]="industryFlag ? 'tooltipClicked' : 'tooltip' ">
                 <form class="d-flex gap-2" #industryForm="ngForm" (ngSubmit)="postIndustry()">
                   <input [(ngModel)]="newIndustry" placeholder="Ingrese Rubro" name="addIndustry" id="addIndustry" minlength="3" maxlength="50" class="form-control border border-dark" type="text">
@@ -106,7 +106,7 @@
           <span class="form-text text-light">El campo es obligatorio</span>
         </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="telefonoproveedor" class="form-label text-light"
             >Telefono:</label
           >
@@ -136,7 +136,7 @@
             <span class="form-text text-light">Ingrese 8 o mas digitos</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="emailProv" class="form-label text-light">Email:</label>
           <input
             [(ngModel)]="this.supplierViewModel.email"
@@ -162,7 +162,7 @@
             <span class="form-text text-light">Ingrese 5 o mas digitos</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="sitioProv" class="form-label text-light"
             >Sitio Web:</label
           >
@@ -190,9 +190,9 @@
             <span class="form-text text-light">Ingrese 5 o mas digitos</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
-          <label for="imgProv" class="form-label text-light"
-            >Imagen proveedor:</label
+        <div class="col-12 col-md-auto mb-3">
+          <label for="imgProv" class="form-label text-light position-relative labelRubro"
+            >Imagen proveedor:  <img class="rounded-circle position-absolute end-0 bottom-0" *ngIf="this.supplierViewModel.image != ''" src="{{this.supplierViewModel.image}}" style="width: 30px; height: 30px" alt=""></label
           >
           <input
             [(ngModel)]="this.supplierViewModel.image"
@@ -214,7 +214,7 @@
       </div>
       <div class="row">
         <h4 class="text-light my-2">Dirección</h4>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="pais" class="form-label text-light">Pais:</label>
           <select
             (change)="onCountryChange()"
@@ -237,7 +237,7 @@
             <span class="form-text text-light">El campo es obligatorio</span>
           </div>
         </div>
-        <div class="col-12 col-md-3 mb-2">
+        <div class="col-12 col-md-3 mb-3">
           <label for="provincia" class="form-label text-light"
             >Provincia:</label
           >
@@ -262,7 +262,7 @@
             <span class="form-text text-light">El campo es obligatorio</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="localidad" class="form-label text-light"
             >Localidad:</label
           >
@@ -290,7 +290,7 @@
             <span class="form-text text-light">Ingrese 3 o mas digitos</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="calle" class="form-label text-light">Calle:</label>
           <input
             [(ngModel)]="this.addressViewModel.streetName"
@@ -316,7 +316,7 @@
             <span class="form-text text-light">Ingrese 3 o mas digitos</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="num" class="form-label text-light">Numero:</label>
           <input
             [(ngModel)]="this.addressViewModel.streetNumber"
@@ -341,7 +341,7 @@
             <span class="form-text text-light">Ingrese un minimo de 1</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="cp" class="form-label text-light">Codigo Postal:</label>
           <input
             [(ngModel)]="this.addressViewModel.postalCode"
@@ -371,7 +371,7 @@
       </div>
       <div class="row">
         <h4 class="text-light my-2">Datos Fiscales</h4>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="cuit" class="form-label text-light">CUIT:</label>
           <input
             [(ngModel)]="this.supplierViewModel.cuit"
@@ -394,7 +394,7 @@
             <span class="form-text text-light">Formato XX-XXXXXXXX-X</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="condicion" class="form-label text-light"
             >Condicion IVA:</label
           >
@@ -421,7 +421,7 @@
       </div>
       <div class="row">
         <h4 class="text-light my-2">Datos de contacto</h4>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="nombreContacto" class="form-label text-light"
             >Nombre:</label
           >
@@ -449,7 +449,7 @@
             <span class="form-text text-light">Ingrese 3 o mas digitos</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="apellidoContacto" class="form-label text-light"
             >Apellido:</label
           >
@@ -477,7 +477,7 @@
             <span class="form-text text-light">Ingrese 3 o mas digitos</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="telefonoContacto" class="form-label text-light"
             >Telefono:</label
           >
@@ -505,7 +505,7 @@
             <span class="form-text text-light">Ingrese 8 o mas digitos</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="emailContacto" class="form-label text-light"
             >Email:</label
           >
@@ -533,7 +533,7 @@
             <span class="form-text text-light">Ingrese 3 o mas digitos</span>
           </div>
         </div>
-        <div class="col-12 col-md-auto mb-2">
+        <div class="col-12 col-md-auto mb-3">
           <label for="rol" class="form-label text-light">Rol:</label>
           <input
             [(ngModel)]="this.contactViewModel.role"

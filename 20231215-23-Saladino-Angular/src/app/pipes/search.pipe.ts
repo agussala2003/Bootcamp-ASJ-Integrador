@@ -9,8 +9,9 @@ export class SearchPipe implements PipeTransform {
     if(args === '' || args === undefined){
       return value;
     }
+    const filteredData = value.filter((item) => deepSearch(item, args));
 
-    return value.filter((item) => deepSearch(item, args));
+    return { filteredData, filteredDataLength: filteredData.length };
   }
 
 }
