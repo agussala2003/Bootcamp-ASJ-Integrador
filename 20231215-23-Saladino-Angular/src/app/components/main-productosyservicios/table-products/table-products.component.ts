@@ -149,7 +149,7 @@ export class TableProductsComponent implements OnInit {
   getDeletedProducts(): void {
     this.productService.getDeletedProducts().subscribe(
       (data: Product[]) => {
-        console.log('You get active products');
+        console.log('You get deleted products');
         console.log(data);
         this.loader();
         this.priceFilter = '0';
@@ -171,10 +171,10 @@ export class TableProductsComponent implements OnInit {
         console.log('You get products by price asc');
         console.log(data);
         this.loader();
-        this.productLength = data.length;
         this.products = data.filter(
           (item: Product) => item.active === this.isActiveItems
         );
+        this.productLength = this.products.length;
       },
       (error) => {
         console.log(error);
@@ -189,10 +189,10 @@ export class TableProductsComponent implements OnInit {
         console.log('You get products by price desc');
         console.log(data);
         this.loader();
-        this.productLength = data.length;
         this.products = data.filter(
           (item: Product) => item.active === this.isActiveItems
         );
+        this.productLength = this.products.length;
       },
       (error) => {
         console.log(error);
@@ -207,10 +207,10 @@ export class TableProductsComponent implements OnInit {
         console.log('You get products by category');
         console.log(data);
         this.loader();
-        this.productLength = data.length;
         this.products = data.filter(
           (item: Product) => item.active === this.isActiveItems
-        );
+          );
+        this.productLength = this.products.length;
       },
       (error) => {
         console.log(error);
@@ -266,16 +266,17 @@ export class TableProductsComponent implements OnInit {
       this.resetPages();
       this.priceFilter = '1';
       this.categoryFilter = '0';
-      this.productFilter === ''
+      this.productFilter = '';
     } else if (this.priceFilter === '1') {
       this.getProductsByPriceDesc();
       this.resetPages();;
       this.priceFilter = '2';
       this.categoryFilter = '0';
-      this.productFilter === ''
+      this.productFilter = '';
     } else if (this.priceFilter === '2') {
       this.priceFilter = '0';
       this.categoryFilter = '0';
+      this.productFilter = '';
       if (this.isActiveItems) {
         this.getActiveProducts();
         this.resetPages();
@@ -316,6 +317,8 @@ export class TableProductsComponent implements OnInit {
       else
         this.getDeletedProducts()
     } else {
+      this.categoryFilter = '0';
+      this.priceFilter = '0';
       if(this.isActiveItems) {
         const filterActive = new SearchPipe().transform(this.initActiveProducts, this.productFilter);
         this.products = filterActive.filteredData;

@@ -321,14 +321,20 @@ export class TableSupplierComponent implements OnInit {
       this.getSuppliersByBusinessNameAsc();
       this.businessNameFilter = '1';
       this.supplierFilter = '';
+      this.resetPages();
     } else if (this.businessNameFilter === '1') {
       this.getSuppliersByBusinessNameDesc();
       this.businessNameFilter = '2';
       this.supplierFilter = '';
+      this.resetPages();
     } else if (this.businessNameFilter === '2') {
-      this.getActiveSuppliers();
+      if(this.isActiveItems)
+        this.getActiveSuppliers();
+      else
+        this.getDeletedSuppliers();
       this.businessNameFilter = '0';
       this.supplierFilter = '';
+      this.resetPages();
     }
   }
 

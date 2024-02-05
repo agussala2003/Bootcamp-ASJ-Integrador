@@ -140,7 +140,7 @@ public class SupplierController {
                 return new ResponseEntity<>("Supplier not found", HttpStatus.NOT_FOUND);
             }
         } catch (EntityNotFoundException e) {
-        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
