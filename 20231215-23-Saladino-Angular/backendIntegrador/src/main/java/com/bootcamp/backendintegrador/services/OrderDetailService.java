@@ -32,7 +32,12 @@ public class OrderDetailService {
     }
 
     public Optional<OrderDetail> getOrderDetailsById(Integer id) {
-        return orderDetailsRepository.findById(id);
+    	Optional<OrderDetail> orderDetail = orderDetailsRepository.findById(id);
+       	if(orderDetail.isPresent()) {
+       		return orderDetail;
+       	} else {
+       		throw new EntityNotFoundException("Order Detail with id " + id + " was not found");
+       	}
     }
 
     public List<OrderDetail> createOrderDetails(List<OrderDetail> orderDetailsList) {
@@ -57,22 +62,6 @@ public class OrderDetailService {
 
         return savedOrderDetails;
     }
-
-
-
-//    public List<OrderDetail> updateOrderDetails(Integer id, List<OrderDetail> updatedOrderDetailsList) {   
-//    	
-//        
-//        Order order = orderService.getOrderById(id).orElseThrow(() ->
-//        new EntityNotFoundException("Order with ID " + id + " not found"));
-//        List<OrderDetail> updatedOrderDetails = orderDetailsRepository.findByOrder(order);
-//        updatedOrderDetails.forEach(item -> {
-//        	deleteOrderDetails(item.getId());
-//        });
-//        
-//        return createOrderDetails(updatedOrderDetailsList);
-//    }
-
     
     public Optional<List<OrderDetail>> getOrderDetailByOrderId(Integer orderId) {
     	Order order = orderService.getOrderById(orderId).orElseThrow(() ->

@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,6 +45,24 @@ public class CategoryController {
     public ResponseEntity<?> getCategoryById(@PathVariable Integer id) {
     	try {
             return ResponseEntity.ok(categoryService.getCategoryById(id));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching categories");
+		}
+    }
+    
+    @GetMapping("/active")
+    public ResponseEntity<?> getActiveCategories() {
+    	try {
+    		return ResponseEntity.ok(categoryService.getActiveCategories());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching categories");
+		}
+    }
+    
+    @GetMapping("/deleted")
+    public ResponseEntity<?> getDeletedCategories() {
+    	try {
+    		return ResponseEntity.ok(categoryService.getDeletedCategories());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching categories");
 		}
@@ -85,6 +104,15 @@ public class CategoryController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleting categories");
 		}
+    }
+    
+    @PatchMapping("/undelete/{id}")
+    public ResponseEntity<?> undeleteCategoryById(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(categoryService.undeleteCategoryById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while undeleting order by id");
+        }
     }
 }
 

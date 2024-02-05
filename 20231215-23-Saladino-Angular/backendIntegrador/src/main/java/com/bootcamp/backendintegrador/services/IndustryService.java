@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.bootcamp.backendintegrador.models.Industry;
 import com.bootcamp.backendintegrador.repositories.IndustryRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class IndustryService {
 
@@ -21,10 +23,30 @@ public class IndustryService {
     }
 
     public Optional<Industry> getIndustryById(Integer id) {
-        return industryRepository.findById(id);
+    	Optional<Industry> industry = industryRepository.findById(id);
+    	if(industry.isPresent()) {
+    		return industry;
+    	} else {
+        	throw new EntityNotFoundException("An error has occurred");
+        }
     }
+    
+    public List<Industry> getActiveIndustries() {
+        return industryRepository.findByActiveTrue();
+    }
+    
+    public List<Industry> getDeletedIndustries() {
+        return industryRepository.findByActiveFalse();
+    }
+    
 
     public Industry createIndustry(Industry newIndustry) {
+    	List<Industry> allIndustries = getAllIndustries();
+    	for (Industry industry : allIndustries) {
+			if(industry.getIndustryName().equalsIgnoreCase(newIndustry.getIndustryName())) {
+				throw new EntityNotFoundException("Industry Already exists");
+			}
+		}
         newIndustry.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return industryRepository.save(newIndustry);
     }
@@ -32,13 +54,20 @@ public class IndustryService {
     public Industry updateIndustry(Integer id, Industry updatedIndustry) {
     	Optional<Industry> optionalIndustry = industryRepository.findById(id);
 
+    	List<Industry> allIndustries = getAllIndustries();
+    	for (Industry industry : allIndustries) {
+			if(industry.getIndustryName().equalsIgnoreCase(updatedIndustry.getIndustryName())) {
+				throw new EntityNotFoundException("Industry Already exists");
+			}
+		}
+    	
         if (optionalIndustry.isPresent()) {
             Industry industry = optionalIndustry.get();
             industry.setIndustryName(updatedIndustry.getIndustryName());
             return industryRepository.save(industry);
+        } else {
+        	throw new EntityNotFoundException("An error has occurred");
         }
-
-        return null;
     }
 
     public Industry deleteIndustryById(Integer id) {
@@ -48,8 +77,20 @@ public class IndustryService {
             Industry industry = optionalIndustry.get();
             industry.setActive(false);
             return industryRepository.save(industry);
+        } else {
+        	throw new EntityNotFoundException("An error has occurred");
         }
+    }
+    
+    public Industry undeleteIndustryById(Integer id) {
+    	Optional<Industry> optionalIndustry = industryRepository.findById(id);
 
-        return null;
+        if (optionalIndustry.isPresent()) {
+            Industry industry = optionalIndustry.get();
+            industry.setActive(true);
+            return industryRepository.save(industry);
+        } else {
+        	throw new EntityNotFoundException("An error has occurred");
+        }
     }
 }

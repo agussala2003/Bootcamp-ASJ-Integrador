@@ -11,6 +11,8 @@ import com.bootcamp.backendintegrador.models.Role;
 import com.bootcamp.backendintegrador.models.User;
 import com.bootcamp.backendintegrador.repositories.UserRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class UserService {
 
@@ -25,7 +27,12 @@ public class UserService {
     }
 
     public Optional<User> getUserById(Integer id) {
-        return userRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
+    	if(user.isPresent()) {  	
+        	return user;
+        } else {
+        	throw new EntityNotFoundException("User with id " + id + " was not found");
+        }
     }
 
     public User createUser(User user) {
@@ -50,9 +57,9 @@ public class UserService {
             existingUser.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
             return userRepository.save(existingUser);
+        } else {
+        	throw new EntityNotFoundException("An error has occurred");
         }
-
-        return null;
     }
 
     public void deleteUser(Integer id) {

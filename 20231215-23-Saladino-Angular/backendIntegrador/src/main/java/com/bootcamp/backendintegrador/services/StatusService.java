@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.bootcamp.backendintegrador.models.Status;
 import com.bootcamp.backendintegrador.repositories.StatusRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class StatusService {
 
@@ -20,7 +22,12 @@ public class StatusService {
     }
 
     public Optional<Status> getStatusById(Integer id) {
-        return statusRepository.findById(id);
+    	Optional<Status> status = statusRepository.findById(id);
+    	if(status.isPresent()) {
+    		return status;
+    	} else {
+        	throw new EntityNotFoundException("Status with id " + id + " was not found");
+        }
     }
 
     public Status createStatus(Status status) {
@@ -34,9 +41,9 @@ public class StatusService {
             Status existingStatus = existingStatusOptional.get();
             existingStatus.setStatusName(updatedStatus.getStatusName());
             return statusRepository.save(existingStatus);
+        } else {
+        	throw new EntityNotFoundException("An error has occurred");
         }
-
-        return null;
     }
     
     public List<Status> findByStatusName(String string) {

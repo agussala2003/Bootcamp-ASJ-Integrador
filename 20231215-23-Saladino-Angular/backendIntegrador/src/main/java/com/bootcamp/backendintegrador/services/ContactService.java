@@ -27,7 +27,12 @@ public class ContactService {
     }
 
     public Optional<Contact> getContactById(Integer id) {
-        return contactRepository.findById(id);
+    	Optional<Contact> contact = contactRepository.findById(id);
+    	if(contact.isPresent()) {
+    		return contact; 
+    	} else {
+    		throw new EntityNotFoundException("Contact with " + id + " was not found");
+    	}
     }
     
     public Optional<List<Contact>> getContactBySupplierId(Integer supplierId) {
@@ -50,9 +55,9 @@ public class ContactService {
             newContact.setSupplier(supplier);
 
             return contactRepository.save(newContact);
-        }
-
-        return null;
+        } else {
+    		throw new EntityNotFoundException("An error has ocurred");
+    	}
     }
 
     public Contact updateContact(Integer id, Contact updatedContact) {
@@ -74,9 +79,9 @@ public class ContactService {
             updateTimestamp(existingContact);
 
             return contactRepository.save(existingContact);
-        }
-
-        return null;
+        } else {
+    		throw new EntityNotFoundException("Contact with " + id + " was not found");
+    	}
     }
 
     public void deleteContactById(Integer id) {

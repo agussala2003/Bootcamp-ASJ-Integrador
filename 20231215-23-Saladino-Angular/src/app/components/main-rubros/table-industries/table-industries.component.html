@@ -12,7 +12,7 @@
             </div>
             <!-- Breadcrumb -->
             <div class="col-12 col-md-3 d-flex justify-content-md-end my-3">
-              <a routerLink="/rubros/form" class="btn btn-primary"
+              <a (click)="openModal(content)" class="btn btn-primary"
                 >Agregar Rubro</a
               >
             </div>
@@ -26,8 +26,9 @@
                         <div class="text-start overflow-y-auto w-100">
                             <div class="d-flex align-items-center justify-content-between">
                               <h5 class="text-nowrap text-white me-2 mb-0">{{industry.industryName}}</h5>
-                            <i *ngIf="searchUsedIndustries(industry.id)" (click)="getIndustryById(industry.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash ms-4"></i>
-                            <i [routerLink]="['/rubros/form/',industry.id]" class="btn btn-primary bx bx-edit ms-2"></i>
+                            <i *ngIf="searchUsedIndustries(industry.id) && industry.active" (click)="getIndustryById(industry.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash ms-4"></i>
+                            <i *ngIf="industry.active" (click)="openModal(content,industry.id)" class="btn btn-primary bx bx-edit ms-2"></i>
+                            <i *ngIf="!industry.active" (click)="undeleteIndustry(industry.id)" class="btn btn-success bx bx-check ms-2"></i>
                           </div>
                         </div>
                       </div>
@@ -35,6 +36,13 @@
                   </div>
                 </div>
               </div>
+          </div>
+          <div *ngIf="deletedLength && !loaderFlag" class="d-flex justify-content-start">
+            <p class="text-light m-0 me-2">Ver eliminados</p>
+            <div class="cntr">
+              <button (click)="changeState()" id="cbx" [ngClass]="this.isActiveItems ? '' : 'checked' " class="hidden-xs-up"></button>
+              <label for="cbx" class="cbx"></label>
+            </div>
           </div>
           <div *ngIf="industries.length == 0">
             <app-empty-list></app-empty-list>
@@ -62,4 +70,32 @@
     </div>
   </div>
   <!-- Modal -->
+    <!-- Modal Modificacion y agregacion -->
+    <ng-template #content let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{isEditedIndustry ? 'Editar Rubro' : 'Nuevo Rubro'}}</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label class="form-label" for="industry">Rubro:</label>
+            <div class="input-group">
+              <input
+                type="text"
+                id="industry"
+                class="form-control"
+                placeholder="Ingrese rubro"
+                name="industry"
+                [(ngModel)]="industryViewModel.industryName"
+                />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="closeModal()">Guardar</button>
+      </div>
+    </ng-template>
+    <!-- Modal Modificacion y agregacion -->
 </div>

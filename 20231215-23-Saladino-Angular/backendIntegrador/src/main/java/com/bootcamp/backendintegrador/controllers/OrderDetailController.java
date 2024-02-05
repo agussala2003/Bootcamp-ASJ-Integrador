@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,25 +76,6 @@ public class OrderDetailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating order details: " + e.getMessage());
         }
     }
-
-//    @PutMapping("/{id}")
-//    public ResponseEntity<?> updateOrderDetails(@PathVariable Integer id, @Valid @RequestBody List<OrderDetail> updatedOrderDetails, BindingResult bindingResult) {
-//        try {
-//            if (bindingResult.hasErrors()) {
-//                Map<String, String> errors = ErrorHandler.validation(bindingResult);
-//                return ResponseEntity.badRequest().body(errors);
-//            }
-//
-//            List<OrderDetail> result = orderDetailsService.updateOrderDetails(id, updatedOrderDetails);
-//            if (result != null) {
-//                return ResponseEntity.ok(result);
-//            } else {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("OrderDetails not found");
-//            }
-//        } catch (EntityNotFoundException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while updating order details: " + e.getMessage());
-//        }
-//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrderDetails(@PathVariable Integer id) {

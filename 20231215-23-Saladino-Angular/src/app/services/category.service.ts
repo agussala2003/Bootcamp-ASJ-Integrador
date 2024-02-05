@@ -18,6 +18,14 @@ export class CategoryService {
     return this.http.get<Category>(this.baseUrl + '/' + id);
   }
 
+  public getActiveCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.baseUrl + '/active');
+  }
+
+  public getDeletedCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.baseUrl + '/deleted');
+  }
+
   public postCategory(category:Category): Observable<Category> {
     return this.http.post<Category>(this.baseUrl, category);
   }
@@ -28,6 +36,10 @@ export class CategoryService {
   
   public deleteCategory(id:string): Observable<Category> {
     return this.http.delete<Category>(this.baseUrl + '/' + id);
+  }
+
+  public undeleteCategory(id:string): Observable<Category> {
+    return this.http.patch<Category>(this.baseUrl + '/undelete/' + id, {});
   }
   
   public getUserState(): string | null {

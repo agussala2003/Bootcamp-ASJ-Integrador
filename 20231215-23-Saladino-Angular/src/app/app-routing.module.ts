@@ -12,9 +12,7 @@ import { LoginComponent } from './components/login/login.component';
 import { DetailProductsComponent } from './components/main-productosyservicios/detail-products/detail-products.component';
 import { DetailOrdersComponent } from './components/main-ordenesdecompra/detail-orders/detail-orders.component';
 import { TableCategoriesComponent } from './components/main-categorias/table-categories/table-categories.component';
-import { FormCategoriesComponent } from './components/main-categorias/form-categories/form-categories.component';
 import { TableIndustriesComponent } from './components/main-rubros/table-industries/table-industries.component';
-import { FormIndustriesComponent } from './components/main-rubros/form-industries/form-industries.component';
 
 const routes: Routes = [
   {
@@ -90,37 +88,11 @@ const routes: Routes = [
   },
   {
     path: 'categorias',
-    children: [
-      {
-        path:'',
-        component:TableCategoriesComponent
-      },
-      {
-        path:'form',
-        component:FormCategoriesComponent
-      },
-      {
-        path:'form/:idCategory',
-        component:FormCategoriesComponent
-      }
-    ]
+    component: TableCategoriesComponent
   },
   {
     path: 'rubros',
-    children: [
-      {
-        path:'',
-        component:TableIndustriesComponent
-      },
-      {
-        path:'form',
-        component:FormIndustriesComponent
-      },
-      {
-        path:'form/:idIndustry',
-        component:FormIndustriesComponent
-      }
-    ]
+    component: TableIndustriesComponent
   },
   {
     path: '**',

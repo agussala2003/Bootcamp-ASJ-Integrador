@@ -4,6 +4,7 @@ import { Industry } from '../../../models/Industry';
 import { SupplierService } from '../../../services/supplier.service';
 import { Supplier } from '../../../models/Supplier';
 import { AlertsService } from '../../../services/alerts.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-table-industries',
@@ -11,15 +12,13 @@ import { AlertsService } from '../../../services/alerts.service';
   styleUrl: './table-industries.component.css',
 })
 export class TableIndustriesComponent implements OnInit {
+
   constructor(
     private industryService: IndustryService,
     private supplierService: SupplierService,
-    private alertService: AlertsService
+    private alertService: AlertsService,
+    private modalService: NgbModal
   ) {}
-
-  industries: Industry[] = [];
-  suppliers: Supplier[] = [];
-  loaderFlag = false;
 
   industryViewModel: Industry = {
     id: '',
@@ -27,14 +26,21 @@ export class TableIndustriesComponent implements OnInit {
     active: true,
     createdAt: '',
     updatedAt: '',
-  };
-
+  }; 
+  
+  industries: Industry[] = [];
+  suppliers: Supplier[] = [];
+  loaderFlag = false;
+  isEditedIndustry: boolean = false;
+  isActiveItems = true;
   userState: any;
+  deletedLength = 0;
 
   ngOnInit(): void {
     this.userState = this.industryService.getUserState();
-    this.refreshIndustries();
+    this.getActiveIndustries();
     this.getSuppliers();
+    this.getDeletedLength();
   }
 
   getSuppliers() {
@@ -52,12 +58,43 @@ export class TableIndustriesComponent implements OnInit {
     );
   }
 
-  refreshIndustries() {
-    this.industryService.getIndustries().subscribe(
+  getActiveIndustries() {
+    this.isActiveItems = true;
+    this.industryService.getActiveIndustries().subscribe(
       (data: Industry[]) => {
-        console.log('You get all Industries');
+        console.log('You get active Industries');
         console.log(data);
-        this.industries = data.filter((item: Industry) => item.active === true);
+        this.industries = data;
+        this.loader();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener los rubros');
+      }
+    );
+  }
+
+  getDeletedIndustries() {
+    this.industryService.getDeletedIndustries().subscribe(
+      (data: Industry[]) => {
+        console.log('You get deleted Industries');
+        console.log(data);
+        this.industries = data;
+        this.loader();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al obtener los rubros');
+      }
+    );
+  }
+
+  getDeletedLength() {
+    this.industryService.getDeletedIndustries().subscribe(
+      (data: Industry[]) => {
+        console.log('You get deleted Industries');
+        console.log(data);
+        this.deletedLength = data.length;
       },
       (error) => {
         console.log(error);
@@ -80,12 +117,42 @@ export class TableIndustriesComponent implements OnInit {
     );
   }
 
+  putIndustry(industry: Industry) {
+    this.industryService.putIndustry(industry).subscribe(
+      (data: Industry) => {
+        console.log('You put');
+        console.log(data);
+        this.alertService.successNotification('Rubro actualizado');
+        this.getActiveIndustries();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al actualizar el rubro, puede que ya exista o no hayas realizado cambios');
+      }
+    );
+  }
+
+  createIndustry(industry: Industry) {
+    this.industryService.postIndustry(industry).subscribe(
+      (data: Industry) => {
+        console.log('You created');
+        console.log(data);
+        this.alertService.successNotification('Rubro creado');
+        this.getActiveIndustries();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al crear el rubro, puede que ya exista o no hayas realizado');
+      }
+    );
+  }
+
   deleteIndustry(id: string) {
     this.industryService.deleteIndustry(id).subscribe(
       (data: Industry) => {
         console.log('You Deleted');
         console.log(data);
-        this.refreshIndustries();
+        this.getActiveIndustries();
         this.alertService.successNotification('Rubro eliminado');
         this.loader();
       },
@@ -94,6 +161,55 @@ export class TableIndustriesComponent implements OnInit {
         this.alertService.errorNotification('Error al eliminar el rubro');
       }
     );
+  }
+
+  undeleteIndustry(id: string) {
+    this.industryService.undeleteIndustry(id).subscribe(
+      (data: Industry) => {
+        console.log('You Undeleted');
+        console.log(data);
+        this.getActiveIndustries();
+        this.alertService.successNotification('Rubro restaurado');
+        this.loader();
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification('Error al restaurar el rubro');
+      }
+    );
+  }
+  
+  openModal(content: any, id?: string) {
+    if(id) {
+      this.isEditedIndustry = true;
+      this.getIndustryById(id);
+    } else {
+      this.isEditedIndustry = false;
+      this.cleanIndustryViewModel();
+    }
+    this.modalService.open(content, { centered: true });
+  }
+
+  closeModal() {
+    if (this.isEditedIndustry) {
+      this.isEditedIndustry = false;
+      this.putIndustry(this.industryViewModel);
+      this.cleanIndustryViewModel();
+      this.modalService.dismissAll();
+    } else {
+      this.createIndustry(this.industryViewModel);
+      this.cleanIndustryViewModel();
+      this.modalService.dismissAll();
+    }
+  }
+
+  changeState() {
+    this.isActiveItems = !this.isActiveItems;
+    if (this.isActiveItems) {
+      this.getActiveIndustries();
+    } else {
+      this.getDeletedIndustries();
+    }
   }
 
   searchUsedIndustries(id: string) {
@@ -111,5 +227,15 @@ export class TableIndustriesComponent implements OnInit {
     setTimeout(() => {
       this.loaderFlag = false;
     }, 1000);
+  }
+
+  cleanIndustryViewModel() {
+    this.industryViewModel = {
+      id: '',
+      industryName: '',
+      active: true,
+      createdAt: '',
+      updatedAt: '',
+    };
   }
 }

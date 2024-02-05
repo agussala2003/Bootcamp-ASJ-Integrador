@@ -43,7 +43,12 @@ public class OrderService {
     }
 
     public Optional<Order> getOrderById(Integer orderId) {
-        return orderRepository.findById(orderId);
+    	Optional<Order> order = orderRepository.findById(orderId);
+    	if(order.isPresent()) {
+    		return order;
+    	} else {
+    		throw new EntityNotFoundException("Order with id " + orderId + " was not found");
+    	}
     }
 
 	public List<Order> getOrdersByStatusId(Integer statusId) {

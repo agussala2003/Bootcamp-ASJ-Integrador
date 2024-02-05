@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.bootcamp.backendintegrador.models.Role;
 import com.bootcamp.backendintegrador.repositories.RoleRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class RoleService {
 
@@ -21,7 +23,12 @@ public class RoleService {
     }
 
     public Optional<Role> getRoleById(Integer id) {
-        return roleRepository.findById(id);
+    	Optional<Role> role = roleRepository.findById(id);
+    	if(role.isPresent()) {
+    		return role;
+    	} else {
+        	throw new EntityNotFoundException("Role with id " + id + " was not found");
+        }
     }
 
     public Role createRole(Role role) {
@@ -37,9 +44,9 @@ public class RoleService {
             existingRole.setRoleName(updatedRole.getRoleName());
             existingRole.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return roleRepository.save(existingRole);
+        } else {
+        	throw new EntityNotFoundException("An error has occurred");
         }
-
-        return null;
     }
 
     public void deleteRole(Integer id) {

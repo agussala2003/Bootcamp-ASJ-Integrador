@@ -26,7 +26,12 @@ public class LocationService {
     }
 
     public Optional<Location> getLocationById(Integer id) {
-        return locationsRepository.findById(id);
+    	Optional<Location> location = locationsRepository.findById(id);
+    	if(location.isPresent()) {
+    		return location;
+    	} else {
+    		throw new EntityNotFoundException("Location with id " + id + " was not found");
+    	}
     }
 
     public Location postLocation(Location location) {
@@ -37,8 +42,9 @@ public class LocationService {
     		location.setProvince(province);
     		
     		return locationsRepository.save(location);
+    	} else {
+    		throw new EntityNotFoundException("An error has occurred");
     	}
-    	return null;
     }
 
     public Location putLocation(Integer id, Location location) {
@@ -54,9 +60,9 @@ public class LocationService {
             existingLocation.setLocationName(location.getLocationName());
             
             return locationsRepository.save(existingLocation);
-        }
-
-        return null;
+        } else {
+    		throw new EntityNotFoundException("An error has occurred");
+    	}
     }
     
     private boolean validateLocationInput(Location location) {

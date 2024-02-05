@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,6 +51,24 @@ public class IndustryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching industry by id: " + e.getMessage());
         }
     }
+    
+    @GetMapping("/active")
+    public ResponseEntity<?> getActiveIndustries() {
+        try {
+            return new ResponseEntity<>(industryService.getActiveIndustries(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching active industries");
+        }
+    }
+    
+    @GetMapping("/deleted")
+    public ResponseEntity<?> getDeletedIndustries() {
+        try {
+            return new ResponseEntity<>(industryService.getDeletedIndustries(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleted industries");
+        }
+    }
 
     @PostMapping()
     public ResponseEntity<?> postIndustry(@Valid @RequestBody Industry industry, BindingResult bindingResult) {
@@ -86,6 +105,15 @@ public class IndustryController {
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting industry");
+        }
+    }
+    
+    @PatchMapping("/undelete/{id}")
+    public ResponseEntity<?> undeleteIndustryById(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(industryService.undeleteIndustryById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while undeleting order by id");
         }
     }
 }

@@ -23,9 +23,7 @@ import { AtoZPipe } from './pipes/ato-z.pipe';
 import { DetailOrdersComponent } from './components/main-ordenesdecompra/detail-orders/detail-orders.component';
 import { NavigationHomeComponent } from './components/navigation-home/navigation-home.component';
 import { TableIndustriesComponent } from './components/main-rubros/table-industries/table-industries.component';
-import { FormIndustriesComponent } from './components/main-rubros/form-industries/form-industries.component';
 import { TableCategoriesComponent } from './components/main-categorias/table-categories/table-categories.component';
-import { FormCategoriesComponent } from './components/main-categorias/form-categories/form-categories.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { EmptyListComponent } from './components/empty-list/empty-list.component';
 import { SearchPipe } from './pipes/search.pipe';
@@ -54,9 +52,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2'
     DetailOrdersComponent,
     NavigationHomeComponent,
     TableIndustriesComponent,
-    FormIndustriesComponent,
     TableCategoriesComponent,
-    FormCategoriesComponent,
     ModalComponent,
     EmptyListComponent,
     SearchPipe,
