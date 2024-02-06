@@ -1,3 +1,6 @@
 .imgProd {
-    width: -webkit-fill-available;
+    height: 630px;
+}
+.card-content span {
+    font-size: 14px;
 }

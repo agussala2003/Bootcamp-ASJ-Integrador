@@ -26,13 +26,18 @@
       <div class="row">
         <h3 class="my-3 text-light">Datos Orden</h3>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
-                    <h5 class="text-nowrap">{{ this.orderViewModel.orderNumber }}</h5>
-                    <span>Orden</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="m-0">{{ this.orderViewModel.orderNumber }}</h5>
+                        <span>Numero de orden</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -40,15 +45,21 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
-                    <h5 class="text-nowrap">
-                      {{ this.orderViewModel.supplier.businessName }}
-                    </h5>
-                    <span>Proveedor</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div class="d-flex justify-content-between">
+                        <div>
+                          <h5 class="text-nowrap m-0">{{ this.orderViewModel.supplier.businessName }}</h5>
+                          <span>Proveedor</span>
+                        </div>
+                        <img src="{{this.orderViewModel.supplier.image}}" style="width: 45px; height: 45px;" class="rounded-1 ms-4" alt="">
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -56,49 +67,56 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
-                    <h5 class="text-nowrap">
-                      {{
-                        this.orderViewModel.status.statusName
-                      }}
-                    </h5>
-                    <span>Estado</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="m-0">{{ this.orderViewModel.status.statusName }}</h5>
+                        <span>Estado</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-12 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+        <div class="col-12 col-sm-4 mb-3">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
-                    <h5 class="text-nowrap">
-                      {{ this.orderViewModel.issuanceDate | date: "dd/MM/yyyy" }}
-                    </h5>
-                    <span>Emision</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="m-0">{{ this.orderViewModel.issuanceDate | date: "dd/MM/yyyy" }}</h5>
+                        <span>Emision</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-12 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+        <div class="col-12 col-sm-4 mb-3">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
-                    <h5 class="text-nowrap">
-                      {{ this.orderViewModel.deliveryDate | date: "dd/MM/yyyy"}}
-                    </h5>
-                    <span>Entrega</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="m-0">{{ this.orderViewModel.deliveryDate | date: "dd/MM/yyyy" }}</h5>
+                        <span>Entrega</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -106,34 +124,45 @@
           </div>
         </div>
         <div class="col-12 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
-                    <h5>
-                      {{ this.orderViewModel.receptionInfo }}
-                    </h5>
-                    <span>Informacion de recepcion</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="m-0">{{ this.orderViewModel.receptionInfo }}</h5>
+                        <span>Informacion de recepcion</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <h3 class="text-light my-3">Productos</h3>
+        <h3 class="text-light my-3">Productos en la orden</h3>
         <div
           *ngFor="let orderDetail of orderDetails"
           class="row p-0 m-0"
         >
           <div class="col-12 col-xl-4 col-sm-6 mb-3">
-            <div class="card bg-dark border border-1 border-white">
+            <div class="card bg-dark border-0">
               <div class="card-content">
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="text-start text-white overflow-y-auto">
-                      <h5 class="text-nowrap">{{ orderDetail.product.productName }}</h5>
-                      <span>Producto</span>
+                      <div class="d-flex">
+                        <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                        <div class="d-flex justify-content-between">
+                          <div>
+                            <h5 class="text-nowrap m-0">{{ orderDetail.product.productName }}</h5>
+                            <span>Nombre del producto</span>
+                          </div>
+                          <img src="{{orderDetail.product.imageUrl}}" style="width: 45px; height: 45px;" class="rounded-1 ms-4" alt="">
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -141,13 +170,18 @@
             </div>
           </div>
           <div class="col-12 col-xl-4 col-sm-6 mb-3">
-            <div class="card bg-dark border border-1 border-white">
+            <div class="card bg-dark border-0">
               <div class="card-content">
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="text-start text-white overflow-y-auto">
-                      <h5 class="text-nowrap">{{ orderDetail.quantity }}</h5>
-                      <span>Cantidad</span>
+                      <div class="d-flex">
+                        <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                        <div>
+                          <h5 class="m-0">{{ orderDetail.quantity }}</h5>
+                          <span>Cantidad</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -155,13 +189,18 @@
             </div>
           </div>
           <div class="col-12 col-xl-4 col-sm-6 mb-3">
-            <div class="card bg-dark border border-1 border-white">
+            <div class="card bg-dark border-0">
               <div class="card-content">
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="text-start text-white overflow-y-auto">
-                      <h5 class="text-nowrap">{{ orderDetail.subtotal | currency }}</h5>
-                      <span>Subtotal</span>
+                      <div class="d-flex">
+                        <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                        <div>
+                          <h5 class="m-0">{{ orderDetail.subtotal | currency }}</h5>
+                          <span>Subtotal</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -170,15 +209,18 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
-                    <h5 class="text-nowrap">
-                      {{ calculateTotal(this.orderViewModel) | currency }}
-                    </h5>
-                    <span>Total</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="m-0">{{ calculateTotal(this.orderViewModel) | currency }}</h5>
+                        <span>Total</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

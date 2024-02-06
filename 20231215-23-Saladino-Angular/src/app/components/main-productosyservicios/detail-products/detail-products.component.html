@@ -28,19 +28,24 @@
     <!-- Ruteo -->
     <div class="row">
       <div class="row">
-        <div class="col-12 col-md-6 mb-3">
+        <div class="col-12 col-md-6 mb-3 d-flex justify-content-center ">
           <img class="rounded-2 imgProd" [src]="this.productViewModel.imageUrl" alt="">
         </div>
         <div class="col-12 col-md-6">
-          <h3 class="my-3 text-light">Datos Producto</h3>
+          <h3 class="my-3 ms-md-3 text-light">Datos Producto</h3>
           <div class="col-12 mb-3">
-            <div class="card bg-dark border border-1 border-white">
+            <div class="card bg-dark border-0">
               <div class="card-content">
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="text-start text-white overflow-y-auto">
-                      <h5 class="text-nowrap">{{ this.productViewModel.sku }}</h5>
-                      <span>Sku</span>
+                      <div class="d-flex ms-md-3">
+                        <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                        <div>
+                          <h5 class="m-0">{{ this.productViewModel.sku }}</h5>
+                          <span>Sku</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -48,15 +53,18 @@
             </div>
           </div>
           <div class="col-12 mb-3">
-            <div class="card bg-dark border border-1 border-white">
+            <div class="card bg-dark border-0">
               <div class="card-content">
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="text-start text-white overflow-y-auto">
-                      <h5 class="text-nowrap">
-                        {{ this.productViewModel.supplier.businessName }}
-                      </h5>
-                      <span>Proveedor</span>
+                      <div class="d-flex ms-md-3">
+                        <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                        <div>
+                          <h5 class="m-0">{{ this.productViewModel.productName }}</h5>
+                          <span>Nombre del producto</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -64,15 +72,21 @@
             </div>
           </div>
           <div class="col-12 mb-3">
-            <div class="card bg-dark border border-1 border-white">
+            <div class="card bg-dark border-0">
               <div class="card-content">
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="text-start text-white overflow-y-auto">
-                      <h5 class="text-nowrap">
-                        {{ this.productViewModel.category.categoryName }}
-                      </h5>
-                      <span>Categoria</span>
+                      <div class="d-flex ms-md-3">
+                        <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                        <div class="d-flex justify-content-between">
+                          <div>
+                            <h5 class="text-nowrap m-0">{{ this.productViewModel.supplier.businessName }}</h5>
+                            <span>Proveedor</span>
+                          </div>
+                          <img src="{{this.productViewModel.supplier.image}}" style="width: 45px; height: 45px;" class="rounded-1 ms-4" alt="">
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -80,15 +94,18 @@
             </div>
           </div>
           <div class="col-12 mb-3">
-            <div class="card bg-dark border border-1 border-white">
+            <div class="card bg-dark border-0">
               <div class="card-content">
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="text-start text-white overflow-y-auto">
-                      <h5 class="text-nowrap">
-                        {{ this.productViewModel.price | currency }}
-                      </h5>
-                      <span>Precio</span>
+                      <div class="d-flex ms-md-3">
+                        <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                        <div>
+                          <h5 class="m-0">{{ this.productViewModel.category.categoryName }}</h5>
+                          <span>Categoria</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -96,15 +113,18 @@
             </div>
           </div>
           <div class="col-12 mb-3">
-            <div class="card bg-dark border border-1 border-white">
+            <div class="card bg-dark border-0">
               <div class="card-content">
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="text-start text-white overflow-y-auto">
-                      <h5 class="text-nowrap">
-                        {{ this.productViewModel.productName }}
-                      </h5>
-                      <span>Producto</span>
+                      <div class="d-flex ms-md-3">
+                        <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                        <div>
+                          <h5 class="m-0">{{ this.productViewModel.price | currency }}</h5>
+                          <span>Precio</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -112,15 +132,18 @@
             </div>
           </div>
           <div class="col-12 mb-3">
-            <div class="card bg-dark border border-1 border-white">
+            <div class="card bg-dark border-0">
               <div class="card-content">
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="text-start text-white">
-                      <h5 class="text-wrap">
-                        {{ this.productViewModel.description }}
-                      </h5>
-                      <span>Descripcion</span>
+                      <div class="d-flex ms-md-3">
+                        <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                        <div>
+                          <h5 class="m-0">{{ this.productViewModel.description }}</h5>
+                          <span>Descripcion</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
