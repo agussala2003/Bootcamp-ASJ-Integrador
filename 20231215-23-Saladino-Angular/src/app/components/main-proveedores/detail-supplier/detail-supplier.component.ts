@@ -12,6 +12,7 @@ import { ContactService } from '../../../services/contact.service';
 import { Industry } from '../../../models/Industry';
 import { IvaCondition } from '../../../models/IvaCondition';
 import { AlertsService } from '../../../services/alerts.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detail-supplier',
@@ -147,33 +148,59 @@ export class DetailSupplierComponent implements OnInit {
   }
 
   deleteSupplier(id: string): void {
-    this.supplierService.deleteSupplier(id).subscribe(
-      () => {
-        console.log('You deleted a supplier');
-        this.alertService.successNotification('Proveedor eliminado');
-        this.router.navigate(['/proveedores']);
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('No se pudo eliminar el proveedor');
+    Swal.fire({
+      title: `Estas seguro que quieres borrar el proveedor ${this.supplierViewModel.businessName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, borralo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.supplierService.deleteSupplier(id).subscribe(
+          () => {
+            console.log('You deleted a supplier');
+            this.alertService.successNotification('Proveedor eliminado');
+            this.router.navigate(['/proveedores']);
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification('No se pudo eliminar el proveedor');
+          }
+        );
       }
-    );
+    });
   }
 
   undeleteSupplierById(id: string) {
-    this.supplierService.patchSupplier(id).subscribe(
-      (data: Supplier) => {
-        console.log('You undeleted a supplier');
-        console.log(data);
-        this.alertService.successNotification('Proveedor recuperado');
-        this.router.navigate(['/proveedores']);
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification(
-          'No se pudo recuperar el proveedor'
+    Swal.fire({
+      title: `Estas seguro que quieres reactivar el proveedor ${this.supplierViewModel.businessName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, activar!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.supplierService.patchSupplier(id).subscribe(
+          (data: Supplier) => {
+            console.log('You undeleted a supplier');
+            console.log(data);
+            this.alertService.successNotification('Proveedor recuperado');
+            this.router.navigate(['/proveedores']);
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification(
+              'No se pudo recuperar el proveedor'
+            );
+          }
         );
       }
-    );
+    });
   }
 }

@@ -141,9 +141,9 @@ public class OrderService {
             existingOrder.setStatus(updatedStatus);
             existingOrder.setUser(updatedUser);
             existingOrder.setDeliveryDate(updatedOrder.getDeliveryDate());
-            existingOrder.setIssuanceDate(updatedOrder.getIssuanceDate());
+//            existingOrder.setIssuanceDate(updatedOrder.getIssuanceDate());
             existingOrder.setReceptionInfo(updatedOrder.getReceptionInfo());
-            existingOrder.setOrderNumber(updatedOrder.getOrderNumber());
+//            existingOrder.setOrderNumber(updatedOrder.getOrderNumber());
 
             existingOrder.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 

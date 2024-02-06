@@ -5,6 +5,7 @@ import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/Product';
 import { AlertsService } from '../../../services/alerts.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-table-categories',
@@ -118,65 +119,117 @@ export class TableCategoriesComponent implements OnInit {
   }
 
   createCategory(category: Category) {
-    this.categoryService.postCategory(category).subscribe(
-      (data: Category) => {
-        console.log('You posted a Category');
-        console.log(data);
-        this.alertService.successNotification('Categoria creada');
-        this.getActiveCategories();
-      },
-      (error) => {
-        console.error(error);
-        this.alertService.errorNotification('Error al crear la categoria, puede que ya exista o no hayas realizado cambios');
+    Swal.fire({
+      title: `Estas seguro que quieres crear la categoria ${this.categoryViewModel.categoryName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, creala!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.categoryService.postCategory(category).subscribe(
+          (data: Category) => {
+            console.log('You posted a Category');
+            console.log(data);
+            this.alertService.successNotification('Categoria creada');
+            this.getActiveCategories();
+          },
+          (error) => {
+            console.error(error);
+            this.alertService.errorNotification('Error al crear la categoria, puede que ya exista o no hayas realizado cambios');
+          }
+        );
       }
-    );
+    });
   }
 
   putCategory(category: Category) {
-    this.categoryService.putCategory(category).subscribe(
-      (data: Category) => {
-        console.log('You putted a Category');
-        console.log(data);
-        this.alertService.successNotification('Categoria actualizada');
-        this.getActiveCategories();
-      },
-      (error) => {
-        console.error(error);
-        this.alertService.errorNotification('Error al actualizar la categoria, puede que ya exista o no hayas realizado cambios');
+    Swal.fire({
+      title: `Estas seguro que quieres actualizar la categoria ${this.categoryViewModel.categoryName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, actualizala!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.categoryService.putCategory(category).subscribe(
+          (data: Category) => {
+            console.log('You putted a Category');
+            console.log(data);
+            this.alertService.successNotification('Categoria actualizada');
+            this.getActiveCategories();
+          },
+          (error) => {
+            console.error(error);
+            this.alertService.errorNotification('Error al actualizar la categoria, puede que ya exista o no hayas realizado cambios');
+          }
+        );
       }
-    );
+    });
   }
 
-  deleteCategory(id: string) {
-    this.categoryService.deleteCategory(id).subscribe(
-      (data: Category) => {
-        console.log('You Deleted');
-        console.log(data);
-        this.getActiveCategories();
-        this.loader();
-        this.alertService.successNotification('Categoria Eliminada');
-      },
-      (error) => {
-        console.error(error);
-        this.alertService.errorNotification('Error al eliminar');
+  deleteCategory(id: string, categoryName: string) {
+    Swal.fire({
+      title: `Estas seguro que quieres borrar la categoria ${categoryName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, borrala!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.categoryService.deleteCategory(id).subscribe(
+          (data: Category) => {
+            console.log('You Deleted');
+            console.log(data);
+            this.getActiveCategories();
+            this.loader();
+            this.alertService.successNotification('Categoria Eliminada');
+          },
+          (error) => {
+            console.error(error);
+            this.alertService.errorNotification('Error al eliminar');
+          }
+        );
       }
-    );
+    });
   }
 
-  undeleteCategory(id: string) {
-    this.categoryService.undeleteCategory(id).subscribe(
-      (data: Category) => {
-        console.log('You Undeleted');
-        console.log(data);
-        this.getActiveCategories();
-        this.loader();
-        this.alertService.successNotification('Categoria recuperada');
-      },
-      (error) => {
-        console.error(error);
-        this.alertService.errorNotification('Error al recuperar');
+  undeleteCategory(id: string, categoryName: string) {
+    Swal.fire({
+      title: `Estas seguro que quieres reactivar la categoria ${categoryName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, activala!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.categoryService.undeleteCategory(id).subscribe(
+          (data: Category) => {
+            console.log('You Undeleted');
+            console.log(data);
+            this.getActiveCategories();
+            this.loader();
+            this.alertService.successNotification('Categoria recuperada');
+          },
+          (error) => {
+            console.error(error);
+            this.alertService.errorNotification('Error al recuperar');
+          }
+        );
       }
-    );
+    });
   }
 
   openModal(content: any, id?: string) {

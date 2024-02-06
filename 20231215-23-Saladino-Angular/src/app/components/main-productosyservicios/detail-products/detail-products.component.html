@@ -86,7 +86,7 @@
                   <div class="d-flex">
                     <div class="text-start text-white overflow-y-auto">
                       <h5 class="text-nowrap">
-                        ${{ this.productViewModel.price }}
+                        {{ this.productViewModel.price | currency }}
                       </h5>
                       <span>Precio</span>
                     </div>
@@ -130,26 +130,26 @@
         </div>
         <!-- Botones para hacer acciones desde el detalle -->
         <div class="d-flex">
-          <a
-            data-bs-toggle="modal" data-bs-target="#exampleModal" 
+          <button
+            (click)="deleteProduct(this.productViewModel.id)"
             class="btn btn-danger me-2"
             *ngIf="this.productViewModel.active"
-            >Eliminar</a
+            >Eliminar</button
           >
-          <a
+          <button
           *ngIf="this.productViewModel.active"
             [routerLink]="[
               '/productos-servicios/form/',
               this.productViewModel.id
             ]"
             class="btn btn-primary me-2"
-            >Editar</a
+            >Editar</button
           >
-          <a
-          data-bs-toggle="modal" data-bs-target="#exampleModal" 
+          <button
+          (click)="undeleteProductById(this.productViewModel.id)"
           class="btn btn-success me-2"
           *ngIf="!this.productViewModel.active"
-          >Dar de alta</a
+          >Dar de alta</button
         >
         </div>
         <!-- Botones para hacer acciones desde el detalle -->
@@ -161,24 +161,4 @@
     <app-navigation-home></app-navigation-home>
   </div>
   <!-- Verificamos el estado del usuario -->
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-               Deseas {{this.productViewModel.active ? 'eliminar' : 'dar de alta'}} el producto "{{this.productViewModel.productName}}"?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-              <button *ngIf="this.productViewModel.active" type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteProduct(this.productViewModel.id)">Aceptar</button>
-              <button *ngIf="!this.productViewModel.active" type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="undeleteProductById(this.productViewModel.id)">Aceptar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Modal -->
 </div>

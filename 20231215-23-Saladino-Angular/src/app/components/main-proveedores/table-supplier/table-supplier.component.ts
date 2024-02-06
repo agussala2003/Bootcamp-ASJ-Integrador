@@ -12,6 +12,7 @@ import { IvaCondition } from '../../../models/IvaCondition';
 import { SupplierService } from '../../../services/supplier.service';
 import { AlertsService } from '../../../services/alerts.service';
 import { SearchPipe } from '../../../pipes/search.pipe';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-table-supplier',
@@ -222,18 +223,6 @@ export class TableSupplierComponent implements OnInit {
     );
   }
 
-  getSupplierById(id: string) {
-    this.supplierService.getSupplierById(id).subscribe(
-      (data: Supplier) => {
-        this.supplierViewModel = data;
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('No se pudo obtener el proveedor');
-      }
-    );
-  }
-
   getSuppliersByBusinessNameAsc() {
     this.supplierService.getSuppliersByBusinessNameAsc().subscribe(
       (data: Supplier[]) => {
@@ -272,48 +261,74 @@ export class TableSupplierComponent implements OnInit {
     );
   }
 
-  deleteSupplier(id: string) {
-    this.supplierService.deleteSupplier(id).subscribe(
-      () => {
-        console.log('You deleted a Supplier');
-        this.getActiveSuppliers();
-        this.getContacts();
-        this.getAddresses();
-        this.getDeletedLenght();
-        this.businessNameFilter = '0';
-        this.alertService.successNotification(`Proveedor dado de baja`);
-        this.loader();
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification(
-          'Parece que ocurrio un error, intente nuevamente'
+  deleteSupplier(id: string, supplierName: string) {
+    Swal.fire({
+      title: `Estas seguro que quieres borrar el proveedor ${supplierName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, borralo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.supplierService.deleteSupplier(id).subscribe(
+          () => {
+            console.log('You deleted a Supplier');
+            this.getActiveSuppliers();
+            this.getContacts();
+            this.getAddresses();
+            this.getDeletedLenght();
+            this.businessNameFilter = '0';
+            this.alertService.successNotification(`Proveedor dado de baja`);
+            this.loader();
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification(
+              'Parece que ocurrio un error, intente nuevamente'
+            );
+          }
         );
       }
-    );
+    });
   }
 
-  undeleteSupplierById(id: string) {
-    this.supplierService.patchSupplier(id).subscribe(
-      (data: Supplier) => {
-        console.log('You undeleted a supplier');
-        console.log(data);
-        this.isActiveItems = !this.isActiveItems;
-        this.getActiveSuppliers();
-        this.getContacts();
-        this.getAddresses();
-        this.getDeletedLenght();
-        this.businessNameFilter = '0';
-        this.alertService.successNotification(`Proveedor fue dado de alta`);
-        this.loader();
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification(
-          'Parece que ocurrio un error, intente nuevamente'
+  undeleteSupplierById(id: string, supplierName: string) {
+    Swal.fire({
+      title: `Estas seguro que quieres reactivar el proveedor ${supplierName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, activalo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.supplierService.patchSupplier(id).subscribe(
+          (data: Supplier) => {
+            console.log('You undeleted a supplier');
+            console.log(data);
+            this.isActiveItems = !this.isActiveItems;
+            this.getActiveSuppliers();
+            this.getContacts();
+            this.getAddresses();
+            this.getDeletedLenght();
+            this.businessNameFilter = '0';
+            this.alertService.successNotification(`Proveedor fue dado de alta`);
+            this.loader();
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification(
+              'Parece que ocurrio un error, intente nuevamente'
+            );
+          }
         );
       }
-    );
+    });
   }
 
   onBusinessNameFilterChange(number: number) {

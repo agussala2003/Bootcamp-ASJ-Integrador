@@ -28,13 +28,18 @@
       <div class="row">
         <h3 class="my-3 text-light">Datos Proveedor</h3>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">{{ this.supplierViewModel.supplierCode }}</h5>
-                    <span>Codigo</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0">{{ this.supplierViewModel.supplierCode }}</h5>
+                        <span>Codigo</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -42,15 +47,21 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.supplierViewModel.businessName }}
-                    </h5>
-                    <span>Razon Social</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div class="d-flex justify-content-between">
+                        <div>
+                          <h5 class="text-nowrap m-0">{{ this.supplierViewModel.businessName }}</h5>
+                          <span>Razon Social</span>
+                        </div>
+                        <img src="{{this.supplierViewModel.image}}" style="width: 50px; height: 50px;" class="rounded-circle ms-5" alt="">
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -58,15 +69,18 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.supplierViewModel.industry.industryName }}
-                    </h5>
-                    <span>Rubro</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0">{{ this.supplierViewModel.industry.industryName }}</h5>
+                        <span>Rubro</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -74,15 +88,18 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.supplierViewModel.phoneNumber }}
-                    </h5>
-                    <span>Telefono</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0">{{ this.supplierViewModel.phoneNumber }}</h5>
+                        <span>Telefono</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -90,15 +107,18 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.supplierViewModel.email }}
-                    </h5>
-                    <span>Email</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0">{{ this.supplierViewModel.email }}</h5>
+                        <span>Email</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -106,19 +126,18 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      <a
-                        target="_blank"
-                        href="https://agussala2003.github.io/portfolio/"
-                        >{{ this.supplierViewModel.website }}</a
-                      >
-                    </h5>
-                    <span>Sitio Web</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0">{{ this.supplierViewModel.website }}</h5>
+                        <span>Sitio Web</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -128,19 +147,18 @@
       <div class="row">
         <h3 class="my-3 text-light">Direccion</h3>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{
-                        this.addressViewModel.streetName +
-                          " " +
-                          this.addressViewModel.streetNumber
-                      }}
-                    </h5>
-                    <span>Calle y numero</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{this.addressViewModel.location.province.country.countryName}}</h5>
+                        <span>Pais</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -148,15 +166,20 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.addressViewModel.location.locationName }}
-                    </h5>
-                    <span>Localidad</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.addressViewModel.location.province.provinceName
+                        }}</h5>
+                        <span>Provincia</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -164,15 +187,20 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.addressViewModel.location.province.provinceName }}
-                    </h5>
-                    <span>Provincia</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.addressViewModel.location.locationName
+                        }}</h5>
+                        <span>Localidad</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -180,15 +208,22 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.addressViewModel.location.province.country.countryName }}
-                    </h5>
-                    <span>Pais</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.addressViewModel.streetName +
+                            " " +
+                            this.addressViewModel.streetNumber
+                        }}</h5>
+                        <span>Calle y numero</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -196,15 +231,20 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.addressViewModel.postalCode }}
-                    </h5>
-                    <span>Codigo Postal</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.addressViewModel.postalCode
+                        }}</h5>
+                        <span>Codigo Postal</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -216,15 +256,20 @@
       <div class="row">
         <h3 class="my-3 text-light">Datos Fiscales</h3>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.supplierViewModel.cuit }}
-                    </h5>
-                    <span>CUIT</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.supplierViewModel.cuit
+                        }}</h5>
+                        <span>Cuit</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -232,15 +277,20 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.supplierViewModel.ivaCondition.taxCondition }}
-                    </h5>
-                    <span>Condicion IVA</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.supplierViewModel.ivaCondition.taxCondition
+                        }}</h5>
+                        <span>Condicion Iva</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -251,15 +301,20 @@
       <div class="row">
         <h3 class="my-3 text-light">Datos Contacto</h3>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.contactViewModel.firstName }}
-                    </h5>
-                    <span>Nombre</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.contactViewModel.firstName
+                        }}</h5>
+                        <span>Nombre</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -267,15 +322,20 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.contactViewModel.lastName }}
-                    </h5>
-                    <span>Apellido</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.contactViewModel.lastName
+                        }}</h5>
+                        <span>Apellido</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -283,47 +343,62 @@
           </div>
         </div>
         <div class="col-12 col-xl-4 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.contactViewModel.phoneNumber }}
-                    </h5>
-                    <span>Telefono</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.contactViewModel.role
+                        }}</h5>
+                        <span>Rol</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-12 col-xl-6 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+        <div class="col-12 col-xl-4 col-sm-6 mb-3">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.contactViewModel.email }}
-                    </h5>
-                    <span>Email</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.contactViewModel.phoneNumber
+                        }}</h5>
+                        <span>Telefono</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-12 col-xl-6 col-sm-6 mb-3">
-          <div class="card bg-dark border border-1 border-white">
+        <div class="col-12 col-xl-4 col-sm-6 mb-3">
+          <div class="card bg-dark border-0">
             <div class="card-content">
               <div class="card-body">
                 <div class="d-flex">
                   <div class="text-start overflow-y-auto text-white">
-                    <h5 class="text-nowrap">
-                      {{ this.contactViewModel.role }}
-                    </h5>
-                    <span>Rol</span>
+                    <div class="d-flex">
+                      <i class='bx bxs-check-circle text-primary fs-4 me-3'></i>
+                      <div>
+                        <h5 class="text-nowrap m-0"> {{
+                          this.contactViewModel.email
+                        }}</h5>
+                        <span>Email</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -333,23 +408,23 @@
       </div>
       <!-- Botones para realizar las acciones en el detalle -->
       <div class="d-flex">
-        <a 
-          data-bs-toggle="modal" data-bs-target="#exampleModal" 
+        <button
+          (click)="deleteSupplier(this.supplierViewModel.id)"
           class="btn btn-danger me-2"
           *ngIf="this.supplierViewModel.active"
-          >Eliminar</a
+          >Eliminar</button
         >
-        <a
+        <button
         *ngIf="this.supplierViewModel.active"
           [routerLink]="['/proveedores/form/', this.supplierViewModel.id]"
           class="btn btn-primary me-2"
-          >Editar</a
+          >Editar</button
         >
-        <a 
-        data-bs-toggle="modal" data-bs-target="#exampleModal" 
+        <button
+        (click)="undeleteSupplierById(this.supplierViewModel.id)"
         class="btn btn-success me-2"
         *ngIf="!this.supplierViewModel.active"
-        >Dar de alta</a
+        >Dar de alta</button
       >
       </div>
       <!-- Botones para realizar las acciones en el detalle -->
@@ -360,24 +435,4 @@
     <app-navigation-home></app-navigation-home>
   </div>
   <!-- Mensaje en caso de que el usuario no este logueado -->
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-             Deseas {{this.supplierViewModel.active ? 'eliminar' : 'dar de alta'}} el proveedor "{{this.supplierViewModel.businessName}}"?
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-            <button *ngIf="this.supplierViewModel.active" type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteSupplier(this.supplierViewModel.id)">Aceptar</button>
-            <button *ngIf="!this.supplierViewModel.active" type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="undeleteSupplierById(this.supplierViewModel.id)">Aceptar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Modal -->
 </div>

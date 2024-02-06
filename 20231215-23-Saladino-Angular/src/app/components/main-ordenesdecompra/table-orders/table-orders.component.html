@@ -97,14 +97,14 @@
                 [ngClass]="order.active ? '' : 'text-decoration-line-through'"
                 class="fw-normal mb-1 text-nowrap text-center"
               >
-                ${{ calculateTotal(order) }}
+                {{ calculateTotal(order) | currency }}
               </p>
             </td>
             <td>
               <div class="d-flex justify-content-center">
                 <i
                   [ngClass]="order.active ? '' : 'd-none'"
-                  (click)="getOrderById(order.id)" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                  (click)="deleteOrder(order.id, order.orderNumber)"
                   class="btn btn-danger bx bx-trash me-2"
                 ></i>
                 <i
@@ -118,7 +118,7 @@
                 ></i>
                 <i
                   [ngClass]="order.active ? 'd-none' : ''"
-                  (click)="getOrderById(order.id)" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                  (click)="undeleteOrder(order.id, order.orderNumber)"
                   class="btn btn-primary bx bx-check ms-2"
                 ></i>
               </div>
@@ -138,25 +138,4 @@
     <app-navigation-home></app-navigation-home>
   </div>
   <!-- Verificamos el estado del usuario -->
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          
-           Deseas {{this.orderViewModel.active ? 'cancelar' : 'dar de alta'}} la orden "{{this.orderViewModel.orderNumber}}"?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          <button *ngIf="this.orderViewModel.active" type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteOrder(this.orderViewModel.id)">Aceptar</button>
-          <button *ngIf="!this.orderViewModel.active" type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="undeleteOrder(this.orderViewModel.id)">Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal -->
 </div>

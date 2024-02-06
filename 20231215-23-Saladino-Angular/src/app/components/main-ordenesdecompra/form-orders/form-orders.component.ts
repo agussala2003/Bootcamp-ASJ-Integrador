@@ -4,8 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { NgForm } from '@angular/forms';
 import { SupplierService } from '../../../services/supplier.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalComponent } from '../../modal/modal.component';
 import { Supplier } from '../../../models/Supplier';
 import { Product } from '../../../models/Product';
 import { Role } from '../../../models/Role';
@@ -19,6 +17,7 @@ import { OrderDetail } from '../../../models/OrderDetail';
 import { OrderDetailService } from '../../../services/order-detail.service';
 import { StatusService } from '../../../services/status.service';
 import { AlertsService } from '../../../services/alerts.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-orders',
@@ -36,8 +35,7 @@ export class FormOrdersComponent implements OnInit {
     private statusService: StatusService,
     private alertService: AlertsService,
     private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private modalService: NgbModal
+    private router: Router
   ) {}
 
   roleViewModel: Role = {
@@ -151,7 +149,6 @@ export class FormOrdersComponent implements OnInit {
         this.getOrderDetailsByOrderId(this.idOrder);
       } else {
         this.setupNewOrden();
-        this.openModal('Informacion del formulario');
       }
     });
 
@@ -351,9 +348,35 @@ export class FormOrdersComponent implements OnInit {
     }
     if (this.validateForm()) {
       if (this.idOrder !== undefined) {
-        this.putOrder(this.idOrder, this.orderViewModel);
+        Swal.fire({
+          title: `Estas seguro que quieres actualizar orden ${this.orderViewModel.orderNumber}?`,
+          text: "Una vez aceptado no podras deshacer esta accion!",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Si, actualizala!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.putOrder(this.idOrder, this.orderViewModel);
+          }
+        });
       } else {
-        this.postOrder(this.orderViewModel);
+        Swal.fire({
+          title: `Estas seguro que quieres crear orden ${this.orderViewModel.orderNumber}?`,
+          text: "Una vez aceptado no podras deshacer esta accion!",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Si, creala!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.postOrder(this.orderViewModel);
+          }
+        });
       }
     } else {
       this.openModal('No cumples con las condiciones');
@@ -493,25 +516,22 @@ export class FormOrdersComponent implements OnInit {
     return false;
   }
 
-  openModal(aviso: string = 'Informacion del formulario') {
-    const mensajes: string[] = [];
-
-    mensajes.push('Todos los campos son obligatorios.');
-    mensajes.push('Completar todos los campos correctamente.');
-    mensajes.push('Respeta los formatos ejemplificados.');
-    mensajes.push(
-      'Evita dejar espacios en el comienzo, final o entre palabras.'
-    );
-    mensajes.push(
-      'El numero de orden debe ser numérico y contener exactamente 8 dígitos.'
-    );
-    mensajes.push('Ingresa un numero de orden que no exista.');
-    mensajes.push('La fecha de emision debe ser como minmo la fecha actual.');
-    mensajes.push('La fecha de entrega debe ser posterior a la de emision.');
-
-    const modalRef = this.modalService.open(ModalComponent);
-    modalRef.componentInstance.listado = mensajes;
-    modalRef.componentInstance.aviso = aviso;
+  openModal(alerTitle: string = 'Informacion del formulario') {
+    Swal.fire({
+      title: alerTitle,
+      html: `<ul>
+                <li class="text-start mb-2 fs-6">Todos los campos son obligatorios.</li>
+                <li class="text-start mb-2 fs-6">Completar todos los campos correctamente.</li>
+                <li class="text-start mb-2 fs-6">Respeta los formatos ejemplificados.</li>
+                <li class="text-start mb-2 fs-6">Evita dejar espacios en el comienzo, final o entre palabras.</li>
+                <li class="text-start mb-2 fs-6">El numero de orden debe ser numérico.</li>
+                <li class="text-start mb-2 fs-6">El numero de orden no debe estar usado.</li>
+                <li class="text-start mb-2 fs-6">La fecha de emision debe ser como minmo la fecha actual.</li>
+                <li class="text-start mb-2 fs-6">La fecha de entrega debe ser posterior a la de emision.</li>
+            </ul>
+     `,
+     confirmButtonText: 'Gracias por avisar!'
+    });
   }
 
   resetOrderData() {

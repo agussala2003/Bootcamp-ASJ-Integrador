@@ -4,14 +4,13 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SupplierService } from '../../../services/supplier.service';
 import { CategoryService } from '../../../services/category.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalComponent } from '../../modal/modal.component';
 import { Category } from '../../../models/Category';
 import { Supplier } from '../../../models/Supplier';
 import { Industry } from '../../../models/Industry';
 import { IvaCondition } from '../../../models/IvaCondition';
 import { Product } from '../../../models/Product';
 import { AlertsService } from '../../../services/alerts.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-products',
@@ -26,7 +25,6 @@ export class FormProductsComponent implements OnInit {
     private supplierService: SupplierService,
     private categoryService: CategoryService,
     private alertService: AlertsService,
-    private modalService: NgbModal,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {}
@@ -91,7 +89,6 @@ export class FormProductsComponent implements OnInit {
         this.getProductById(this.idProduct);
       } else {
         this.setupNewProduct();
-        this.openModal('Informacion del formulario');
       }
     });
 
@@ -206,9 +203,35 @@ export class FormProductsComponent implements OnInit {
     }
     if (this.validateForm()) {
       if (this.idProduct !== undefined) {
-        this.putProduct(this.idProduct, this.productViewModel);
+        Swal.fire({
+          title: `Estas seguro que quieres actualizar el producto ${this.productViewModel.productName}?`,
+          text: "Una vez aceptado no podras deshacer esta accion!",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Si, actualizalo!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.putProduct(this.idProduct, this.productViewModel);
+          }
+        });
       } else {
-        this.postProduct(this.productViewModel);
+        Swal.fire({
+          title: `Estas seguro que quieres crear el producto ${this.productViewModel.productName}?`,
+          text: "Una vez aceptado no podras deshacer esta accion!",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Si, crealo!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.postProduct(this.productViewModel);
+          }
+        });
       }
     } else {
       this.openModal('No cumples con las condiciones');
@@ -306,26 +329,21 @@ export class FormProductsComponent implements OnInit {
     }
   }
 
-  openModal(aviso: string = 'Informacion del formulario') {
-    const mensajes: string[] = [];
-
-    mensajes.push('Todos los campos son obligatorios.');
-    mensajes.push('Completar todos los campos correctamente.');
-    mensajes.push('Respeta los formatos ejemplificados.');
-    mensajes.push(
-      'Evita dejar espacios en el comienzo, final o entre palabras.'
-    );
-    mensajes.push(
-      'El código debe ser numérico y contener exactamente 8 dígitos.'
-    );
-    mensajes.push(
-      'La Imagen debe comenzar con "https://" y seguir un formato válido.'
-    );
-    mensajes.push('Ingresa un código que no exista.');
-
-    const modalRef = this.modalService.open(ModalComponent);
-    modalRef.componentInstance.listado = mensajes;
-    modalRef.componentInstance.aviso = aviso;
+  openModal(alerTitle: string = 'Informacion del formulario') {
+    Swal.fire({
+      title: alerTitle,
+      html: `<ul>
+                <li class="text-start mb-2 fs-6">Todos los campos son obligatorios.</li>
+                <li class="text-start mb-2 fs-6">Completar todos los campos correctamente.</li>
+                <li class="text-start mb-2 fs-6">Respeta los formatos ejemplificados.</li>
+                <li class="text-start mb-2 fs-6">Evita dejar espacios en el comienzo, final o entre palabras.</li>
+                <li class="text-start mb-2 fs-6">El Sku debe ser numérico y contener exactamente 8 dígitos.</li>
+                <li class="text-start mb-2 fs-6">El Sku no debe estar repetido.</li>
+                <li class="text-start mb-2 fs-6">La Imagen debe comenzar con "https://" y seguir un formato válido.</li>
+            </ul>
+     `,
+     confirmButtonText: 'Gracias por avisar!'
+    });
   }
 
   resetProductData() {

@@ -26,9 +26,9 @@
                         <div class="text-start overflow-y-auto w-100">
                             <div class="d-flex align-items-center justify-content-between">
                               <h5 class="text-nowrap text-white me-2 mb-0">{{industry.industryName}}</h5>
-                            <i *ngIf="searchUsedIndustries(industry.id) && industry.active" (click)="getIndustryById(industry.id)" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-danger bx bx-trash ms-4"></i>
+                            <i *ngIf="searchUsedIndustries(industry.id) && industry.active" (click)="deleteIndustry(industry.id, industry.industryName)" class="btn btn-danger bx bx-trash ms-4"></i>
                             <i *ngIf="industry.active" (click)="openModal(content,industry.id)" class="btn btn-primary bx bx-edit ms-2"></i>
-                            <i *ngIf="!industry.active" (click)="undeleteIndustry(industry.id)" class="btn btn-success bx bx-check ms-2"></i>
+                            <i *ngIf="!industry.active" (click)="undeleteIndustry(industry.id, industry.industryName)" class="btn btn-success bx bx-check ms-2"></i>
                           </div>
                         </div>
                       </div>
@@ -51,25 +51,6 @@
     <div *ngIf="userState == null" class="container py-5 p-md-5">
         <app-navigation-home></app-navigation-home>
     </div>
-    <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-           Deseas eliminar el rubro "{{this.industryViewModel.industryName}}"?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteIndustry(this.industryViewModel.id)">Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal -->
     <!-- Modal Modificacion y agregacion -->
     <ng-template #content let-modal>
       <div class="modal-header">

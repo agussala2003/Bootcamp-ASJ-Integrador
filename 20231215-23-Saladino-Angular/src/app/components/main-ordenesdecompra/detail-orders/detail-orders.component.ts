@@ -13,6 +13,7 @@ import { Category } from '../../../models/Category';
 import { Product } from '../../../models/Product';
 import { OrderDetail } from '../../../models/OrderDetail';
 import { AlertsService } from '../../../services/alerts.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detail-orders',
@@ -147,33 +148,59 @@ export class DetailOrdersComponent implements OnInit {
   }
 
   deleteOrder(id: string): void {
-    this.orderService.deleteOrder(id).subscribe(
-      (data) => {
-        console.log('You deleted a order');
-        console.log(data);
-        this.alertService.successNotification('Orden cancelada');
-        this.router.navigate(['/ordenes']);
-      },
-      (error) => {
-        console.error(error);
-        this.alertService.errorNotification('Error al cancelar la orden');
+    Swal.fire({
+      title: `Estas seguro que quieres cancelar la orden ${this.orderViewModel.orderNumber}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, cancelala!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.orderService.deleteOrder(id).subscribe(
+          (data) => {
+            console.log('You deleted a order');
+            console.log(data);
+            this.alertService.successNotification('Orden cancelada');
+            this.router.navigate(['/ordenes']);
+          },
+          (error) => {
+            console.error(error);
+            this.alertService.errorNotification('Error al cancelar la orden');
+          }
+        );
       }
-    );
+    });
   }
 
   undeleteOrder(id: string): void {
-    this.orderService.undeleteOrder(id).subscribe(
-      (data) => {
-        console.log('You undeleted a order');
-        console.log(data);
-        this.alertService.successNotification('Orden reactivada');
-        this.router.navigate(['/ordenes']);
-      },
-      (error) => {
-        console.error(error);
-        this.alertService.errorNotification('Error al reactivar la orden');
+    Swal.fire({
+      title: `Estas seguro que quieres reactivar la orden ${this.orderViewModel.orderNumber}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, activala!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.orderService.undeleteOrder(id).subscribe(
+          (data) => {
+            console.log('You undeleted a order');
+            console.log(data);
+            this.alertService.successNotification('Orden reactivada');
+            this.router.navigate(['/ordenes']);
+          },
+          (error) => {
+            console.error(error);
+            this.alertService.errorNotification('Error al reactivar la orden');
+          }
+        );
       }
-    );
+    });
   }
 
   calculateTotal(order: Order): number {

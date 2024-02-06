@@ -5,6 +5,7 @@ import { SupplierService } from '../../../services/supplier.service';
 import { Supplier } from '../../../models/Supplier';
 import { AlertsService } from '../../../services/alerts.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-table-industries',
@@ -118,65 +119,117 @@ export class TableIndustriesComponent implements OnInit {
   }
 
   putIndustry(industry: Industry) {
-    this.industryService.putIndustry(industry).subscribe(
-      (data: Industry) => {
-        console.log('You put');
-        console.log(data);
-        this.alertService.successNotification('Rubro actualizado');
-        this.getActiveIndustries();
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('Error al actualizar el rubro, puede que ya exista o no hayas realizado cambios');
+    Swal.fire({
+      title: `Estas seguro que quieres actualizar el rubro ${industry.industryName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, actualizala!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.industryService.putIndustry(industry).subscribe(
+          (data: Industry) => {
+            console.log('You put');
+            console.log(data);
+            this.alertService.successNotification('Rubro actualizado');
+            this.getActiveIndustries();
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification('Error al actualizar el rubro, puede que ya exista o no hayas realizado cambios');
+          }
+        );
       }
-    );
+    });
   }
 
   createIndustry(industry: Industry) {
-    this.industryService.postIndustry(industry).subscribe(
-      (data: Industry) => {
-        console.log('You created');
-        console.log(data);
-        this.alertService.successNotification('Rubro creado');
-        this.getActiveIndustries();
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('Error al crear el rubro, puede que ya exista o no hayas realizado');
+    Swal.fire({
+      title: `Estas seguro que quieres crear el rubro ${industry.industryName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, crealo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.industryService.postIndustry(industry).subscribe(
+          (data: Industry) => {
+            console.log('You created');
+            console.log(data);
+            this.alertService.successNotification('Rubro creado');
+            this.getActiveIndustries();
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification('Error al crear el rubro, puede que ya exista o no hayas realizado');
+          }
+        );
       }
-    );
+    });
   }
 
-  deleteIndustry(id: string) {
-    this.industryService.deleteIndustry(id).subscribe(
-      (data: Industry) => {
-        console.log('You Deleted');
-        console.log(data);
-        this.getActiveIndustries();
-        this.alertService.successNotification('Rubro eliminado');
-        this.loader();
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('Error al eliminar el rubro');
+  deleteIndustry(id: string, industryName: string) {
+    Swal.fire({
+      title: `Estas seguro que quieres borrar el rubro ${industryName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, borralo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.industryService.deleteIndustry(id).subscribe(
+          (data: Industry) => {
+            console.log('You Deleted');
+            console.log(data);
+            this.getActiveIndustries();
+            this.alertService.successNotification('Rubro eliminado');
+            this.loader();
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification('Error al eliminar el rubro');
+          }
+        );
       }
-    );
+    });
   }
 
-  undeleteIndustry(id: string) {
-    this.industryService.undeleteIndustry(id).subscribe(
-      (data: Industry) => {
-        console.log('You Undeleted');
-        console.log(data);
-        this.getActiveIndustries();
-        this.alertService.successNotification('Rubro restaurado');
-        this.loader();
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('Error al restaurar el rubro');
+  undeleteIndustry(id: string, industryName: string) {
+    Swal.fire({
+      title: `Estas seguro que quieres reactivar el rubro ${industryName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, activalo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.industryService.undeleteIndustry(id).subscribe(
+          (data: Industry) => {
+            console.log('You Undeleted');
+            console.log(data);
+            this.getActiveIndustries();
+            this.alertService.successNotification('Rubro restaurado');
+            this.loader();
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification('Error al restaurar el rubro');
+          }
+        );
       }
-    );
+    });
   }
   
   openModal(content: any, id?: string) {

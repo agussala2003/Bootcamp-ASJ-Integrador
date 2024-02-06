@@ -24,7 +24,6 @@ import { DetailOrdersComponent } from './components/main-ordenesdecompra/detail-
 import { NavigationHomeComponent } from './components/navigation-home/navigation-home.component';
 import { TableIndustriesComponent } from './components/main-rubros/table-industries/table-industries.component';
 import { TableCategoriesComponent } from './components/main-categorias/table-categories/table-categories.component';
-import { ModalComponent } from './components/modal/modal.component';
 import { EmptyListComponent } from './components/empty-list/empty-list.component';
 import { SearchPipe } from './pipes/search.pipe';
 import { PaginationPipe } from './pipes/pagination.pipe';
@@ -53,7 +52,6 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2'
     NavigationHomeComponent,
     TableIndustriesComponent,
     TableCategoriesComponent,
-    ModalComponent,
     EmptyListComponent,
     SearchPipe,
     PaginationPipe,

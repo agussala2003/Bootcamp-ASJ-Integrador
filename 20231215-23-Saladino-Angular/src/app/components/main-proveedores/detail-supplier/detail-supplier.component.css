@@ -1,0 +1,19 @@
+.welcomeContainer {
+    border-bottom: 1px solid #fff;
+}
+.infoContainer {
+    border-bottom: 1px solid #fff;
+}
+.card-content span {
+    font-size: 14px;
+}
+
+@media (min-width: 767.5px) {
+    .welcomeContainer {
+        border-bottom:none;
+        border-right: 1px solid #fff;
+    }
+    .infoContainer {
+        border: none;
+    }
+}

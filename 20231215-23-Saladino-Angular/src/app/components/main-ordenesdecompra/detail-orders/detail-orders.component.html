@@ -160,7 +160,7 @@
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="text-start text-white overflow-y-auto">
-                      <h5 class="text-nowrap">${{ orderDetail.subtotal }}</h5>
+                      <h5 class="text-nowrap">{{ orderDetail.subtotal | currency }}</h5>
                       <span>Subtotal</span>
                     </div>
                   </div>
@@ -176,7 +176,7 @@
                 <div class="d-flex">
                   <div class="text-start text-white overflow-y-auto">
                     <h5 class="text-nowrap">
-                      ${{ calculateTotal(this.orderViewModel) }}
+                      {{ calculateTotal(this.orderViewModel) | currency }}
                     </h5>
                     <span>Total</span>
                   </div>
@@ -187,20 +187,20 @@
         </div>
         <!-- Acciones desde el detalle -->
         <div class="d-flex">
-          <a *ngIf="this.orderViewModel.active" 
-            data-bs-toggle="modal" data-bs-target="#exampleModal" 
+          <button *ngIf="this.orderViewModel.active" 
+            (click)="deleteOrder(this.orderViewModel.id)"
             class="btn btn-danger me-2"
-            >Eliminar</a
+            >Eliminar</button
           >
-          <a *ngIf="this.orderViewModel.active" 
+          <button *ngIf="this.orderViewModel.active" 
             [routerLink]="['/ordenes/form/', this.orderViewModel.id]"
             class="btn btn-primary me-2"
-            >Editar</a
+            >Editar</button
           >
-          <a *ngIf="!this.orderViewModel.active" 
-            data-bs-toggle="modal" data-bs-target="#exampleModal" 
+          <button *ngIf="!this.orderViewModel.active" 
+          (click)="undeleteOrder(this.orderViewModel.id)"
             class="btn btn-success me-2"
-            >Dar de alta</a
+            >Dar de alta</button
           >
         </div>
         <!-- Acciones desde el detalle -->
@@ -212,24 +212,4 @@
     <app-navigation-home></app-navigation-home>
   </div>
   <!-- Verificamos el nivel del usuario -->
-   <!-- Modal -->
-   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-           Deseas {{this.orderViewModel.active ? 'cancelar' : 'dar de alta'}} la orden "{{this.orderViewModel.orderNumber}}"?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-          <button *ngIf="this.orderViewModel.active"  type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteOrder(this.orderViewModel.id)">Aceptar</button>
-          <button *ngIf="!this.orderViewModel.active"  type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="undeleteOrder(this.orderViewModel.id)">Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Modal -->
 </div>

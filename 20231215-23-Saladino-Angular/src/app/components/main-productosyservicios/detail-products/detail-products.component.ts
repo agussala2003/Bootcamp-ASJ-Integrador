@@ -7,6 +7,7 @@ import { Supplier } from '../../../models/Supplier';
 import { Category } from '../../../models/Category';
 import { Product } from '../../../models/Product';
 import { AlertsService } from '../../../services/alerts.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-detail-products',
@@ -89,31 +90,57 @@ export class DetailProductsComponent {
   }
 
   deleteProduct(id: string) {
-    this.productService.deleteProduct(id).subscribe(
-      (data) => {
-        console.log('You delteed a product');
-        this.alertService.successNotification('Producto eliminado');
-        this.router.navigate(['/productos-servicios']);
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('Error al eliminar el producto');
+    Swal.fire({
+      title: `Estas seguro que quieres borrar el producto ${this.productViewModel.productName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, borralo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.productService.deleteProduct(id).subscribe(
+          (data) => {
+            console.log('You delteed a product');
+            this.alertService.successNotification('Producto eliminado');
+            this.router.navigate(['/productos-servicios']);
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification('Error al eliminar el producto');
+          }
+        );
       }
-    );
+    });
   }
 
   undeleteProductById(id: string) {
-    this.productService.patchProduct(id).subscribe(
-      (data: Product) => {
-        console.log('You undeleted a product');
-        console.log(data);
-        this.alertService.successNotification('Producto reactivado');
-        this.router.navigate(['/productos-servicios']);
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('Error al reactivar el producto');
+    Swal.fire({
+      title: `Estas seguro que quieres reactivar el producto ${this.productViewModel.productName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, activalo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.productService.patchProduct(id).subscribe(
+          (data: Product) => {
+            console.log('You undeleted a product');
+            console.log(data);
+            this.alertService.successNotification('Producto reactivado');
+            this.router.navigate(['/productos-servicios']);
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification('Error al reactivar el producto');
+          }
+        );
       }
-    );
+    });
   }
 }

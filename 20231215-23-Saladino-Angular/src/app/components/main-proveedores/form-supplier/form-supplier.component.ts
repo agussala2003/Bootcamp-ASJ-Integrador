@@ -3,8 +3,6 @@ import { SupplierService } from '../../../services/supplier.service';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IndustryService } from '../../../services/industry.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalComponent } from '../../modal/modal.component';
 import { Industry } from '../../../models/Industry';
 import { Country } from '../../../models/Country';
 import { Supplier } from '../../../models/Supplier';
@@ -20,6 +18,7 @@ import { ProvinceService } from '../../../services/province.service';
 import { IvaConditionService } from '../../../services/iva-condition.service';
 import { LocationService } from '../../../services/location.service';
 import { AlertsService } from '../../../services/alerts.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-supplier',
@@ -39,7 +38,6 @@ export class FormSupplierComponent implements OnInit {
     private ivaConditionService: IvaConditionService,
     private locationService: LocationService,
     private alertService: AlertsService,
-    private modalService: NgbModal,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {}
@@ -125,7 +123,6 @@ export class FormSupplierComponent implements OnInit {
         this.getAddressBySupplierId(this.idSupplier);
       } else {
         this.setupNewSupplier();
-        this.openModal('Informacion del formulario');
       }
     });
 
@@ -289,9 +286,35 @@ export class FormSupplierComponent implements OnInit {
     }
     if (this.validateForm()) {
       if (this.idSupplier !== undefined) {
-        this.putSupplier(this.idSupplier, this.supplierViewModel);
+        Swal.fire({
+          title: `Estas seguro que quieres actualizar el proveedor ${this.supplierViewModel.businessName}?`,
+          text: "Una vez aceptado no podras deshacer esta accion!",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Si, actualizalo!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.putSupplier(this.idSupplier, this.supplierViewModel);
+          }
+        });
       } else {
-        this.postSupplier(this.supplierViewModel);
+        Swal.fire({
+          title: `Estas seguro que quieres crear el proveedor ${this.supplierViewModel.businessName}?`,
+          text: "Una vez aceptado no podras deshacer esta accion!",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          cancelButtonText: "Cancelar",
+          confirmButtonText: "Si, crealo!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.postSupplier(this.supplierViewModel);
+          }
+        });
       }
     } else {
       this.openModal('No cumples con las condiciones');
@@ -578,34 +601,23 @@ export class FormSupplierComponent implements OnInit {
     return /^\d{1}$/.test(str);
   }
 
-  openModal(aviso: string = 'Informacion del formulario') {
-    const mensajes: string[] = [];
-
-    mensajes.push('Todos los campos son obligatorios.');
-    mensajes.push('Completar todos los campos correctamente.');
-    mensajes.push('Respeta los formatos ejemplificados.');
-    mensajes.push(
-      'Evita dejar espacios en el comienzo, final o entre palabras.'
-    );
-    mensajes.push(
-      'El código debe ser alfanumérico y contener entre 4 y 8 caracteres.'
-    );
-    mensajes.push(
-      'Verifica que el teléfono siga el formato correcto, por ejemplo: +54-11-12345678.'
-    );
-    mensajes.push(
-      'El correo electrónico debe tener el formato adecuado, por ejemplo: correo@example.com.'
-    );
-    mensajes.push(
-      'La URL del sitio web y la Imagen debe comenzar con "https://" y seguir un formato válido.'
-    );
-    mensajes.push(
-      'Asegúrate de seleccionar una opción válida en los campos desplegables.'
-    );
-
-    const modalRef = this.modalService.open(ModalComponent);
-    modalRef.componentInstance.listado = mensajes;
-    modalRef.componentInstance.aviso = aviso;
+  openModal(alerTitle: string = 'Informacion del formulario') {
+    Swal.fire({
+      title: alerTitle,
+      html: `<ul>
+                <li class="text-start mb-2 fs-6">Todos los campos son obligatorios.</li>
+                <li class="text-start mb-2 fs-6">Completar todos los campos correctamente.</li>
+                <li class="text-start mb-2 fs-6">Respeta los formatos ejemplificados.</li>
+                <li class="text-start mb-2 fs-6">Evita dejar espacios en el comienzo, final o entre palabras.</li>
+                <li class="text-start mb-2 fs-6">El código debe ser alfanumérico y contener entre 4 y 8 caracteres.</li>
+                <li class="text-start mb-2 fs-6">Verifica que el teléfono siga el formato correcto, por ejemplo: +54-11-12345678.</li>
+                <li class="text-start mb-2 fs-6">El correo electrónico debe tener el formato adecuado, por ejemplo: correo@example.com.</li>
+                <li class="text-start mb-2 fs-6">La URL del sitio web y la Imagen debe comenzar con "https://" y seguir un formato válido.</li>
+                <li class="text-start fs-6">Asegúrate de seleccionar una opción válida en los campos desplegables.</li>
+            </ul>
+     `,
+     confirmButtonText: 'Gracias por avisar!'
+    });
   }
 
   resetSupplierData(): void {

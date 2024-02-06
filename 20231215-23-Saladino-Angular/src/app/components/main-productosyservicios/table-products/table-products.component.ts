@@ -8,6 +8,7 @@ import { Supplier } from '../../../models/Supplier';
 import { CategoryService } from '../../../services/category.service';
 import { AlertsService } from '../../../services/alerts.service';
 import { SearchPipe } from '../../../pipes/search.pipe';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-table-products',
@@ -112,21 +113,7 @@ export class TableProductsComponent implements OnInit {
       }
     );
   }
-
-  getProductById(id: string) {
-    this.productService.getProductById(id).subscribe(
-      (data: Product) => {
-        console.log('You get a product by Id');
-        console.log(data);
-        this.productViewModel = data;
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('Error al obtener el producto');
-      }
-    );
-  }
-
+  
   getActiveProducts(): void {
     this.productService.getActiveProducts().subscribe(
       (data: Product[]) => {
@@ -219,45 +206,71 @@ export class TableProductsComponent implements OnInit {
     );
   }
 
-  deleteProduct(id: string): void {
-    this.productService.deleteProduct(id).subscribe(
-      (data: Product) => {
-        console.log('You deleted a product');
-        console.log(data);
-        this.getActiveProducts();
-        this.getDeletedLength();
-        this.priceFilter = '0';
-        this.categoryFilter = '0';
-        this.productFilter = '';
-        this.alertService.successNotification('Producto eliminado');
-        this.loader();
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('Error al eliminar el producto');
+  deleteProduct(id: string, productName: string): void {
+    Swal.fire({
+      title: `Estas seguro que quieres borrar el producto ${productName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, borralo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.productService.deleteProduct(id).subscribe(
+          (data: Product) => {
+            console.log('You deleted a product');
+            console.log(data);
+            this.getActiveProducts();
+            this.getDeletedLength();
+            this.priceFilter = '0';
+            this.categoryFilter = '0';
+            this.productFilter = '';
+            this.alertService.successNotification('Producto eliminado');
+            this.loader();
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification('Error al eliminar el producto');
+          }
+        );
       }
-    );
+    });
   }
 
-  undeleteProduct(id: string): void {
-    this.productService.patchProduct(id).subscribe(
-      (data: Product) => {
-        console.log('You undeleted a product');
-        console.log(data);
-        this.isActiveItems = !this.isActiveItems;
-        this.getActiveProducts();
-        this.getDeletedLength();
-        this.priceFilter = '0';
-        this.categoryFilter = '0';
-        this.productFilter = '';
-        this.alertService.successNotification('Producto reactivado');
-        this.loader();
-      },
-      (error) => {
-        console.log(error);
-        this.alertService.errorNotification('Error al reactivar el producto');
+  undeleteProduct(id: string, productName: string): void {
+    Swal.fire({
+      title: `Estas seguro que quieres reactivar el producto ${productName}?`,
+      text: "Una vez aceptado no podras deshacer esta accion!",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "Si, activalo!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.productService.patchProduct(id).subscribe(
+          (data: Product) => {
+            console.log('You undeleted a product');
+            console.log(data);
+            this.isActiveItems = !this.isActiveItems;
+            this.getActiveProducts();
+            this.getDeletedLength();
+            this.priceFilter = '0';
+            this.categoryFilter = '0';
+            this.productFilter = '';
+            this.alertService.successNotification('Producto reactivado');
+            this.loader();
+          },
+          (error) => {
+            console.log(error);
+            this.alertService.errorNotification('Error al reactivar el producto');
+          }
+        );
       }
-    );
+    });
   }
 
   onPriceFilterChange() {

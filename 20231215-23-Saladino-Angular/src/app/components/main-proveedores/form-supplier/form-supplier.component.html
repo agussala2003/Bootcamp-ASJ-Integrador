@@ -26,7 +26,7 @@
     <!-- Ruteo -->
     <form #formProv="ngForm" (ngSubmit)="submitSupplier(formProv)">
       <div class="row mt-4">
-        <h4 class="text-light my-2">Datos Proveedor <i (click)="openModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class='bx bx-info-circle text-white ms-2'></i> </h4>
+        <h4 class="text-light my-2">Datos Proveedor <i (click)="openModal()" class='bx bx-info-circle text-white ms-2'></i> </h4>
         <div class="col-12 col-md-auto mb-3">
           <label for="codProv" class="form-label text-light">Codigo:</label>
           <div class="underline"></div>
@@ -563,31 +563,12 @@
       <div class="row">
         <div class="col-12 mt-2">
           <button
-            data-bs-toggle="modal" data-bs-target="#exampleModal" 
             [disabled]="!formProv.valid || this.existsCode || !this.isCuit"
-            type="button"
+            type="submit"
             class="btn btn-success"
           >
             {{ flagCode ? 'Agregar' : 'Actualizar' }}
           </button>
-        </div>
-      </div>
-      <!-- Modal Confirmacion -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Por seguridad...</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              Deseas {{flagCode ? 'agregar' : 'actualizar'}} el proveedor "{{this.supplierViewModel.businessName}}"?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-              <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
-            </div>
-          </div>
         </div>
       </div>
     </form>
