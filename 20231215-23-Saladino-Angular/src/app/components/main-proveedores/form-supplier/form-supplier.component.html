@@ -128,12 +128,10 @@
             <span class="form-text text-light">El campo es obligatorio</span>
           </div>
           <div
-            *ngIf="
-              formProv.controls['telefonoproveedor']?.hasError('minlength')
-            "
+            *ngIf="this.supplierViewModel.phoneNumber && !validatePhoneNumber(this.supplierViewModel.phoneNumber)"
             class="col-auto"
           >
-            <span class="form-text text-light">Ingrese 8 o mas digitos</span>
+            <span class="form-text text-light">Por ejemplo: +54-11-12345678</span>
           </div>
         </div>
         <div class="col-12 col-md-auto mb-3">
@@ -156,11 +154,11 @@
             <span class="form-text text-light">El campo es obligatorio</span>
           </div>
           <div
-            *ngIf="formProv.controls['emailProv']?.hasError('minlength')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">Ingrese 5 o mas digitos</span>
-          </div>
+          *ngIf="this.supplierViewModel.email && !validateEmail(this.supplierViewModel.email)"
+          class="col-auto"
+        >
+          <span class="form-text text-light">Por ejemplo: correo&#64;example.com.</span>
+        </div>
         </div>
         <div class="col-12 col-md-auto mb-3">
           <label for="sitioProv" class="form-label text-light"
@@ -184,11 +182,11 @@
             <span class="form-text text-light">El campo es obligatorio</span>
           </div>
           <div
-            *ngIf="formProv.controls['sitioProv']?.hasError('minlength')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">Ingrese 5 o mas digitos</span>
-          </div>
+          *ngIf="this.supplierViewModel.website && !validateUrl(this.supplierViewModel.website)"
+          class="col-auto"
+        >
+          <span class="form-text text-light">Por ejemplo: https://...</span>
+        </div>
         </div>
         <div class="col-12 col-md-auto mb-3">
           <label for="imgProv" class="form-label text-light position-relative labelRubro"
@@ -210,6 +208,12 @@
           >
             <span class="form-text text-light">El campo es obligatorio</span>
           </div>
+          <div
+          *ngIf="this.supplierViewModel.image && !validateUrl(this.supplierViewModel.image)"
+          class="col-auto"
+        >
+          <span class="form-text text-light">Por ejemplo: https://...</span>
+        </div>
         </div>
       </div>
       <div class="row">
@@ -499,10 +503,10 @@
             <span class="form-text text-light">El campo es obligatorio</span>
           </div>
           <div
-            *ngIf="formProv.controls['telefonocontacto']?.hasError('minlength')"
+            *ngIf="this.contactViewModel.phoneNumber && !validatePhoneNumber(this.contactViewModel.phoneNumber)"
             class="col-auto"
           >
-            <span class="form-text text-light">Ingrese 8 o mas digitos</span>
+            <span class="form-text text-light">Por ejemplo: +54-11-12345678</span>
           </div>
         </div>
         <div class="col-12 col-md-auto mb-3">
@@ -527,11 +531,11 @@
             <span class="form-text text-light">El campo es obligatorio</span>
           </div>
           <div
-            *ngIf="formProv.controls['emailcontacto']?.hasError('minlength')"
-            class="col-auto"
-          >
-            <span class="form-text text-light">Ingrese 3 o mas digitos</span>
-          </div>
+          *ngIf="this.contactViewModel.email && !validateEmail(this.contactViewModel.email)"
+          class="col-auto"
+        >
+          <span class="form-text text-light">Por ejemplo: correo&#64;example.com.</span>
+        </div>
         </div>
         <div class="col-12 col-md-auto mb-3">
           <label for="rol" class="form-label text-light">Rol:</label>
@@ -563,7 +567,7 @@
       <div class="row">
         <div class="col-12 mt-2">
           <button
-            [disabled]="!formProv.valid || this.existsCode || !this.isCuit"
+            [disabled]="!formProv.valid || this.existsCode || !this.isCuit || !validatePhoneNumber(this.supplierViewModel.phoneNumber) || !validateEmail(this.supplierViewModel.email) || !validateUrl(this.supplierViewModel.image) ||!validateUrl(this.supplierViewModel.website) || !validatePhoneNumber(this.contactViewModel.phoneNumber) || !validateEmail(this.contactViewModel.email)"
             type="submit"
             class="btn btn-success"
           >

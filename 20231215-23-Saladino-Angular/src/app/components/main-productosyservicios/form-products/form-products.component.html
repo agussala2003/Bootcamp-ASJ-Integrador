@@ -149,6 +149,12 @@
         <div *ngIf="formProdyServ.controls['imagen']?.hasError('required')" class="col-auto">
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
+        <div
+        *ngIf="this.productViewModel.imageUrl && !validateUrl(this.productViewModel.imageUrl)"
+        class="col-auto"
+      >
+        <span class="form-text text-light">Por ejemplo: https://...</span>
+      </div>
       </div>
         <div class="col-12 col-md-6 mb-3">
           <label for="descripcion" class="form-label text-light"
@@ -177,7 +183,7 @@
     <div class="row">
       <div class="col-12 mt-2">
         <button
-          [disabled]="!formProdyServ.valid || this.isActiveSku || !this.isNumberCode"
+          [disabled]="!formProdyServ.valid || this.isActiveSku || !this.isNumberCode || !validateUrl(this.productViewModel.imageUrl)"
           type="submit"
           class="btn btn-success">
           {{this.flagCode ? 'Agregar' : 'Actualizar'}}
