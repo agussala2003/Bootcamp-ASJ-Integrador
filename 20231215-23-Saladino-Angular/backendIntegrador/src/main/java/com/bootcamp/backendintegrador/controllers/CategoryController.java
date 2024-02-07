@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.backendintegrador.errors.DuplicateException;
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
 import com.bootcamp.backendintegrador.models.Category;
-import com.bootcamp.backendintegrador.models.ErrorHandler;
 import com.bootcamp.backendintegrador.services.CategoryService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -45,6 +46,8 @@ public class CategoryController {
     public ResponseEntity<?> getCategoryById(@PathVariable Integer id) {
     	try {
             return ResponseEntity.ok(categoryService.getCategoryById(id));
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching categories");
 		}
@@ -77,8 +80,10 @@ public class CategoryController {
             }
             Category createdCategory = categoryService.createCategory(category);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		} catch (DuplicateException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has occurred");
 		}
     }
     
@@ -91,9 +96,13 @@ public class CategoryController {
             }
             Category updatedCategory = categoryService.updateCategory(id,category);
             return ResponseEntity.status(HttpStatus.CREATED).body(updatedCategory);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating industry: " + e.getMessage());
-        }
+        } catch (DuplicateException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has occurred");
+		}
     }
 
     @DeleteMapping("/{id}")
@@ -101,6 +110,8 @@ public class CategoryController {
     	try {
             categoryService.deleteCategoryById(id);
             return ResponseEntity.noContent().build();
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleting categories");
 		}
@@ -110,7 +121,9 @@ public class CategoryController {
     public ResponseEntity<?> undeleteCategoryById(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(categoryService.undeleteCategoryById(id));
-        } catch (Exception e) {
+        } catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		} catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while undeleting order by id");
         }
     }

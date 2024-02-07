@@ -45,7 +45,7 @@ public class RoleService {
             existingRole.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return roleRepository.save(existingRole);
         } else {
-        	throw new EntityNotFoundException("An error has occurred");
+        	throw new EntityNotFoundException("Role doesn't exists");
         }
     }
 

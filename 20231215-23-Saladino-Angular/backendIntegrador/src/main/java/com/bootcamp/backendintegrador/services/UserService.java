@@ -37,7 +37,7 @@ public class UserService {
 
     public User createUser(User user) {
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        Role role = roleService.getRoleById(user.getRole().getId()).orElseThrow(() -> new RuntimeException("Role not found"));
+        Role role = roleService.getRoleById(user.getRole().getId()).orElseThrow(() -> new EntityNotFoundException("Role not found"));
         user.setRole(role);
         return userRepository.save(user);
     }
@@ -47,7 +47,7 @@ public class UserService {
 
         if (existingUserOptional.isPresent()) {
             User existingUser = existingUserOptional.get();
-            Role role = roleService.getRoleById(updatedUser.getRole().getId()).orElseThrow(() -> new RuntimeException("Role not found"));
+            Role role = roleService.getRoleById(updatedUser.getRole().getId()).orElseThrow(() -> new EntityNotFoundException("Role not found"));
 
             existingUser.setRole(role);
             existingUser.setFirstName(updatedUser.getFirstName());
@@ -58,7 +58,7 @@ public class UserService {
 
             return userRepository.save(existingUser);
         } else {
-        	throw new EntityNotFoundException("An error has occurred");
+        	throw new EntityNotFoundException("User doesn't exists");
         }
     }
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bootcamp.backendintegrador.models.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
 import com.bootcamp.backendintegrador.models.OrderDetail;
 import com.bootcamp.backendintegrador.services.OrderDetailService;
 
@@ -47,6 +47,8 @@ public class OrderDetailController {
         try {
             Optional<OrderDetail> orderDetail = orderDetailsService.getOrderDetailsById(id);
             return ResponseEntity.ok(orderDetail);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching order detail by id");
         }
@@ -57,7 +59,9 @@ public class OrderDetailController {
         try {
             Optional<List<OrderDetail>> orderDetails = orderDetailsService.getOrderDetailByOrderId(orderId);
             return ResponseEntity.ok(orderDetails);
-        } catch (Exception e) {
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }  catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching order details by order id");
         }
     }
@@ -73,7 +77,9 @@ public class OrderDetailController {
             List<OrderDetail> createdOrderDetails = orderDetailsService.createOrderDetails(orderDetails);
             return ResponseEntity.ok(createdOrderDetails);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating order details: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating order details");
         }
     }
 

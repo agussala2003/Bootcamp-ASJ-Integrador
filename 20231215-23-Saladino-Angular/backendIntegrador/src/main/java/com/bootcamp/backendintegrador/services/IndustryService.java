@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.backendintegrador.errors.DuplicateException;
 import com.bootcamp.backendintegrador.models.Industry;
 import com.bootcamp.backendintegrador.repositories.IndustryRepository;
 
@@ -27,7 +28,7 @@ public class IndustryService {
     	if(industry.isPresent()) {
     		return industry;
     	} else {
-        	throw new EntityNotFoundException("An error has occurred");
+        	throw new EntityNotFoundException("Industry doesn't exists");
         }
     }
     
@@ -44,7 +45,7 @@ public class IndustryService {
     	List<Industry> allIndustries = getAllIndustries();
     	for (Industry industry : allIndustries) {
 			if(industry.getIndustryName().equalsIgnoreCase(newIndustry.getIndustryName())) {
-				throw new EntityNotFoundException("Industry Already exists");
+				throw new DuplicateException("Industry Already exists");
 			}
 		}
         newIndustry.setCreatedAt(new Timestamp(System.currentTimeMillis()));
@@ -57,7 +58,7 @@ public class IndustryService {
     	List<Industry> allIndustries = getAllIndustries();
     	for (Industry industry : allIndustries) {
 			if(industry.getIndustryName().equalsIgnoreCase(updatedIndustry.getIndustryName())) {
-				throw new EntityNotFoundException("Industry Already exists");
+				throw new DuplicateException("Industry Already exists");
 			}
 		}
     	
@@ -66,7 +67,7 @@ public class IndustryService {
             industry.setIndustryName(updatedIndustry.getIndustryName());
             return industryRepository.save(industry);
         } else {
-        	throw new EntityNotFoundException("An error has occurred");
+        	throw new EntityNotFoundException("Industry doesn't exists");
         }
     }
 
@@ -78,7 +79,7 @@ public class IndustryService {
             industry.setActive(false);
             return industryRepository.save(industry);
         } else {
-        	throw new EntityNotFoundException("An error has occurred");
+        	throw new EntityNotFoundException("Industry doesn't exists");
         }
     }
     
@@ -90,7 +91,7 @@ public class IndustryService {
             industry.setActive(true);
             return industryRepository.save(industry);
         } else {
-        	throw new EntityNotFoundException("An error has occurred");
+        	throw new EntityNotFoundException("Industry doesn't exists");
         }
     }
 }

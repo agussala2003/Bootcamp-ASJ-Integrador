@@ -248,7 +248,7 @@ export class FormOrdersComponent implements OnInit {
       (data: Product[]) => {
         console.log('You prodcuts by supplier id');
         console.log(data);
-        this.products = data;
+        this.products = data.filter((item: Product) => item.active);
       },
       (error) => {
         console.log('Error getting products by supplier id');

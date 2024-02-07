@@ -1,4 +1,4 @@
-package com.bootcamp.backendintegrador.models;
+package com.bootcamp.backendintegrador.errors;
 
 import java.util.HashMap;
 import java.util.Map;

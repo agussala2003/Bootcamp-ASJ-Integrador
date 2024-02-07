@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.backendintegrador.errors.DuplicateException;
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.Industry;
 import com.bootcamp.backendintegrador.models.IvaCondition;
 import com.bootcamp.backendintegrador.models.Supplier;
@@ -56,34 +58,30 @@ public class SupplierService {
     }
 
     public Supplier postSupplier(Supplier supplier) {
-    	
-    	List<Supplier> suppliers = getSuppliers();
-    	
-    	for (Supplier supplier2 : suppliers) {
-			if(supplier2.getSupplierCode().equals(supplier.getSupplierCode())) {
-				throw new EntityNotFoundException("The supplier code is used");
-			}
-		}
-    	
-    	if(validateSupplierInput(supplier)) {
-            if (supplier.getCreatedAt() == null) {
-                supplier.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        List<Supplier> suppliers = getSuppliers();
+        
+        for (Supplier existingSupplier : suppliers) {
+            if(existingSupplier.getSupplierCode().equals(supplier.getSupplierCode())) {
+                throw new DuplicateException("The supplier code is already in use");
             }
+        }
+        
+        if (!validateSupplierInput(supplier)) {
+            throw new ValidationException("Invalid supplier data provided");
+        }
+        
+        supplier.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
-            Industry industry = industryService.getIndustryById(supplier.getIndustry().getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Industry not found")); // Handle properly
+        Industry industry = industryService.getIndustryById(supplier.getIndustry().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Industry not found"));
 
-            IvaCondition ivaCondition = ivaConditionService.getIvaConditionById(supplier.getIvaCondition().getId())
-                    .orElseThrow(() -> new EntityNotFoundException("IvaCondition not found")); // Handle properly
+        IvaCondition ivaCondition = ivaConditionService.getIvaConditionById(supplier.getIvaCondition().getId())
+                .orElseThrow(() -> new EntityNotFoundException("IVA Condition not found"));
 
-            supplier.setIndustry(industry);
-            supplier.setIvaCondition(ivaCondition);
-            
+        supplier.setIndustry(industry);
+        supplier.setIvaCondition(ivaCondition);
 
-            return supplierRepository.save(supplier);
-    	} else {
-    		throw new EntityNotFoundException("The values are wrong");
-    	}
+        return supplierRepository.save(supplier);
     }
 
     public Supplier deleteSupplier(Integer id) {
@@ -95,7 +93,7 @@ public class SupplierService {
             supplier.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return supplierRepository.save(supplier);
         } else {
-        	throw new EntityNotFoundException("Supplier can't be deleted");
+        	throw new EntityNotFoundException("Supplier doesn't exists");
         }
 
     }
@@ -109,12 +107,16 @@ public class SupplierService {
         	List<Supplier> suppliers = getSuppliers();
         	for (Supplier supplier2 : suppliers) {
     			if(supplier2.getSupplierCode().equals(updatedSupplier.getSupplierCode())) {
-    				throw new EntityNotFoundException("The supplier code is used");
+    				throw new DuplicateException("The supplier code is used");
     			}
     		}
         }
+        
+        if (!validateSupplierInput(updatedSupplier)) {
+            throw new ValidationException("Invalid supplier data provided");
+        }
 
-        if (existingSupplierOptional.isPresent() && validateSupplierInput(updatedSupplier)) {
+        if (existingSupplierOptional.isPresent()) {
             Supplier existingSupplier = existingSupplierOptional.get();
 
             Industry industry = industryService.getIndustryById(updatedSupplier.getIndustry().getId())
@@ -137,7 +139,7 @@ public class SupplierService {
 
             return supplierRepository.save(existingSupplier);
         } else {
-        	throw new EntityNotFoundException("The values are wrong");
+        	throw new EntityNotFoundException("Supplier doesn't exists");
         }
     }
 
@@ -150,7 +152,7 @@ public class SupplierService {
             supplier.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return supplierRepository.save(supplier);
         } else {
-        	throw new EntityNotFoundException("Supplier can't be undeleted");
+        	throw new EntityNotFoundException("Supplier doesn't exists");
         }
     }
     

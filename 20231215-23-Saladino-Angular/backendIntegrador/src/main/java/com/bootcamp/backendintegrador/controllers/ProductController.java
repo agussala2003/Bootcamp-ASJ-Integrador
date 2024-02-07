@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bootcamp.backendintegrador.models.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.DuplicateException;
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.Product;
 import com.bootcamp.backendintegrador.services.ProductService;
 
@@ -89,6 +91,8 @@ public class ProductController {
         try {
             Optional<Product> product = productsService.getProductById(id);
             return ResponseEntity.ok(product);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching product by id");
         }
@@ -99,6 +103,8 @@ public class ProductController {
         try {
             Optional<List<Product>> products = productsService.getProductBySupplierId(supplierId);
             return ResponseEntity.ok(products);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching products by supplier id");
         }
@@ -109,6 +115,8 @@ public class ProductController {
         try {
             Optional<List<Product>> products = productsService.getProductByCategoryId(categoryId);
             return ResponseEntity.ok(products);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching products by supplier id");
         }
@@ -122,10 +130,15 @@ public class ProductController {
                 return ResponseEntity.badRequest().body(errors);
             }
 
-            // Consider using HttpStatus.CREATED for successful creation
             return ResponseEntity.ok(productsService.postProduct(product));
+        } catch (DuplicateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating product: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 
@@ -134,6 +147,8 @@ public class ProductController {
         try {
             Product deletedProduct = productsService.deleteProductById(id);
             return ResponseEntity.ok(deletedProduct);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting product");
         }
@@ -148,8 +163,14 @@ public class ProductController {
             }
 
             return ResponseEntity.ok(productsService.putProduct(id, product));
+        } catch (DuplicateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while updating product: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 
@@ -158,6 +179,8 @@ public class ProductController {
         try {
             Product undeletedProduct = productsService.undeleteProductById(id);
             return ResponseEntity.ok(undeletedProduct);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while undeleting product");
         }

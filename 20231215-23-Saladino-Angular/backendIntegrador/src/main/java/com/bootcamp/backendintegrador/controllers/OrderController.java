@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bootcamp.backendintegrador.models.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.DuplicateException;
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.Order;
 import com.bootcamp.backendintegrador.services.OrderService;
 
@@ -69,6 +71,8 @@ public class OrderController {
         try {
             List<Order> statusOrders = orderService.getOrdersByStatusId(statusId);
             return ResponseEntity.ok(statusOrders);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching deleted orders");
         }
@@ -79,6 +83,8 @@ public class OrderController {
         try {
             Optional<Order> order = orderService.getOrderById(id);
             return ResponseEntity.ok(order);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching order by id");
         }
@@ -92,8 +98,14 @@ public class OrderController {
                 return ResponseEntity.badRequest().body(errors);
             }
             return ResponseEntity.ok(orderService.createOrder(order));
+        } catch (DuplicateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating order: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 
@@ -101,6 +113,8 @@ public class OrderController {
     public ResponseEntity<?> deleteOrderById(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(orderService.desactivateOrderById(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting order by id");
         }
@@ -114,8 +128,14 @@ public class OrderController {
                 return ResponseEntity.badRequest().body(errors);
             }
             return ResponseEntity.ok(orderService.updateOrder(id, order));
+        } catch (DuplicateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while updating order: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 
@@ -123,8 +143,10 @@ public class OrderController {
     public ResponseEntity<?> undeleteOrderById(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(orderService.undeleteOrderById(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while undeleting order by id");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting order by id");
         }
     }
 }

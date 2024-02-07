@@ -45,9 +45,7 @@ public class ContactService {
     public Contact createContact(Contact newContact) {
     	
         if(validateContactInput(newContact)) {
-            if (newContact.getCreatedAt() == null) {
-                newContact.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            }
+            newContact.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
             Supplier supplier = supplierService.getSupplierById(newContact.getSupplier().getId())
                     .orElseThrow(() -> new EntityNotFoundException("Supplier not found"));

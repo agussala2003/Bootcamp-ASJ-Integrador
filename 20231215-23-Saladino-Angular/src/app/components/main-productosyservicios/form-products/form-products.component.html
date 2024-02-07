@@ -1,4 +1,4 @@
-<div class="bg-dark">
+<article class="bg-dark">
   <div *ngIf="userState == true" class="container py-5 p-md-5">
     <!-- Ruteo -->
     <div class="row">
@@ -150,7 +150,6 @@
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
       </div>
-      <!-- <div class="row"> -->
         <div class="col-12 col-md-6 mb-3">
           <label for="descripcion" class="form-label text-light"
             >Descripcion:</label
@@ -173,7 +172,6 @@
           <div *ngIf="formProdyServ.controls['descripcion']?.hasError('minlength')" class="col-auto">
             <span class="form-text text-light">Ingrese 15 o mas digitos</span>
           </div>
-        <!-- </div> -->
       </div>
     </div>
     <div class="row">
@@ -193,4 +191,4 @@
     <app-navigation-home></app-navigation-home>
   </div>
   <!-- Verificamos el estado del usuario -->
-</div>
+</article>

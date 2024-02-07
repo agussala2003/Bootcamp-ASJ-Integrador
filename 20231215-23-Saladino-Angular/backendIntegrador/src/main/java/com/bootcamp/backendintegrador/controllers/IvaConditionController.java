@@ -10,11 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import com.bootcamp.backendintegrador.models.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
 import com.bootcamp.backendintegrador.models.IvaCondition;
 import com.bootcamp.backendintegrador.services.IvaConditionService;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -55,8 +54,8 @@ public class IvaConditionController {
 
             IvaCondition createdIvaCondition = ivaConditionsService.postIvaCondition(ivaCondition);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdIvaCondition);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating IvaCondition: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating IvaCondition");
         }
     }
 

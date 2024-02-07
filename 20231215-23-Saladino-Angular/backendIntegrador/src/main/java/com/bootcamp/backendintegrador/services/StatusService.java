@@ -42,7 +42,7 @@ public class StatusService {
             existingStatus.setStatusName(updatedStatus.getStatusName());
             return statusRepository.save(existingStatus);
         } else {
-        	throw new EntityNotFoundException("An error has occurred");
+        	throw new EntityNotFoundException("Status doesn't exists");
         }
     }
     

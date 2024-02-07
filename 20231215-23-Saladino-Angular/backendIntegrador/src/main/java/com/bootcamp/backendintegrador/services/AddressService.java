@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.Address;
 import com.bootcamp.backendintegrador.models.Location;
 import com.bootcamp.backendintegrador.models.Supplier;
@@ -42,37 +43,39 @@ public class AddressService {
     
     public Optional<List<Address>> getAddressBySupplierId(Integer supplierId) {
     	Supplier supplier = supplierService.getSupplierById(supplierId).orElseThrow(() ->
-        new IllegalArgumentException("Supplier with ID " + supplierId + " not found"));
+        new EntityNotFoundException("Supplier with ID " + supplierId + " not found"));
     	return Optional.ofNullable(addressRepository.findBySupplier(supplier));
     }
 
     public Address postAddress(Address address) {
 
-    	if(validateAddressInput(address)) {
-            if (address.getCreatedAt() == null) {
-                address.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            }
+        if (!validateAddressInput(address)) {
+            throw new ValidationException("Invalid supplier data provided");
+        } else {
+        	address.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
             Supplier supplier = supplierService.getSupplierById(address.getSupplier().getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
+                        .orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
 
             Location location = locationService.getLocationById(address.getLocation().getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Location not found"));
+                        .orElseThrow(() -> new EntityNotFoundException("Location not found"));
 
             address.setSupplier(supplier);
             address.setLocation(location);
 
             return addressRepository.save(address);
-    	} else {
-    		throw new EntityNotFoundException("Values are wrong");
-    	}
+        }
     	
     }
 
     public Address putAddress(Integer id, Address updatedAddress) {
         Optional<Address> existingAddressOptional = addressRepository.findById(id);
+        
+        if (!validateAddressInput(updatedAddress)) {
+            throw new ValidationException("Invalid supplier data provided");
+        }
 
-        if (existingAddressOptional.isPresent() && validateAddressInput(updatedAddress)) {
+        if (existingAddressOptional.isPresent()) {
             Address existingAddress = existingAddressOptional.get();
 
             Supplier supplier = supplierService.getSupplierById(updatedAddress.getSupplier().getId())
@@ -91,7 +94,7 @@ public class AddressService {
 
             return addressRepository.save(existingAddress);
         } else {
-        	throw new EntityNotFoundException("Values are wrong");
+        	throw new EntityNotFoundException("Address doesn't exists");
         }
 
     }

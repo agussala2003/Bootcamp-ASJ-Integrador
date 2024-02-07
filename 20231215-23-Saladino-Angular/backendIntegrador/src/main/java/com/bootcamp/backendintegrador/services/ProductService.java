@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.backendintegrador.errors.DuplicateException;
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.Category;
 import com.bootcamp.backendintegrador.models.Product;
 import com.bootcamp.backendintegrador.models.Supplier;
@@ -73,26 +75,24 @@ public class ProductService {
     	
     	for (Product product2 : products) {
 			if(product2.getSku().equals(product.getSku())) {
-				throw new EntityNotFoundException("The sku is used");
+				throw new DuplicateException("The sku is used");
 			}
 		}
+    	
+		if(!validateProductInput(product)) {
+			throw new ValidationException("Invalid product data provided");
+		}
 		
-		if(validateProductInput(product)) {
-			if (product.getCreatedAt() == null) {
-				product.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-	        }
-			
-			Optional<Supplier> supplier = Optional.ofNullable(supplierService.getSupplierById(product.getSupplier().getId()).orElseThrow(() ->
-	        new EntityNotFoundException("Supplier with ID " + product.getSupplier().getId() + " not found")));
-			Optional<Category> category = Optional.ofNullable(categoryService.getCategoryById(product.getCategory().getId()).orElseThrow(() ->
-	        new EntityNotFoundException("Supplier with ID " + product.getCategory().getId() + " not found")));
-			
-			product.setSupplier(supplier.get());
-			product.setCategory(category.get());
-			return productsRepository.save(product);
-		} else {
-			throw new EntityNotFoundException("Values are wrong");
-		}		
+		product.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		
+		Optional<Supplier> supplier = Optional.ofNullable(supplierService.getSupplierById(product.getSupplier().getId()).orElseThrow(() ->
+        new EntityNotFoundException("Supplier with ID " + product.getSupplier().getId() + " not found")));
+		Optional<Category> category = Optional.ofNullable(categoryService.getCategoryById(product.getCategory().getId()).orElseThrow(() ->
+        new EntityNotFoundException("Supplier with ID " + product.getCategory().getId() + " not found")));
+		
+		product.setSupplier(supplier.get());
+		product.setCategory(category.get());
+		return productsRepository.save(product);	
 	}
 	
 	public Product deleteProductById(Integer id){
@@ -104,7 +104,7 @@ public class ProductService {
 			product.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return productsRepository.save(product);
 		} else {
-			throw new EntityNotFoundException("Product can't be deleted");
+			throw new EntityNotFoundException("Product doesn't exists");
 		}
 	}
 	
@@ -117,12 +117,16 @@ public class ProductService {
 			List<Product> products = getProducts();
 	    	for (Product product2 : products) {
 				if(product2.getSku().equals(product.getSku())) {
-					throw new EntityNotFoundException("The sku is used");
+					throw new DuplicateException("The sku is used");
 				}
 			}
 		}
 		
-		if(optionalProduct.isPresent() && validateProductInput(product)) {
+		if(!validateProductInput(product)) {
+			throw new ValidationException("Invalid product data provided");
+		}
+		
+		if(optionalProduct.isPresent()) {
 			Product existingProduct = optionalProduct.get();
 			
 			Optional<Supplier> supplier = Optional.ofNullable(supplierService.getSupplierById(product.getSupplier().getId()).orElseThrow(() ->
@@ -142,7 +146,7 @@ public class ProductService {
 
 	        return productsRepository.save(existingProduct);
 		} else {
-			throw new EntityNotFoundException("Values are wrong");
+			throw new EntityNotFoundException("Product doesn't exists");
 		}
 	}
 	
@@ -158,7 +162,7 @@ public class ProductService {
 
             return productsRepository.save(product);
         } else {
-			throw new EntityNotFoundException("Product can't be undeleted");
+			throw new EntityNotFoundException("Product doesn't exists");
 		}
     }
 	

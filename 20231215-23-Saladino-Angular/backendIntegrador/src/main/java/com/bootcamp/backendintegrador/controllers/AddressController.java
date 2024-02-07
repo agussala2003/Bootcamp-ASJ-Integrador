@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.Address;
-import com.bootcamp.backendintegrador.models.ErrorHandler;
 import com.bootcamp.backendintegrador.services.AddressService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -46,6 +47,8 @@ public class AddressController {
     public ResponseEntity<?> getAddressById(@PathVariable Integer id) {
     	try {
     		 return ResponseEntity.ok(addressService.getAddressById(id));
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching address by id");
 		}
@@ -56,7 +59,9 @@ public class AddressController {
     public ResponseEntity<?> getAddressBySupplierId(@PathVariable Integer id) {
     	try {
     		return ResponseEntity.ok(addressService.getAddressBySupplierId(id));
-		} catch (Exception e) {
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}  catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching addresses by supplier id");
 		}
         
@@ -71,9 +76,13 @@ public class AddressController {
             }
             Address createdAddress = addressService.postAddress(address);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdAddress);
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-		}
+		} catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
     }
 
     @PutMapping("/{id}")
@@ -90,9 +99,13 @@ public class AddressController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Address not found");
             }
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-		}
+		} catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
 
     }
 

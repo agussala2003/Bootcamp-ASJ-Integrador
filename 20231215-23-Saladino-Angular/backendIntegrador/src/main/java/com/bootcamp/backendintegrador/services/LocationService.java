@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.Location;
 import com.bootcamp.backendintegrador.models.Province;
 import com.bootcamp.backendintegrador.repositories.LocationRepository;
@@ -35,22 +36,27 @@ public class LocationService {
     }
 
     public Location postLocation(Location location) {
-    	if(validateLocationInput(location)) {
-    		Province province = provinceService.getProvinceById(location.getProvince().getId())
+    	
+    	if(!validateLocationInput(location)) {
+    		throw new ValidationException("Invalid location data provided");
+    	}
+    	
+    	Province province = provinceService.getProvinceById(location.getProvince().getId())
     				.orElseThrow(() -> new EntityNotFoundException("Province not found"));
     		
-    		location.setProvince(province);
+    	location.setProvince(province);
     		
-    		return locationsRepository.save(location);
-    	} else {
-    		throw new EntityNotFoundException("An error has occurred");
-    	}
+    	return locationsRepository.save(location);
     }
 
     public Location putLocation(Integer id, Location location) {
         Optional<Location> existingLocationOptional = locationsRepository.findById(id);
 
-        if (existingLocationOptional.isPresent() && validateLocationInput(location)) {
+        if(!validateLocationInput(location)) {
+    		throw new ValidationException("Invalid location data provided");
+    	}
+        
+        if (existingLocationOptional.isPresent()) {
             Location existingLocation = existingLocationOptional.get();
 
             Province province = provinceService.getProvinceById(location.getProvince().getId())
@@ -61,7 +67,7 @@ public class LocationService {
             
             return locationsRepository.save(existingLocation);
         } else {
-    		throw new EntityNotFoundException("An error has occurred");
+    		throw new EntityNotFoundException("Location doesn't exists");
     	}
     }
     

@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import com.bootcamp.backendintegrador.models.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
 import com.bootcamp.backendintegrador.models.Province;
 import com.bootcamp.backendintegrador.services.ProvinceService;
 
@@ -40,6 +40,8 @@ public class ProvinceController {
         try {
             Optional<Province> province = provinceService.getProvinceById(id);
             return ResponseEntity.ok(province);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching province by ID");
         }
@@ -50,6 +52,8 @@ public class ProvinceController {
         try {
             List<Province> provinces = provinceService.getProvincesByCountryId(countryId);
             return ResponseEntity.ok(provinces);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching provinces by country ID");
         }
@@ -66,8 +70,10 @@ public class ProvinceController {
             Province createdProvince = provinceService.createProvince(province);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdProvince);
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has ocurred");
+		}
     }
 
     @PutMapping("/{id}")
@@ -85,8 +91,10 @@ public class ProvinceController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Province not found");
             }
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has ocurred");
+		}
     }
 
     @DeleteMapping("/{id}")
@@ -95,7 +103,7 @@ public class ProvinceController {
             provinceService.deleteProvince(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting province");
-        }
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has ocurred");
+		}
     }
 }

@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.backendintegrador.errors.DuplicateException;
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.Order;
 import com.bootcamp.backendintegrador.models.Status;
 import com.bootcamp.backendintegrador.models.Supplier;
@@ -64,36 +66,34 @@ public class OrderService {
     	
     	for (Order order2 : orders) {
 			if(order2.getOrderNumber().equals(newOrder.getOrderNumber())) {
-				throw new EntityNotFoundException("The order number is used");
+				throw new DuplicateException("The order number is used");
 			}
 		}
     	
-    	if(validateOrder(newOrder)) {
-            if (newOrder.getCreatedAt() == null) {
-                newOrder.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            }
-
-            Supplier orderSupplier = supplierService.getSupplierById(newOrder.getSupplier().getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Supplier not found with ID: " + newOrder.getSupplier().getId()));
-
-            Status orderStatus = statusService.getStatusById(newOrder.getStatus().getId())
-                    .orElseThrow(() -> new EntityNotFoundException("Status not found with ID: " + newOrder.getStatus().getId()));
-
-            User orderUser = userService.getUserById(newOrder.getUser().getId())
-                    .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + newOrder.getUser().getId()));
-            
-            if(orderStatus.getId() == 2) {
-            	newOrder.setActive(false);
-            }
-
-            newOrder.setSupplier(orderSupplier);
-            newOrder.setStatus(orderStatus);
-            newOrder.setUser(orderUser);
-
-            return orderRepository.save(newOrder);
-    	} else {
-    		throw new EntityNotFoundException("Values are wrong");
+    	if(!validateOrder(newOrder)) {
+    		throw new ValidationException("Invalid order data provided");
     	}
+    	
+        newOrder.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+        Supplier orderSupplier = supplierService.getSupplierById(newOrder.getSupplier().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Supplier not found with ID: " + newOrder.getSupplier().getId()));
+
+        Status orderStatus = statusService.getStatusById(newOrder.getStatus().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Status not found with ID: " + newOrder.getStatus().getId()));
+
+        User orderUser = userService.getUserById(newOrder.getUser().getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + newOrder.getUser().getId()));
+        
+        if(orderStatus.getId() == 2) {
+        	newOrder.setActive(false);
+        }
+
+        newOrder.setSupplier(orderSupplier);
+        newOrder.setStatus(orderStatus);
+        newOrder.setUser(orderUser);
+
+        return orderRepository.save(newOrder);
     }
 
 
@@ -109,7 +109,7 @@ public class OrderService {
             orderToDeactivate.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
             return orderRepository.save(orderToDeactivate);
         } else {
-        	throw new EntityNotFoundException("Order can't be canceled");
+        	throw new EntityNotFoundException("Order doesn't exists");
         }
     }
 
@@ -122,12 +122,16 @@ public class OrderService {
         	List<Order> orders = getAllOrders();
         	for (Order order2 : orders) {
     			if(order2.getOrderNumber().equals(updatedOrder.getOrderNumber())) {
-    				throw new EntityNotFoundException("The order number is used");
+    				throw new DuplicateException("The order number is used");
     			}
     		}
         }
+        
+    	if(!validateOrder(updatedOrder)) {
+    		throw new ValidationException("Invalid order data provided");
+    	}
 
-        if (optionalOrder.isPresent() && validateOrder(updatedOrder)) {
+        if (optionalOrder.isPresent()) {
             Order existingOrder = optionalOrder.get();
 
             Supplier updatedSupplier = supplierService.getSupplierById(updatedOrder.getSupplier().getId()).orElseThrow(
@@ -141,15 +145,13 @@ public class OrderService {
             existingOrder.setStatus(updatedStatus);
             existingOrder.setUser(updatedUser);
             existingOrder.setDeliveryDate(updatedOrder.getDeliveryDate());
-//            existingOrder.setIssuanceDate(updatedOrder.getIssuanceDate());
             existingOrder.setReceptionInfo(updatedOrder.getReceptionInfo());
-//            existingOrder.setOrderNumber(updatedOrder.getOrderNumber());
 
             existingOrder.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
             return orderRepository.save(existingOrder);
         } else {	
-        	throw new EntityNotFoundException("Values are wrong");
+        	throw new EntityNotFoundException("Order doesn't exists");
         }
     }
     
@@ -181,7 +183,7 @@ public class OrderService {
 
             return orderRepository.save(orderToUndelete);
         } else {
-        	throw new EntityNotFoundException("Order can't be activated");
+        	throw new EntityNotFoundException("Order doesn't exists");
         }
     }
 }

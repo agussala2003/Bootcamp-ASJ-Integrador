@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bootcamp.backendintegrador.models.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.DuplicateException;
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
 import com.bootcamp.backendintegrador.models.Industry;
 import com.bootcamp.backendintegrador.services.IndustryService;
 
@@ -47,6 +48,8 @@ public class IndustryController {
         try {
             Optional<Industry> industry = industryService.getIndustryById(id);
             return new ResponseEntity<>(industry, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching industry by id: " + e.getMessage());
         }
@@ -79,7 +82,9 @@ public class IndustryController {
             }
             Industry createdIndustry = industryService.createIndustry(industry);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdIndustry);
-        } catch (EntityNotFoundException e) {
+        } catch (DuplicateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating industry: " + e.getMessage());
         }
     }
@@ -93,7 +98,11 @@ public class IndustryController {
             }
             Industry updatedIndustry = industryService.updateIndustry(id,industry);
             return ResponseEntity.status(HttpStatus.CREATED).body(updatedIndustry);
+        } catch (DuplicateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while creating industry: " + e.getMessage());
         }
     }
@@ -103,6 +112,8 @@ public class IndustryController {
         try {
             industryService.deleteIndustryById(id);
             return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting industry");
         }
@@ -112,6 +123,8 @@ public class IndustryController {
     public ResponseEntity<?> undeleteIndustryById(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(industryService.undeleteIndustryById(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while undeleting order by id");
         }

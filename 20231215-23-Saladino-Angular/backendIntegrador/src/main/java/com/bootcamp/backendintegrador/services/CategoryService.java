@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.backendintegrador.errors.DuplicateException;
 import com.bootcamp.backendintegrador.models.Category;
 import com.bootcamp.backendintegrador.repositories.CategoryRepository;
 
@@ -43,20 +44,20 @@ public class CategoryService {
     	List<Category> allCategories = getAllCategories();
     	for (Category category : allCategories) {
 			if(category.getCategoryName().equalsIgnoreCase(newCategory.getCategoryName())) {
-				throw new EntityNotFoundException("Category already exists");
+				throw new DuplicateException("Category already exists");
 			}
 		}
         newCategory.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return categoryRepository.save(newCategory);
     }
     
-    public Category updateCategory(Integer id, Category updatedCategory) {
+    public Category updateCategory(Integer id, Category updatedCategory) throws Exception  {
     	Optional<Category> optionalCategory = categoryRepository.findById(id);
     	
     	List<Category> allCategories = getAllCategories();
     	for (Category category : allCategories) {
 			if(category.getCategoryName().equalsIgnoreCase(updatedCategory.getCategoryName())) {
-				throw new EntityNotFoundException("Category already exists");
+				throw new DuplicateException("Category already exists");
 			}
 		}
     	if (optionalCategory.isPresent()) {
@@ -64,7 +65,7 @@ public class CategoryService {
             category.setCategoryName(updatedCategory.getCategoryName());
             return categoryRepository.save(category);
         } else {	
-        	throw new EntityNotFoundException("An error has ocurred");
+        	throw new EntityNotFoundException("Category doesn't exists");
         }
     	
     }
@@ -89,8 +90,8 @@ public class CategoryService {
             Category category = optionalCategory.get();
             category.setActive(true);
             return categoryRepository.save(category);
-        } else {
-        	throw new EntityNotFoundException("An error has occurred");
+        } else {	
+        	throw new EntityNotFoundException("Category doesn't exists");
         }
     }
 

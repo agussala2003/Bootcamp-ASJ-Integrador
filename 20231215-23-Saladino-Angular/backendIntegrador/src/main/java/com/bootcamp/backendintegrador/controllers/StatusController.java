@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bootcamp.backendintegrador.models.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
 import com.bootcamp.backendintegrador.models.Status;
 import com.bootcamp.backendintegrador.services.StatusService;
 
@@ -48,6 +48,8 @@ public class StatusController {
         try {
             Optional<Status> status = statusService.getStatusById(id);
             return new ResponseEntity<>(status, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
         	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching status by id");
         }
@@ -63,8 +65,8 @@ public class StatusController {
 
             Status createdStatus = statusService.createStatus(status);
             return new ResponseEntity<>(createdStatus, HttpStatus.OK);
-        } catch (EntityNotFoundException e) {
-        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (Exception e) {
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has occurred");
         }
     }
 
@@ -77,13 +79,11 @@ public class StatusController {
             }
 
             Status result = statusService.updateStatus(id, updatedStatus);
-            if (result != null) {
-                return new ResponseEntity<>(result, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Status not found", HttpStatus.NOT_FOUND);
-            }
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
-        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has ocurred");
         }
     }
 

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
 import com.bootcamp.backendintegrador.models.Country;
-import com.bootcamp.backendintegrador.models.ErrorHandler;
 import com.bootcamp.backendintegrador.services.CountryService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -33,12 +33,11 @@ public class CountryController {
 
     @GetMapping()
     public ResponseEntity<?> getAllCountries() {
-    try {
-    	return new ResponseEntity<>(countryService.getAllCountries(), HttpStatus.OK);
-	} catch (Exception e) {
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching countries");
-	}
-        
+	    try {
+	    	return new ResponseEntity<>(countryService.getAllCountries(), HttpStatus.OK);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching countries");
+		}
     }
 
     @GetMapping("/{id}")
@@ -46,6 +45,8 @@ public class CountryController {
     	try {
             Optional<Country> country = countryService.getCountryById(id);
             return new ResponseEntity<>(country, HttpStatus.OK);
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching countries by id");
 		}
@@ -60,8 +61,8 @@ public class CountryController {
             }
             Country createdCountry = countryService.createCountry(country);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCountry);
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has occurred");
 		}
 
     }

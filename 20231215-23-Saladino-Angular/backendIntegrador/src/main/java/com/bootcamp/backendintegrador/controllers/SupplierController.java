@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bootcamp.backendintegrador.models.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.DuplicateException;
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.Supplier;
 import com.bootcamp.backendintegrador.services.SupplierService;
 
@@ -91,6 +93,8 @@ public class SupplierController {
         try {
             Optional<Supplier> supplier = supplierService.getSupplierById(id);
             return new ResponseEntity<>(supplier, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
         	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching suppliers by id");
         }
@@ -106,8 +110,14 @@ public class SupplierController {
 
             Supplier createdSupplier = supplierService.postSupplier(supplier);
             return new ResponseEntity<>(createdSupplier, HttpStatus.CREATED); // Return 201 Created
+        } catch (DuplicateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (EntityNotFoundException e) {
-        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 
@@ -120,8 +130,10 @@ public class SupplierController {
             } else {
                 return new ResponseEntity<>("Supplier not found", HttpStatus.NOT_FOUND);
             }
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (Exception e) {
-        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting suppliers by id");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 
@@ -139,8 +151,14 @@ public class SupplierController {
             } else {
                 return new ResponseEntity<>("Supplier not found", HttpStatus.NOT_FOUND);
             }
+        } catch (DuplicateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (EntityNotFoundException e) {
-        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 
@@ -149,8 +167,10 @@ public class SupplierController {
         try {
             Supplier undeletedSupplier = supplierService.undeleteSupplierById(id);
             return new ResponseEntity<>(undeletedSupplier, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (Exception e) {
-        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while undeleting suppliers by id");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
     }
 }

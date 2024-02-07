@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.backendintegrador.errors.ErrorHandler;
 import com.bootcamp.backendintegrador.models.Contact;
-import com.bootcamp.backendintegrador.models.ErrorHandler;
 import com.bootcamp.backendintegrador.services.ContactService;
 
 import jakarta.persistence.EntityNotFoundException;
