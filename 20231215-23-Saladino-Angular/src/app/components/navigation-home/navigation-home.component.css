@@ -1,33 +1,36 @@
 img {
-    width: -webkit-fill-available;
+  width: -webkit-fill-available;
 }
 
-/* Card styles */
-.card-container {
-    cursor: pointer;
-}
-.card {
-    width: 296px;
-    border-radius: 30px;
-    background: rgb(33, 37, 41);
-    box-shadow: 15px 15px 30px rgb(25, 25, 25),
-                -15px -15px 30px rgb(60, 60, 60);
-}
-.card p {
-    font-size: 14px;
+.carda {
+  width: 250px;
+  height: 254px;
+  background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+  border-radius: 20px;
+  transition: all 0.3s;
+  cursor: pointer;
 }
 
-/* Transición suave para el efecto hover */
-.card-container:hover .card {
-    transform: scale(1.05); /* Aumenta ligeramente el tamaño al hacer hover */
-    box-shadow: 20px 20px 40px rgb(25, 25, 25),
-                -20px -20px 40px rgb(60, 60, 60);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Añade una transición suave de 0.3 segundos */
+.card2 {
+    width: 250px;
+    height: 254px;
+    background-color: #1a1a1a;
+    border-radius: 0;
+    transition: all 0.2s;
+    border: 1px solid #fff;
 }
 
-/* Restablece las propiedades al salir del hover para evitar saltos bruscos */
-.card-container .card {
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
+.card2 p {
+  font-size: 14px;
+  padding: 0 5px;
 }
-  
-   
+
+.card2:hover {
+  transform: scale(0.98);
+  border-radius: 20px;
+  border: none;
+}
+
+.carda:hover {
+  box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.3);
+}
