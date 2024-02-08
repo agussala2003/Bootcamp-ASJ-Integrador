@@ -43,6 +43,10 @@ public class OrderService {
     public List<Order> getDeletedOrders() {
         return orderRepository.findByActiveFalse();
     }
+    
+    public List<Object[]> getTop3Suppliers() {
+        return orderRepository.findTop3Suppliers();
+    }
 
     public Optional<Order> getOrderById(Integer orderId) {
     	Optional<Order> order = orderRepository.findById(orderId);

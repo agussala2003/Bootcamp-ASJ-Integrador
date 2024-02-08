@@ -30,6 +30,10 @@ public class OrderDetailService {
     public List<OrderDetail> getOrderDetails() {
         return orderDetailsRepository.findAll();
     }
+    
+    public List<Object[]> getTop3Products() {
+        return orderDetailsRepository.findTop3Products();
+    }
 
     public Optional<OrderDetail> getOrderDetailsById(Integer id) {
     	Optional<OrderDetail> orderDetail = orderDetailsRepository.findById(id);

@@ -66,6 +66,15 @@ public class OrderController {
         }
     }
     
+    @GetMapping("/top-suppliers")
+    public ResponseEntity<?> getTop3Suppliers() {
+        try {
+            return ResponseEntity.ok(orderService.getTop3Suppliers());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching top 3 suppliers");
+        }
+    }
+    
     @GetMapping("/status/{statusId}")
     public ResponseEntity<?> getOrdersByStatusId(@PathVariable Integer statusId) {
         try {

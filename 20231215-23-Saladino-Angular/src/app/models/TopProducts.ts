@@ -1,0 +1,1 @@
+export type TopProducts = [product: string, quantity: number];

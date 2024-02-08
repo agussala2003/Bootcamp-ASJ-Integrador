@@ -49,4 +49,78 @@
             </div>
          </div>         
     </div>
+    <div class="row mt-4">
+      <div class="col-12 col-md-6 p-2 p-md-5">
+         <div class="d-flex align-items-center gap-2">
+            <i class="bx bx-package text-light fs-3"></i>
+            <h4 class="text-light m-0">Proveedores mas frecuentes</h4>
+         </div>
+         <div class="table-responsive rounded-3 mt-3 mb-3 border border-1 border-white">
+            <table class="table table-dark align-middle mb-0">
+              <thead>
+                <tr class="h-100">
+                  <th class="text-center">Puesto</th>
+                  <th class="text-center py-2 text-nowrap">Razon Social</th>
+                  <th class="text-center">Cantidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-light" *ngFor="let supplier of topSuppliers; index as i">
+                  <td>
+                    <p class="fw-normal mb-1 text-nowrap text-center">
+                      {{ i + 1 }}
+                    </p>
+                  </td>
+                  <td>
+                    <p class="fw-normal mb-1 text-nowrap text-center">
+                      {{ supplier[0] }}
+                    </p>
+                  </td>
+                  <td>
+                    <p class="fw-normal mb-1 text-nowrap text-center">
+                      {{ supplier[1] }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      </div>
+      <div class="col-12 col-md-6 p-2 p-md-5">
+         <div class="d-flex align-items-center gap-2">
+            <i class="bx bx-shopping-bag text-light fs-3"></i>
+            <h4 class="text-light m-0">Productos mas frecuentes</h4>
+         </div>
+         <div class="table-responsive rounded-3 mt-3 mb-3 border border-1 border-white">
+            <table class="table table-dark align-middle mb-0">
+              <thead>
+                <tr class="h-100">
+                  <th class="text-center">Puesto</th>
+                  <th class="text-center py-2 text-nowrap">Producto</th>
+                  <th class="text-center">Cantidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-light" *ngFor="let product of topProducts; index as i">
+                  <td>
+                    <p class="fw-normal mb-1 text-nowrap text-center">
+                      {{ i + 1 }}
+                    </p>
+                  </td>
+                  <td>
+                    <p class="fw-normal mb-1 text-nowrap text-center">
+                      {{ product[0] }}
+                    </p>
+                  </td>
+                  <td>
+                    <p class="fw-normal mb-1 text-nowrap text-center">
+                      {{ product[1] }}
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
 </section>

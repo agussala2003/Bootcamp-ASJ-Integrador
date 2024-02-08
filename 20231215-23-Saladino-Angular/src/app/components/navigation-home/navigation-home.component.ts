@@ -6,6 +6,9 @@ import { Supplier } from '../../models/Supplier';
 import { Product } from '../../models/Product';
 import { Order } from '../../models/Order';
 import { LoginService } from '../../services/login.service';
+import { OrderDetailService } from '../../services/order-detail.service';
+import { TopSuppliers } from '../../models/TopSuppliers';
+import { TopProducts } from '../../models/TopProducts';
 
 @Component({
   selector: 'app-navigation-home',
@@ -13,20 +16,28 @@ import { LoginService } from '../../services/login.service';
   styleUrl: './navigation-home.component.css',
 })
 export class NavigationHomeComponent implements OnInit {
+
   constructor(
     private supplierService: SupplierService,
     private productService: ProductService,
     private orderService: OrderService,
+    private orderDetailService: OrderDetailService,
     private loginService: LoginService
   ) {}
+
   userState: any = true;
   suppliers: Supplier[] = [];
   products: Product[] = [];
   orders: Order[] = [];
+  topSuppliers: TopSuppliers[] = [];
+  topProducts: TopProducts[] = [];
+
   ngOnInit(): void {
     this.getActiveSuppliers();
     this.getActiveProducts();
     this.getActiveOrders();
+    this.getTop3Suppliers();
+    this.getTop3Products();
     const location = window.location.pathname === '/inicio';
     if (!location) {
       this.userState = this.loginService.getUserState();
@@ -53,6 +64,20 @@ export class NavigationHomeComponent implements OnInit {
   getActiveOrders() {
     this.orderService.getActiveOrders().subscribe((data: Order[]) => {
       this.orders = data;
+    });
+  }
+
+  getTop3Suppliers() {
+    this.orderService.getTop3Suppliers().subscribe((data) => {
+      console.log(data);
+      this.topSuppliers = data;
+    });
+  }
+
+  getTop3Products() {
+    this.orderDetailService.getTop3Products().subscribe((data) => {
+      console.log(data);
+      this.topProducts = data;
     });
   }
 }

@@ -1,0 +1,1 @@
+export type TopSuppliers = [supplier: string,quantity: number];

@@ -41,6 +41,15 @@ public class OrderDetailController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching order details");
         }
     }
+    
+    @GetMapping("/top-products")
+    public ResponseEntity<?> getTop3Products() {
+        try {
+            return ResponseEntity.ok(orderDetailsService.getTop3Products());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while fetching order details");
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderDetailsById(@PathVariable Integer id) {
