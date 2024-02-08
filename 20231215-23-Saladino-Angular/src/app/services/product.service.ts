@@ -59,11 +59,4 @@ export class ProductService {
   public patchProduct(id: string) :Observable<Product> {
     return this.http.patch<Product>(`${this.baseUrl}/${id}/undelete`,true);
   }
-
-  getUserState(): string | null {
-    const valor: string | null = JSON.parse(
-      localStorage.getItem('inicio') || 'null'
-    );
-    return valor !== null ? valor : null;
-  }
 }

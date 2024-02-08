@@ -9,6 +9,7 @@ import { CategoryService } from '../../../services/category.service';
 import { AlertsService } from '../../../services/alerts.service';
 import { SearchPipe } from '../../../pipes/search.pipe';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-table-products',
@@ -21,6 +22,7 @@ export class TableProductsComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
+    private loginService: LoginService,
     private alertService: AlertsService
   ) {}
 
@@ -83,7 +85,7 @@ export class TableProductsComponent implements OnInit {
     this.getActiveProducts();
     this.getCategories();
     this.getDeletedLength();
-    this.userState = this.productService.getUserState();
+    this.userState = this.loginService.getUserState();
   }
 
   getCategories() {
@@ -204,6 +206,10 @@ export class TableProductsComponent implements OnInit {
         this.alertService.errorNotification('Error al obtener los productos');
       }
     );
+  }
+
+  checkSupplier(product: Product): boolean {
+    return product.supplier.active;
   }
 
   deleteProduct(id: string, productName: string): void {

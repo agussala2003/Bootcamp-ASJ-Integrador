@@ -45,11 +45,4 @@ export class OrderService {
   public undeleteOrder(id: string): Observable<Order> {
     return this.http.patch<Order>(`${this.baseUrl}/${id}/undelete`, true);
   }
-
-  public getUserState(): string | null {
-    const valor: string | null = JSON.parse(
-      localStorage.getItem('inicio') || 'null'
-    );
-    return valor !== null ? valor : null;
-  }
 }

@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.backendintegrador.errors.DuplicateException;
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.Role;
 import com.bootcamp.backendintegrador.models.User;
 import com.bootcamp.backendintegrador.repositories.UserRepository;
@@ -36,10 +38,26 @@ public class UserService {
     }
 
     public User createUser(User user) {
+    	List<User> users = getUsers();
+    	for (User user2 : users) {
+			if(user2.getEmail().equalsIgnoreCase(user.getEmail())) {
+				throw new DuplicateException("This email is used");
+			}
+		}
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         Role role = roleService.getRoleById(user.getRole().getId()).orElseThrow(() -> new EntityNotFoundException("Role not found"));
         user.setRole(role);
         return userRepository.save(user);
+    }
+    
+    public User loginUser(User user) {
+    	List<User> users = getUsers();
+    	for (User user2 : users) {
+			if(user2.getEmail().equals(user.getEmail()) && user2.getPassword().equals(user.getPassword())) {
+				return user2;
+			}
+		}
+    	throw new ValidationException("Values Are wrong");
     }
 
     public User updateUser(Integer id, User updatedUser) {

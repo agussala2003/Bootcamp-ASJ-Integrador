@@ -19,6 +19,7 @@ import { IvaConditionService } from '../../../services/iva-condition.service';
 import { LocationService } from '../../../services/location.service';
 import { AlertsService } from '../../../services/alerts.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-form-supplier',
@@ -37,6 +38,7 @@ export class FormSupplierComponent implements OnInit {
     private provinceService: ProvinceService,
     private ivaConditionService: IvaConditionService,
     private locationService: LocationService,
+    private loginService: LoginService,
     private alertService: AlertsService,
     private activatedRoute: ActivatedRoute,
     private router: Router
@@ -126,7 +128,7 @@ export class FormSupplierComponent implements OnInit {
       }
     });
 
-    this.userState = this.supplierService.getUserState();
+    this.userState = this.loginService.getUserState();
 
     this.getCountries();
     this.getProvinces();

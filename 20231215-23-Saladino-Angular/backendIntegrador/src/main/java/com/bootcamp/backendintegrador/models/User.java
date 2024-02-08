@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.sql.Timestamp;
 
@@ -24,22 +25,25 @@ public class User {
 
     @NotBlank(message = "First name is required")
     @NotNull(message = "First name must be completed")
+    @Size(min = 3, max = 50, message = "Max length for first name is 50")
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NotBlank(message = "Last name is required")
     @NotNull(message = "Last name must be completed")
+    @Size(min = 3, max = 50, message = "Max length for last name is 50")
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @NotNull(message = "Email is required")
     @NotBlank(message = "Email must be complete")
     @Email(message = "Email must be valid")
-    @Column(name = "email", nullable = false)
+    @Column(name = "email",unique = true, nullable = false)
     private String email;
 
     @NotNull(message = "Password is required")
     @NotBlank(message = "Password must be completed")
+    @Size(min = 8,max = 50, message = "Password must be at least 8 characters long")
     @Column(name = "password", nullable = false)
     private String password;
 

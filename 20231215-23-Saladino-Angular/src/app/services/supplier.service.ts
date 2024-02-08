@@ -11,47 +11,43 @@ export class SupplierService {
 
   constructor(private http: HttpClient) {}
 
-  getSuppliers(): Observable<Supplier[]> {
+  public getSuppliers(): Observable<Supplier[]> {
     return this.http.get<Supplier[]>(this.baseUrl);
   }
 
-  getSupplierById(id: string): Observable<Supplier> {
+  public getSupplierById(id: string): Observable<Supplier> {
     return this.http.get<Supplier>(`${this.baseUrl}/${id}`);
   }
 
-  getActiveSuppliers(): Observable<Supplier[]> {
+  public getActiveSuppliers(): Observable<Supplier[]> {
     return this.http.get<Supplier[]>(`${this.baseUrl}/active`);
   }
 
-  getDeletedSuppliers(): Observable<Supplier[]> {
+  public getDeletedSuppliers(): Observable<Supplier[]> {
     return this.http.get<Supplier[]>(`${this.baseUrl}/deleted`);
   }
 
-  getSuppliersByBusinessNameAsc(): Observable<Supplier[]> {
+  public getSuppliersByBusinessNameAsc(): Observable<Supplier[]> {
     return this.http.get<Supplier[]>(`${this.baseUrl}/businessNameAsc`);
   }
 
-  getSuppliersByBusinessNameDesc(): Observable<Supplier[]> {
+  public getSuppliersByBusinessNameDesc(): Observable<Supplier[]> {
     return this.http.get<Supplier[]>(`${this.baseUrl}/businessNameDesc`);
   }
 
-  postSupplier(supplier: Supplier): Observable<Supplier> {
+  public postSupplier(supplier: Supplier): Observable<Supplier> {
     return this.http.post<Supplier>(this.baseUrl, supplier);
   }
 
-  putSupplier(id: string, supplier: Supplier): Observable<Supplier> {
+  public putSupplier(id: string, supplier: Supplier): Observable<Supplier> {
     return this.http.put<Supplier>(`${this.baseUrl}/${id}`, supplier);
   }
 
-  patchSupplier(id: string): Observable<Supplier> {
+  public patchSupplier(id: string): Observable<Supplier> {
     return this.http.patch<Supplier>(`${this.baseUrl}/${id}/undelete`, true);
   }
 
-  deleteSupplier(id: string): Observable<void> {
+  public deleteSupplier(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
-  }
-
-  getUserState(): string | null {
-    return JSON.parse(localStorage.getItem('inicio') || 'null');
   }
 }

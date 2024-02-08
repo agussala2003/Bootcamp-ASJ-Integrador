@@ -8,6 +8,7 @@ import { Category } from '../../../models/Category';
 import { Product } from '../../../models/Product';
 import { AlertsService } from '../../../services/alerts.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-detail-products',
@@ -20,6 +21,7 @@ export class DetailProductsComponent {
   constructor(
     private productService: ProductService,
     private alertService: AlertsService,
+    private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {}
@@ -72,7 +74,7 @@ export class DetailProductsComponent {
       this.idProduct = data['idProduct'];
       this.getProductById(this.idProduct);
     });
-    this.userState = this.productService.getUserState();
+    this.userState = this.loginService.getUserState();
   }
 
   getProductById(id: string): void {

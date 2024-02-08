@@ -14,6 +14,7 @@ import { OrderDetail } from '../../../models/OrderDetail';
 import { StatusService } from '../../../services/status.service';
 import { AlertsService } from '../../../services/alerts.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-table-orders',
@@ -28,7 +29,8 @@ export class TableOrdersComponent implements OnInit {
     private orderDetailService: OrderDetailService,
     private supplierService: SupplierService,
     private statusService: StatusService,
-    private alertService: AlertsService
+    private alertService: AlertsService,
+    private loginService: LoginService
   ) {}
 
   roleViewModel: Role = {
@@ -102,7 +104,7 @@ export class TableOrdersComponent implements OnInit {
     this.getOrders();
     this.getOrderDetails();
     this.getStaus();
-    this.userState = this.orderService.getUserState();
+    this.userState = this.loginService.getUserState();
   }
 
   getOrderDetails() {

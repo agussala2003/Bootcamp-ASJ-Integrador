@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.backendintegrador.errors.DuplicateException;
 import com.bootcamp.backendintegrador.errors.ErrorHandler;
+import com.bootcamp.backendintegrador.errors.ValidationException;
 import com.bootcamp.backendintegrador.models.User;
 import com.bootcamp.backendintegrador.services.UserService;
 
@@ -55,7 +57,7 @@ public class UserController {
         }
     }
 
-    @PostMapping()
+    @PostMapping("/create")
     public ResponseEntity<Object> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
@@ -65,7 +67,24 @@ public class UserController {
 
             User createdUser = userService.createUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-        } catch (EntityNotFoundException e) {
+        } catch (DuplicateException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has occurred");
+        }
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<Object> loginUser(@Valid @RequestBody User user, BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                Map<String, String> errors = ErrorHandler.validation(bindingResult);
+                return ResponseEntity.badRequest().body(errors);
+            }
+
+            User createdUser = userService.loginUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        } catch (ValidationException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error has occurred");

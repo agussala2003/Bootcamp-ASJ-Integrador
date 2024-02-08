@@ -13,6 +13,7 @@ import { Industry } from '../../../models/Industry';
 import { IvaCondition } from '../../../models/IvaCondition';
 import { AlertsService } from '../../../services/alerts.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-detail-supplier',
@@ -28,6 +29,7 @@ export class DetailSupplierComponent implements OnInit {
     private contactService: ContactService,
     private alertService: AlertsService,
     private activatedRoute: ActivatedRoute,
+    private loginService: LoginService,
     private router: Router
   ) {}
 
@@ -108,7 +110,7 @@ export class DetailSupplierComponent implements OnInit {
       this.getContactBySupplierId(this.idSupplier);
       this.getAddressBySupplierId(this.idSupplier);
     });
-    this.userState = this.supplierService.getUserState();
+    this.userState = this.loginService.getUserState();
   }
 
   getSupplierById(id: string): void {

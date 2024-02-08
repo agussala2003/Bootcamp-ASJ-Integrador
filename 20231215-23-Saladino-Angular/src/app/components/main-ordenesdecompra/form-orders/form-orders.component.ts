@@ -18,6 +18,7 @@ import { OrderDetailService } from '../../../services/order-detail.service';
 import { StatusService } from '../../../services/status.service';
 import { AlertsService } from '../../../services/alerts.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-form-orders',
@@ -34,6 +35,7 @@ export class FormOrdersComponent implements OnInit {
     private orderDetailService: OrderDetailService,
     private statusService: StatusService,
     private alertService: AlertsService,
+    private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {}
@@ -152,7 +154,7 @@ export class FormOrdersComponent implements OnInit {
       }
     });
 
-    this.userState = this.orderService.getUserState();
+    this.userState = this.loginService.getUserState();
     this.getActiveSuppliers();
     this.getOrders();
     this.getStatus();

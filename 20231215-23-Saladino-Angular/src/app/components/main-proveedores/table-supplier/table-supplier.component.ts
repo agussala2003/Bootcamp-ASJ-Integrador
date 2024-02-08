@@ -13,6 +13,7 @@ import { SupplierService } from '../../../services/supplier.service';
 import { AlertsService } from '../../../services/alerts.service';
 import { SearchPipe } from '../../../pipes/search.pipe';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-table-supplier',
@@ -24,7 +25,8 @@ export class TableSupplierComponent implements OnInit {
     private supplierService: SupplierService,
     private addressService: AddressService,
     private contactService: ContactService,
-    private alertService: AlertsService
+    private alertService: AlertsService,
+    private loginService: LoginService
   ) {}
 
   industryViewModel: Industry = {
@@ -110,7 +112,7 @@ export class TableSupplierComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.userState = this.supplierService.getUserState();
+    this.userState = this.loginService.getUserState();
     this.getActiveSuppliers();
     this.getContacts();
     this.getAddresses();

@@ -6,9 +6,22 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav gap-md-3">
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" routerLink="/inicio">Inicio</a>
+              </li>
+              <li class="nav-item dropdown">
+                <button class="btn btn-dark" data-bs-toggle="dropdown" aria-expanded="false"><img src="https://i.ibb.co/yVGxFPR/2.png" style="width: 27px;" alt=""></button>
+                <ul *ngIf="userState" class="dropdown-menu dropdown-menu-dark">
+                    <li class="text-nowrap px-2 mb-2"><i class="bx bx-user"></i> {{user.firstName + ' ' + user.lastName}}</li>
+                    <li class="text-nowrap px-2 mb-2"><i class="bx bx-group"></i> {{user.role.roleName}}</li>
+                    <li class="text-nowrap px-2 mb-2"><i class="bx bx-calendar"></i> {{user.createdAt | date: 'yyyy/MM/dd' }}</li>
+                    <li class="text-nowrap px-2 closeSesion" (click)="logout()"><i class="bx bx-log-out"></i> Cerrar Sesion</li>
+                </ul>
+                <ul *ngIf="!userState" class="dropdown-menu dropdown-menu-dark">
+                  <li class="text-nowrap px-2 mb-2 closeSesion" routerLink="/login"><i class="bx bx-log-in"></i> Iniciar Sesion</li>
+                  <li class="text-nowrap px-2 closeSesion" routerLink="/register"><i class="bx bx-user-plus"></i> Registrarse</li>
+              </ul>
               </li>
             </ul>
           </div>

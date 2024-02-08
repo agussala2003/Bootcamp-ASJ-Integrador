@@ -14,6 +14,7 @@ import { Product } from '../../../models/Product';
 import { OrderDetail } from '../../../models/OrderDetail';
 import { AlertsService } from '../../../services/alerts.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-detail-orders',
@@ -28,6 +29,7 @@ export class DetailOrdersComponent implements OnInit {
     private orderService: OrderService,
     private orderDetailService: OrderDetailService,
     private alertService: AlertsService,
+    private loginService: LoginService,
     private router: Router
   ) {}
 
@@ -128,7 +130,7 @@ export class DetailOrdersComponent implements OnInit {
       this.getOrderById(this.idOrder);
       this.getOrderDetailsByOrderId(this.idOrder);
     });
-    this.userState = this.orderService.getUserState();
+    this.userState = this.loginService.getUserState();
   }
 
   getOrderDetailsByOrderId(id: string): void {

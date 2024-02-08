@@ -1,0 +1,49 @@
+.loginBox {
+    width: 350px;
+    min-height: 200px;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+  .user {
+    margin: 0 auto;
+    display: block;
+    margin-bottom: 20px;
+  }
+  h3 {
+    margin: 0;
+    padding: 0 0 20px;
+    color: #fff;
+    text-align: center;
+  }
+  .loginBox input {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .loginBox input[type="text"],
+  .loginBox input[type="password"] {
+    border: none;
+    border-bottom: 2px solid #fff;
+    outline: none;
+    height: 40px;
+    color: #fff;
+    background: transparent;
+    font-size: 16px;
+    padding-left: 20px;
+    box-sizing: border-box;
+  }
+  .loginBox input[type="text"]:focus,
+  .loginBox input[type="password"]:focus {
+    border-bottom: 2px solid #42f3fa;
+  }
+  .loginBox a {
+    color: #262626;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+  }
+  a:hover {
+    color: #00ffff;
+  }
+  

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { User } from '../../models/User';
 import { AlertsService } from '../../services/alerts.service';
@@ -8,9 +8,9 @@ import { AlertsService } from '../../services/alerts.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   constructor(
-    private service: LoginService,
+    private loginService: LoginService,
     private alertService: AlertsService
   ) {}
 
@@ -22,41 +22,28 @@ export class LoginComponent implements OnInit {
       id: '',
       roleName: '',
     },
-    firstName: '',
-    lastName: '',
+    firstName: 'Prueba',
+    lastName: 'Prueba',
     email: '',
     password: '',
     createdAt: '',
     updatedAt: '',
   };
 
-  ngOnInit(): void {
-    this.updateUsers();
-  }
-
-  updateUsers() {
-    this.service.getUsers().subscribe((data: User[]) => {
-      console.log(data);
-      this.users = data;
-    }, (error) => {
-      console.error(error);
-      this.alertService.errorNotification('Error al cargar los usuarios');
-    });
-  }
-
   validateUser() {
-    const usuarioValido = this.users.find(
-      (user) =>
-        user.email === this.userViewModel.email &&
-        user.password === this.userViewModel.password
+    this.loginService.logUser(this.userViewModel).subscribe(
+      (data) => {
+        this.alertService.successNotification("Inicio de sesión exitoso");
+        setTimeout(() => {
+          window.location.href = '/inicio';
+          this.userViewModel = data;
+          this.loginService.validateLogin(data);
+        }, 1000);
+      },
+      (error) => {
+        console.log(error);
+        this.alertService.errorNotification("Usuario o contraseña incorrectos");
+      }
     );
-
-    if (usuarioValido) {
-      this.service.validateLogin();
-      this.alertService.successNotification('Bienvenido');
-      window.location.pathname = '/inicio';
-    } else {
-      this.alertService.errorNotification('Usuario o contraseña incorrectos');
-    }
   }
 }

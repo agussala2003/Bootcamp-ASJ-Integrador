@@ -11,6 +11,7 @@ import { IvaCondition } from '../../../models/IvaCondition';
 import { Product } from '../../../models/Product';
 import { AlertsService } from '../../../services/alerts.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-form-products',
@@ -25,6 +26,7 @@ export class FormProductsComponent implements OnInit {
     private supplierService: SupplierService,
     private categoryService: CategoryService,
     private alertService: AlertsService,
+    private loginService: LoginService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) {}
@@ -92,7 +94,7 @@ export class FormProductsComponent implements OnInit {
       }
     });
 
-    this.userState = this.productService.getUserState();
+    this.userState = this.loginService.getUserState();
     this.getActiveSuppliers();
     this.getCategories();
     this.getProducts();

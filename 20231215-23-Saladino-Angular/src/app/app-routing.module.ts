@@ -13,6 +13,7 @@ import { DetailProductsComponent } from './components/main-productosyservicios/d
 import { DetailOrdersComponent } from './components/main-ordenesdecompra/detail-orders/detail-orders.component';
 import { TableCategoriesComponent } from './components/main-categorias/table-categories/table-categories.component';
 import { TableIndustriesComponent } from './components/main-rubros/table-industries/table-industries.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
   {
@@ -85,6 +86,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: 'categorias',

@@ -29,7 +29,8 @@ import { SearchPipe } from './pipes/search.pipe';
 import { PaginationPipe } from './pipes/pagination.pipe';
 import { LoaderComponent } from './components/loader/loader.component';
 
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2'
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { RegisterComponent } from './components/register/register.component'
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2'
     EmptyListComponent,
     SearchPipe,
     PaginationPipe,
-    LoaderComponent
+    LoaderComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
