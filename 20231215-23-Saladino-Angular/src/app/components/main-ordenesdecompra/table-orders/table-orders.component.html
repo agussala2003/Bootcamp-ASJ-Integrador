@@ -134,7 +134,7 @@
     <!-- Mostramos un mensaje si no hay ordenes -->
   </div>
   <!-- Verificamos el estado del usuario -->
-  <div *ngIf="userState == null" class="container py-5 p-md-5">
+  <div *ngIf="userState == null && !loaderFlag" class="container py-5 p-md-5">
     <app-navigation-home></app-navigation-home>
   </div>
   <!-- Verificamos el estado del usuario -->

@@ -48,7 +48,7 @@
             <app-empty-list></app-empty-list>
           </div>
     </div>
-    <div *ngIf="userState == null" class="container py-5 p-md-5">
+    <div *ngIf="userState == null && !loaderFlag" class="container py-5 p-md-5">
         <app-navigation-home></app-navigation-home>
     </div>
   <!-- Modal Modificacion y agregacion -->
