@@ -26,6 +26,7 @@ export class NavigationHomeComponent implements OnInit {
   ) {}
 
   userState: any = true;
+  location: any = window.location.pathname === '/inicio';
   suppliers: Supplier[] = [];
   products: Product[] = [];
   orders: Order[] = [];
@@ -38,10 +39,8 @@ export class NavigationHomeComponent implements OnInit {
     this.getActiveOrders();
     this.getTop3Suppliers();
     this.getTop3Products();
-    const location = window.location.pathname === '/inicio';
-    if (!location) {
-      this.userState = this.loginService.getUserState();
-    }
+    this.location = window.location.pathname === '/inicio';
+    this.userState = this.loginService.getUserState();
   }
 
   getActiveSuppliers() {

@@ -11,6 +11,7 @@
                         <input [(ngModel)]="this.userViewModel.password" required id="pass" type="password" name="Password" placeholder="Contraseña"> 
                     </div> 
                         <button [disabled]="!registerForm.valid" class="btn btn-primary w-100" type="submit">Registrarme</button>
+                        <p class="text-center mt-3 text-light">¿Ya tienes cuenta? <a class="text-decoration-underline link-light" routerLink="/login">Inicia sesion</a></p>
                 </form>
             </div>
         </div>

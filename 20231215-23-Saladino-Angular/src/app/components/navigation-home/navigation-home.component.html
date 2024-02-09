@@ -1,13 +1,13 @@
 <section class="container">
     <div class="row my-2 my-md-5">
        <div class="ms-0 ms-md-5 col-12 col-md-7">
-           <h1 *ngIf="this.userState" class="text-white">Bienvenido a nuestro sistema de gestión y administracion!</h1>
-           <p *ngIf="this.userState" class="text-white">Optimiza tus procesos de aprovisionamiento, controla tu inventario y agiliza las órdenes de compra. Desde el seguimiento de proveedores hasta la administración eficiente de productos.</p>
-           <h1 *ngIf="!this.userState"  class="text-white">Oops, parece que no tienes cuenta aqui.</h1>
-           <p *ngIf="!this.userState"  class="text-white">Te invitamos a que ingreses a tu cuenta o crees una en caso de no tener para asi poder acceder a todos los beneficios que te ofrece nuestra plataforma.</p>
+           <h1 *ngIf="this.location" class="text-white">Bienvenido a nuestro sistema de gestión y administracion!</h1>
+           <p *ngIf="this.location" class="text-white">Optimiza tus procesos de aprovisionamiento, controla tu inventario y agiliza las órdenes de compra. Desde el seguimiento de proveedores hasta la administración eficiente de productos.</p>
+           <h1 *ngIf="!this.userState && !location"  class="text-white">Oops, parece que no tienes cuenta aqui.</h1>
+           <p *ngIf="!this.userState && !location"  class="text-white">Te invitamos a que ingreses a tu cuenta o crees una en caso de no tener para asi poder acceder a todos los beneficios que te ofrece nuestra plataforma.</p>
            <div class="d-flex">
-               <a routerLink="/login" class="btn btn-info me-3">Iniciar Sesion</a>
-               <a routerLink="/register" class="btn btn-outline-info">Registrarse</a>
+               <a *ngIf="!this.userState" routerLink="/login" class="btn btn-info me-3">Iniciar Sesion</a>
+               <a *ngIf="!this.userState" routerLink="/register" class="btn btn-outline-info">Registrarse</a>
            </div>
        </div>
         <div class="col-12 offset-md-1 col-md-3">
@@ -52,9 +52,9 @@
     <div class="row mt-4">
       <div class="col-12 col-md-6 p-2 p-md-5">
          <div class="d-flex align-items-center gap-2">
-            <i class="bx bx-package text-light fs-3"></i>
+            <i class="bx bxs-check-circle text-success  fs-3"></i>
             <h4 class="text-light m-0">Proveedores mas frecuentes</h4>
-         </div>
+         </div>        
          <div class="table-responsive rounded-3 mt-3 mb-3 border border-1 border-white">
             <table class="table table-dark align-middle mb-0">
               <thead>
@@ -66,10 +66,8 @@
               </thead>
               <tbody>
                 <tr class="text-light" *ngFor="let supplier of topSuppliers; index as i">
-                  <td>
-                    <p class="fw-normal mb-1 text-nowrap text-center">
-                      {{ i + 1 }}
-                    </p>
+                  <td class="text-center">
+                    <img [src]="'../../../assets/img/medal' + (i + 1) + '.png'" style="width: 40px;" alt="">
                   </td>
                   <td>
                     <p class="fw-normal mb-1 text-nowrap text-center">
@@ -88,7 +86,7 @@
       </div>
       <div class="col-12 col-md-6 p-2 p-md-5">
          <div class="d-flex align-items-center gap-2">
-            <i class="bx bx-shopping-bag text-light fs-3"></i>
+            <i class="bx bxs-check-circle text-success fs-3"></i>
             <h4 class="text-light m-0">Productos mas frecuentes</h4>
          </div>
          <div class="table-responsive rounded-3 mt-3 mb-3 border border-1 border-white">
@@ -102,10 +100,8 @@
               </thead>
               <tbody>
                 <tr class="text-light" *ngFor="let product of topProducts; index as i">
-                  <td>
-                    <p class="fw-normal mb-1 text-nowrap text-center">
-                      {{ i + 1 }}
-                    </p>
+                  <td class="text-center">
+                    <img [src]="'../../../assets/img/medal' + (i + 1) + '.png'" style="width: 40px;" alt="">
                   </td>
                   <td>
                     <p class="fw-normal mb-1 text-nowrap text-center">

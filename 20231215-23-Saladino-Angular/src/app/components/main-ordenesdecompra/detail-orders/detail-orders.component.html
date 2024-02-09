@@ -57,7 +57,7 @@
                           <h5 class="text-nowrap m-0">{{ this.orderViewModel.supplier.businessName }}</h5>
                           <span>Proveedor</span>
                         </div>
-                        <img src="{{this.orderViewModel.supplier.image}}" style="width: 45px; height: 45px;" class="rounded-1 ms-4" alt="">
+                        <img (error)="handleImageErrorSupplier(this.orderViewModel.supplier)" src="{{this.orderViewModel.supplier.image}}" style="width: 45px; height: 45px;" class="rounded-1 ms-4" alt="">
                       </div>
                     </div>
                   </div>
@@ -160,7 +160,7 @@
                             <h5 class="text-nowrap m-0">{{ orderDetail.product.productName }}</h5>
                             <span>Nombre del producto</span>
                           </div>
-                          <img src="{{orderDetail.product.imageUrl}}" style="width: 45px; height: 45px;" class="rounded-1 ms-4" alt="">
+                          <img (error)="handleImageErrorProduct(orderDetail.product)" src="{{orderDetail.product.imageUrl}}" style="width: 45px; height: 45px;" class="rounded-1 ms-4" alt="">
                         </div>
                       </div>
                     </div>

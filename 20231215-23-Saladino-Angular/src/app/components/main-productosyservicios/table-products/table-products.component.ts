@@ -357,8 +357,8 @@ export class TableProductsComponent implements OnInit {
     }, 1000);
   }
 
-  handleImageError(productoyservicio: any): void {
-    productoyservicio.Imagen = '../../../../assets/img/logoGenerico.png';
+  handleImageError(product: Product): void {
+    product.imageUrl = '../../../../assets/img/bienes.png';
   }
 
   goPrevPage() {

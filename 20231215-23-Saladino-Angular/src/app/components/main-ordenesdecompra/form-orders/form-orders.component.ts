@@ -518,6 +518,10 @@ export class FormOrdersComponent implements OnInit {
     return false;
   }
 
+  handleImageError() {
+    this.supplierImg = '../../../../assets/img/logoGenerico.png';
+  }
+
   openModal(alerTitle: string = 'Informacion del formulario') {
     Swal.fire({
       title: alerTitle,

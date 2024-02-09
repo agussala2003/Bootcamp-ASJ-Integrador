@@ -176,6 +176,10 @@ export class DetailSupplierComponent implements OnInit {
     });
   }
 
+  handleImageError(supplier: Supplier) {
+    supplier.image = '../../../../assets/img/logoGenerico.png';
+  }
+
   undeleteSupplierById(id: string) {
     Swal.fire({
       title: `Estas seguro que quieres reactivar el proveedor ${this.supplierViewModel.businessName}?`,

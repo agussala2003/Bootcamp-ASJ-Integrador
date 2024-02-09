@@ -215,6 +215,14 @@ export class DetailOrdersComponent implements OnInit {
     return total;
   }
 
+  handleImageErrorSupplier(supplier: Supplier) {
+    supplier.image = '../../../../assets/img/logoGenerico.png';
+  }
+
+  handleImageErrorProduct(product: Product) {
+    product.imageUrl = '../../../../assets/img/bienes.png';
+  }
+
   getOrderById(id: string): void {
     this.orderService.getOrderById(id).subscribe(
       (data: Order) => {

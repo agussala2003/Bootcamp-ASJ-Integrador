@@ -29,7 +29,7 @@
     <div class="row">
       <div class="row">
         <div class="col-12 col-md-6 mb-3 d-flex justify-content-center ">
-          <img class="rounded-2 imgProd" [src]="this.productViewModel.imageUrl" alt="">
+          <img (error)="handleImageError(this.productViewModel)" class="rounded-2 imgProd" [src]="this.productViewModel.imageUrl" alt="">
         </div>
         <div class="col-12 col-md-6">
           <h3 class="my-3 ms-md-3 text-light">Datos Producto</h3>
@@ -84,7 +84,7 @@
                             <h5 class="text-nowrap m-0">{{ this.productViewModel.supplier.businessName }}</h5>
                             <span>Proveedor</span>
                           </div>
-                          <img src="{{this.productViewModel.supplier.image}}" style="width: 45px; height: 45px;" class="rounded-1 ms-4" alt="">
+                          <img (error)="handleImageErrorSupplier(this.productViewModel.supplier)"  src="{{this.productViewModel.supplier.image}}" style="width: 45px; height: 45px;" class="rounded-1 ms-4" alt="">
                         </div>
                       </div>
                     </div>

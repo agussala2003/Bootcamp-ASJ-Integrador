@@ -9,7 +9,8 @@ export class SearchPipe implements PipeTransform {
     if(args === '' || args === undefined){
       return value;
     }
-    const filteredData = value.filter((item) => deepSearch(item, args));
+    const searchTerm = args.toLowerCase(); // Convertir el término de búsqueda a minúsculas
+    const filteredData = value.filter((item) => deepSearch(item, searchTerm));
 
     return { filteredData, filteredDataLength: filteredData.length };
   }
@@ -24,7 +25,7 @@ function deepSearch(obj: any, searchTerm: string): boolean {
         if (deepSearch(value, searchTerm)) {
           return true;
         }
-      } else if (typeof value === 'string' && value.includes(searchTerm)) {
+      } else if (typeof value === 'string' && value.toLowerCase().includes(searchTerm)) {
         return true;
       }
     }

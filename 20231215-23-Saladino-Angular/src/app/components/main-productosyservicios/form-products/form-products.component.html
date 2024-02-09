@@ -48,7 +48,7 @@
       </div>
       <div class="col-12 col-md-3 mb-3">
         <label for="seleccCodProv" class="form-label text-light position-relative labelProv"
-          >Codigo Proveedor: <img class="rounded-circle position-absolute end-0 bottom-0" *ngIf="this.productViewModel.supplier.id != ''" src="{{supplierImg}}" style="width: 30px; height: 30px" alt=""></label
+          >Codigo Proveedor: <img  [src]="supplierImg" (error)="handleImageError()"  class="rounded-circle position-absolute end-0 bottom-0" *ngIf="this.productViewModel.supplier.id != ''" style="width: 30px; height: 30px" alt=""></label
         >
         <select
           [(ngModel)]="this.productViewModel.supplier.id"

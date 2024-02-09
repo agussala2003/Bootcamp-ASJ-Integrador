@@ -330,6 +330,10 @@ export class FormProductsComponent implements OnInit {
       );
     }
   }
+  
+  handleImageError() {
+    this.supplierImg = '../../../../assets/img/logoGenerico.png';
+  }
 
   openModal(alerTitle: string = 'Informacion del formulario') {
     Swal.fire({

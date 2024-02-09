@@ -117,6 +117,14 @@ export class DetailProductsComponent {
       }
     });
   }
+  
+  handleImageError(product: Product): void {
+    product.imageUrl = '../../../../assets/img/bienes.png';
+  }
+
+  handleImageErrorSupplier(supplier: Supplier) {
+    supplier.image = '../../../../assets/img/logoGenerico.png';
+  }
 
   undeleteProductById(id: string) {
     Swal.fire({
