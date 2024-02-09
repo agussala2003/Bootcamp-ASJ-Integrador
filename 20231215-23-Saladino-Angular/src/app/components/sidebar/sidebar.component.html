@@ -5,14 +5,14 @@
           <div (click)="adminFlag = !adminFlag" class="d-flex desplegable-link">
             <i class='text-light fs-4 bx bx-cog me-2'></i>
             <p class="text-light fw-semibold">
-                Administracion
+                Administración
             </p>
             <i class='bx bx-chevron-down text-light pt-1 ms-2'></i>
           </div>
           <ul [ngClass]="adminFlag ? 'd-block' : 'd-none transition'">
             <li class="list-unstyled mb-2"><a [ngClass]="isPath('/proveedores') ? 'active' : ''" class="item-link text-decoration-none text-light" routerLink="proveedores">Proveedores</a></li>
             <li class="list-unstyled mb-2"><a [ngClass]="isPath('/productos-servicios') ? 'active' : ''" class="item-link text-decoration-none text-light" routerLink="productos-servicios">Productos y servicios</a></li>
-            <li class="list-unstyled mb-2"><a [ngClass]="isPath('/ordenes') ? 'active' : ''" class="item-link text-decoration-none text-light" routerLink="ordenes">Ordenes de compra</a></li>
+            <li class="list-unstyled mb-2"><a [ngClass]="isPath('/ordenes') ? 'active' : ''" class="item-link text-decoration-none text-light" routerLink="ordenes">Órdenes de compra</a></li>
           </ul>
         </div>
 
@@ -25,7 +25,7 @@
             <i class='bx bx-chevron-down text-light pt-1 ms-2'></i>
           </div>
           <ul [ngClass]="userFlag ? 'd-block' : 'd-none'">
-            <li class="list-unstyled mb-2"><a [ngClass]="isPath('/login') ? 'active' : ''" routerLink="login" class="item-link text-decoration-none text-light">Iniciar Sesion</a></li>
+            <li class="list-unstyled mb-2"><a [ngClass]="isPath('/login') ? 'active' : ''" routerLink="login" class="item-link text-decoration-none text-light">Iniciar Sesión</a></li>
             <li class="list-unstyled mb-2"><a [ngClass]="isPath('/register') ? 'active' : ''" routerLink="register" class="item-link text-decoration-none text-light">Registrarse</a></li>
           </ul>
         </div>
@@ -39,7 +39,7 @@
             <i class='bx bx-chevron-down text-light pt-1 ms-2'></i>
           </div>
           <ul [ngClass]="extrasFlag ? 'd-block' : 'd-none'">
-            <li class="list-unstyled mb-2"><a [ngClass]="isPath('/categorias') ? 'active' : ''" routerLink="categorias" class="item-link text-decoration-none text-light">Categorias</a></li>
+            <li class="list-unstyled mb-2"><a [ngClass]="isPath('/categorias') ? 'active' : ''" routerLink="categorias" class="item-link text-decoration-none text-light">Categorías</a></li>
             <li class="list-unstyled mb-2"><a [ngClass]="isPath('/rubros') ? 'active' : ''" routerLink="rubros" class="item-link text-decoration-none text-light">Rubros</a></li>
           </ul>
         </div>

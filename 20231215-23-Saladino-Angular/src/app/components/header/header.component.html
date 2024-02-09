@@ -16,10 +16,10 @@
                     <li class="text-nowrap px-2 mb-2"><i class="bx bx-user"></i> {{user.firstName + ' ' + user.lastName}}</li>
                     <li class="text-nowrap px-2 mb-2"><i class="bx bx-group"></i> {{user.role.roleName}}</li>
                     <li class="text-nowrap px-2 mb-2"><i class="bx bx-calendar"></i> {{user.createdAt | date: 'yyyy/MM/dd' }}</li>
-                    <li class="text-nowrap px-2 closeSesion" (click)="logout()"><i class="bx bx-log-out"></i> Cerrar Sesion</li>
+                    <li class="text-nowrap px-2 closeSesion" (click)="logout()"><i class="bx bx-log-out"></i> Cerrar Sesión</li>
                 </ul>
                 <ul *ngIf="!userState" class="dropdown-menu dropdown-menu-dark">
-                  <li class="text-nowrap px-2 mb-2 closeSesion" routerLink="/login"><i class="bx bx-log-in"></i> Iniciar Sesion</li>
+                  <li class="text-nowrap px-2 mb-2 closeSesion" routerLink="/login"><i class="bx bx-log-in"></i> Iniciar Sesión</li>
                   <li class="text-nowrap px-2 closeSesion" routerLink="/register"><i class="bx bx-user-plus"></i> Registrarse</li>
               </ul>
               </li>

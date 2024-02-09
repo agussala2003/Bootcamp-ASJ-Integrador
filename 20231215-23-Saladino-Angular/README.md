@@ -1,33 +1,4 @@
-<!-- # 2023121523SaladinoAngular
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.6.
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page. -->
-
-
-# Proyect Integrador Final
+# Proyecto Integrador Final
 
 Desarrollo de un *Sistema de Gestión Compras* para manejar información de Proveedores, Productos y Órdenes de compra.
 
@@ -44,6 +15,7 @@ Pasos necesarios para correr el proyecto localmente
 - Crear la(s) siguiente(s) tabla(s)
 
 ```sql
+
 CREATE TABLE countries (
   id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
   country_name VARCHAR(255)
@@ -102,25 +74,28 @@ CREATE TABLE users (
   last_name VARCHAR(255),
   email VARCHAR(255),
   password VARCHAR(255),
-  role_id INT,
   created_at DATETIME NULL,
-  updated_at DATETIME NULL
+  updated_at DATETIME NULL,
+  role_id INT,
+  FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
 CREATE TABLE providers (
   id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
   supplier_code VARCHAR(255),
   business_name VARCHAR(255),
-  industry_id INT,
   email VARCHAR(255),
   website VARCHAR(255),
   phone_number VARCHAR(255),
   image TEXT,
   active BIT,
   cuit VARCHAR(255),
-  iva_condition_id INT,
   created_at DATETIME NULL,
-  updated_at DATETIME NULL
+  updated_at DATETIME NULL,
+  industry_id INT,
+  iva_condition_id INT,
+  FOREIGN KEY (industry_id) REFERENCES industries(id),
+  FOREIGN KEY (iva_condition_id) REFERENCES tax_conditions(id)
 );
 
 CREATE TABLE contacts (
@@ -130,34 +105,39 @@ CREATE TABLE contacts (
   email VARCHAR(255),
   phone_number VARCHAR(255),
   role VARCHAR(255),
-  supplier_id INT,
   created_at DATETIME NULL,
-  updated_at DATETIME NULL
+  updated_at DATETIME NULL,
+  supplier_id INT,
+  FOREIGN KEY (supplier_id) REFERENCES providers(id)
 );
 
 CREATE TABLE addresses (
   id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
   street_name VARCHAR(255),
   street_number INT,
-  location_id INT,
   postal_code VARCHAR(255),
-  supplier_id INT,
   created_at DATETIME NULL,
-  updated_at DATETIME NULL
+  updated_at DATETIME NULL,
+  supplier_id INT,
+  location_id INT,
+  FOREIGN KEY (location_id) REFERENCES locations(id),
+  FOREIGN KEY (supplier_id) REFERENCES providers(id)
 );
 
 CREATE TABLE products (
   id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
   sku VARCHAR(255),
-  supplier_id INT,
-  category_id INT,
   product_name VARCHAR(255),
   description TEXT,
   image_url TEXT,
   active BIT,
   price DECIMAL(10,2),
   created_at DATETIME NULL,
-  updated_at DATETIME NULL
+  updated_at DATETIME NULL,
+  supplier_id INT,
+  category_id INT,
+  FOREIGN KEY (supplier_id) REFERENCES providers(id),
+  FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
 CREATE TABLE orders (
@@ -167,21 +147,26 @@ CREATE TABLE orders (
   delivery_date DATETIME NOT NULL,
   active BIT,
   reception_info TEXT,
+  created_at DATETIME NULL,
+  updated_at DATETIME NULL,
   user_id INT,
   supplier_id INT,
   status_id INT,
-  created_at DATETIME NULL,
-  updated_at DATETIME NULL
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (supplier_id) REFERENCES providers(id),
+  FOREIGN KEY (status_id) REFERENCES status(id)
 );
 
 CREATE TABLE order_details (
   id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
-  order_id INT,
-  product_id INT,
   quantity INT,
   subtotal DECIMAL(10,2),
   created_at DATETIME NULL,
-  updated_at DATETIME NULL
+  updated_at DATETIME NULL,
+  order_id INT,
+  product_id INT,
+  FOREIGN KEY (order_id) REFERENCES orders(id),
+  FOREIGN KEY (product_id) REFERENCES products(id)
 );
 ```
 
@@ -517,15 +502,6 @@ INSERT INTO users (first_name, last_name, email, password, role_id, created_at, 
 ('Gustavo', 'Lamberti', 'guslamber@gmail.com', 'contrasena', 4, '2023-10-05 15:45:00', NULL);
 ```
 
-- Insertar **Roles**
-```sql
-INSERT INTO roles (role_name, created_at, updated_at) VALUES
-('Administrador', '2023-02-05 15:45:00', NULL),
-('Cliente', '2023-02-05 15:45:00', NULL),
-('Proveedor', '2023-02-05 15:45:00', '2023-02-05 16:10:00'),
-('Usuario', '2023-02-05 15:45:00', '2023-02-05 16:10:00');
-```
-
 - Insertar **Proveedores**
 ```sql
 INSERT INTO providers (supplier_code, business_name, industry_id, email, website, phone_number, image, active, cuit, iva_condition_id, created_at, updated_at) VALUES
@@ -592,13 +568,13 @@ INSERT INTO addresses (street_name, street_number, location_id, postal_code, sup
 INSERT INTO products (sku, supplier_id, category_id, product_name, description, image_url, active, price, created_at, updated_at) VALUES 
 ('59810231', 1, 1, 'Horno electrico', 'Un gran horno para salir de los apuros', 'https://i.pinimg.com/236x/46/79/15/4679153e6438a3fe70942cb2f40194ed.jpg', 1, 199999.0, '2023-07-26 15:45:00', '2023-07-26 15:45:00'),
 ('24642121', 1, 2, 'Samsung Galaxy A53 5G', 'Uno de los mejores calidad precio', 'https://i.pinimg.com/564x/4f/36/25/4f3625c2351226716851bf7f63d06fa8.jpg', 1, 399999.0, '2023-07-26 15:45:00', '2023-07-26 15:45:00'),
-('12349182', 3, 6, 'Vans Old Skool', 'Las zapatillas de Skater\n', 'https://i.pinimg.com/236x/58/68/dd/5868dd6d549714b426835b9ee21149c6.jpg', 1, 99999.0, '2023-07-26 15:45:00', '2023-05-15 15:45:00'),
-('12462343', 3, 6, 'Alpargatas Vans', 'Estas son re comodas', 'https://i.pinimg.com/474x/e8/4b/69/e84b6988c3013863d0abfffbdd0f9d44.jpg', 1, 79999.0, '2023-05-15 15:45:00', '2023-05-15 15:45:00'),
-('72345634', 2, 7, 'Chomba Blanca', 'Te va a quedar pintada', 'https://i.pinimg.com/236x/ae/d7/08/aed708802eef315186a9e7a251650ae2.jpg', 1, 59999.0, '2023-05-15 15:45:00', '2023-05-15 15:45:00'),
-('83453546', 2, 8, 'Perfume Hombre Suave', 'El mejor perfume de lacoste', 'https://i.pinimg.com/236x/da/4e/d6/da4ed625f06cb43efabe89d488d9255f.jpg', 1, 89999.0, '2023-05-15 15:45:00', NULL),
-('65434234', 4, 7, 'Remera mujer', 'Remera clasica para el dia', 'https://i.pinimg.com/236x/43/68/fd/4368fd68ea8e8eb47d4de79a0716845f.jpg', 1, 25999.0, '2023-05-15 15:45:00', '2023-05-15 15:45:00'),
-('53523452', 4, 9, 'Sweater negro', 'Super abrigado para invierno', 'https://i.pinimg.com/236x/f4/a3/28/f4a3285210cc4cefdb2913a8e13b7734.jpg', 1, 49999.0, '2023-05-15 15:45:00', '2023-05-15 15:45:00'),
-('45243423', 4, 7, 'Zapatillas Blancas', 'Zapatillas blancas clasicas', 'https://i.pinimg.com/564x/7b/15/65/7b1565a0d4be3fb99c39ad15ac8ff6ce.jpg', 1, 49999.0, '2023-05-15 15:45:00', '2023-05-15 15:45:00');
+('12349182', 3, 4, 'Vans Old Skool', 'Las zapatillas de Skater\n', 'https://i.pinimg.com/236x/58/68/dd/5868dd6d549714b426835b9ee21149c6.jpg', 1, 99999.0, '2023-07-26 15:45:00', '2023-05-15 15:45:00'),
+('12462343', 3, 4, 'Alpargatas Vans', 'Estas son re comodas', 'https://i.pinimg.com/474x/e8/4b/69/e84b6988c3013863d0abfffbdd0f9d44.jpg', 1, 79999.0, '2023-05-15 15:45:00', '2023-05-15 15:45:00'),
+('72345634', 2, 5, 'Chomba Blanca', 'Te va a quedar pintada', 'https://i.pinimg.com/236x/ae/d7/08/aed708802eef315186a9e7a251650ae2.jpg', 1, 59999.0, '2023-05-15 15:45:00', '2023-05-15 15:45:00'),
+('83453546', 2, 6, 'Perfume Hombre Suave', 'El mejor perfume de lacoste', 'https://i.pinimg.com/236x/da/4e/d6/da4ed625f06cb43efabe89d488d9255f.jpg', 1, 89999.0, '2023-05-15 15:45:00', NULL),
+('65434234', 4, 5, 'Remera mujer', 'Remera clasica para el dia', 'https://i.pinimg.com/236x/43/68/fd/4368fd68ea8e8eb47d4de79a0716845f.jpg', 1, 25999.0, '2023-05-15 15:45:00', '2023-05-15 15:45:00'),
+('53523452', 4, 7, 'Sweater negro', 'Super abrigado para invierno', 'https://i.pinimg.com/236x/f4/a3/28/f4a3285210cc4cefdb2913a8e13b7734.jpg', 1, 49999.0, '2023-05-15 15:45:00', '2023-05-15 15:45:00'),
+('45243423', 4, 4, 'Zapatillas Blancas', 'Zapatillas blancas clasicas', 'https://i.pinimg.com/564x/7b/15/65/7b1565a0d4be3fb99c39ad15ac8ff6ce.jpg', 1, 49999.0, '2023-05-15 15:45:00', '2023-05-15 15:45:00');
 
 ```
 
@@ -632,6 +608,8 @@ INSERT INTO order_details (product_id, quantity, subtotal, order_id, created_at,
 ```
 
 - Ejecutar el servidor de Java (*puerto 8080*)
+
+- Iniciar sesion con alguno de los usuarios creados previamente o registrar un usuario nuevo
 
 - Insertar algunas **Categorías** desde el FRONT
 

@@ -20,7 +20,7 @@
     <div class="row">
       <h4 class="text-light my-2">Datos Productos y Servicios <i (click)="openModal()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class='bx bx-info-circle text-white ms-2'></i> </h4>
       <div class="col-12 col-md-3 mb-3">
-        <label for="sku" class="form-label text-light">Codigo / Sku:</label>
+        <label for="sku" class="form-label text-light">Código / Sku:</label>
         <input
           [(ngModel)]="this.productViewModel.sku"
           required
@@ -37,18 +37,18 @@
           <span class="form-text text-light">El dato es obligatorio</span>
         </div>
         <div *ngIf="formProdyServ.controls['sku']?.hasError('minlength')" class="col-auto">
-          <span class="form-text text-light">Codigo de 8 o mas digitos</span>
+          <span class="form-text text-light">Código de 8 o mas digitos</span>
         </div>
         <div *ngIf="!this.isNumberCode" class="col-auto">
           <span class="form-text text-light">Debe ser numerico</span>
         </div>
         <div *ngIf="this.isActiveSku" class="col-auto">
-          <span class="form-text text-light"> Ingresa un codigo que no exista </span>
+          <span class="form-text text-light"> Ingresa un código que no exista </span>
         </div>
       </div>
       <div class="col-12 col-md-3 mb-3">
         <label for="seleccCodProv" class="form-label text-light position-relative labelProv"
-          >Codigo Proveedor: <img  [src]="supplierImg" (error)="handleImageError()"  class="rounded-circle position-absolute end-0 bottom-0" *ngIf="this.productViewModel.supplier.id != ''" style="width: 30px; height: 30px" alt=""></label
+          >Código Proveedor: <img  [src]="supplierImg" (error)="handleImageError()"  class="rounded-circle position-absolute end-0 bottom-0" *ngIf="this.productViewModel.supplier.id != ''" style="width: 30px; height: 30px" alt=""></label
         >
         <select
           [(ngModel)]="this.productViewModel.supplier.id"
@@ -68,7 +68,7 @@
         </div>
       </div>
       <div class="col-12 col-md-3 mb-3">
-        <label for="categoria" class="form-label text-light position-relative labelCat">Categoria:
+        <label for="categoria" class="form-label text-light position-relative labelCat">Categoría:
           <div class="containerTooltip position-absolute end-0 bottom-0">
             <span class="hover-me text-white" (click)="categoryFlag = !categoryFlag" >Agregar</span>
             <div [ngClass]="categoryFlag ? 'tooltipClicked' : 'tooltip' ">
@@ -88,7 +88,7 @@
           aria-label="Default select example"
           required
         >
-          <option selected disabled>Selecciona una categoria</option>
+          <option selected disabled>Selecciona una categoría</option>
           <option *ngFor="let category of categories" value="{{category.id}}">{{category.categoryName}}</option>
         </select>
         <div *ngIf="formProdyServ.controls['categoria']?.hasError('required')" class="col-auto">
@@ -158,7 +158,7 @@
       </div>
         <div class="col-12 col-md-6 mb-3">
           <label for="descripcion" class="form-label text-light"
-            >Descripcion:</label
+            >Descripción:</label
           >
           <textarea
             [(ngModel)]="this.productViewModel.description"
@@ -176,7 +176,7 @@
             <span class="form-text text-light">El dato es obligatorio</span>
           </div>
           <div *ngIf="formProdyServ.controls['descripcion']?.hasError('minlength')" class="col-auto">
-            <span class="form-text text-light">Ingrese 15 o mas digitos</span>
+            <span class="form-text text-light">Ingrese 15 o mas dígitos</span>
           </div>
       </div>
     </div>

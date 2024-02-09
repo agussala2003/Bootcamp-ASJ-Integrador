@@ -32,7 +32,7 @@
             <div class="row">
               <div class="col-12 col-md-6 mb-3">
                 <label for="orden" class="form-label text-light"
-                  >Numero de orden:</label
+                  >Número de orden:</label
                 >
                 <input
                   [(ngModel)]="this.orderViewModel.orderNumber"
@@ -100,7 +100,7 @@
               </div>
               <div class="col-12 col-md-6 mb-3">
                 <label for="emision" class="form-label text-light text-nowrap"
-                  >Fecha de emision:</label
+                  >Fecha de emisión:</label
                 >
                 <input
                   [(ngModel)]="this.orderViewModel.issuanceDate"
@@ -177,7 +177,7 @@
               </div>
               <div class="col-12 mb-3">
                 <label for="infoRecepcion" class="form-label text-light"
-                  >Informacion de recepcion:</label
+                  >Información de recepción:</label
                 >
                 <textarea
                   [(ngModel)]="this.orderViewModel.receptionInfo"
@@ -208,7 +208,7 @@
               </div>
               <div *ngIf="idOrder === undefined" class="col-12 col-md-7 mb-3">
                 <label for="seleccCodProd" class="form-label text-light"
-                  >Codigo / Sku:</label
+                  >Código / Sku:</label
                 >
                 <select
                   [disabled]="this.orderViewModel.supplier.id == ''"
@@ -287,7 +287,7 @@
               <img [src]="orderDetail.product.imageUrl" class="detailImg" alt="">
               <div class="d-flex text-light flex-column ms-3">
                 <p class="mb-1">Producto: {{orderDetail.product.productName}}</p>
-                <p class="mb-1">Proveedor: {{orderViewModel.supplier.businessName}}</p>
+                <p class="mb-1">Proveedor: {{orderDetail.product.supplier.businessName}}</p>
                 <p class="mb-1">Cantidad: {{orderDetail.quantity}}</p>
                 <p class="mb-1">Precio: {{orderDetail.product.price | currency }}</p>
                 <p class="mb-1">Subtotal: {{orderDetail.subtotal | currency }}</p>

@@ -552,7 +552,6 @@ export class FormSupplierComponent implements OnInit {
   }
 
   isCuitValidation(): void {
-    if (this.idSupplier === undefined) {
       const fullCuit = this.supplierViewModel.cuit;
       if (fullCuit.length === 13 && fullCuit.includes('-')) {
         const arrCuit = fullCuit.split('-');
@@ -584,7 +583,6 @@ export class FormSupplierComponent implements OnInit {
         console.log('El CUIT no es válido. Longitud incorrecta o falta guión.');
         this.isCuit = false;
       }
-    }
   }
 
   private isNumber(str: string): boolean {

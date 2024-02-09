@@ -1,12 +1,12 @@
 <section class="container">
     <div class="row my-2 my-md-5">
        <div class="ms-0 ms-md-5 col-12 col-md-7">
-           <h1 *ngIf="this.location" class="text-white">Bienvenido a nuestro sistema de gestión y administracion!</h1>
+           <h1 *ngIf="this.location" class="text-white">Bienvenido a nuestro sistema de gestión y administración!</h1>
            <p *ngIf="this.location" class="text-white">Optimiza tus procesos de aprovisionamiento, controla tu inventario y agiliza las órdenes de compra. Desde el seguimiento de proveedores hasta la administración eficiente de productos.</p>
            <h1 *ngIf="!this.userState && !location"  class="text-white">Oops, parece que no tienes cuenta aqui.</h1>
            <p *ngIf="!this.userState && !location"  class="text-white">Te invitamos a que ingreses a tu cuenta o crees una en caso de no tener para asi poder acceder a todos los beneficios que te ofrece nuestra plataforma.</p>
            <div class="d-flex">
-               <a *ngIf="!this.userState" routerLink="/login" class="btn btn-info me-3">Iniciar Sesion</a>
+               <a *ngIf="!this.userState" routerLink="/login" class="btn btn-info me-3">Iniciar Sesión</a>
                <a *ngIf="!this.userState" routerLink="/register" class="btn btn-outline-info">Registrarse</a>
            </div>
        </div>
@@ -41,7 +41,7 @@
             <div routerLink="/ordenes" class="d-flex justify-content-center card-container">
                <div class="carda">
                   <div class="card2 text-light d-flex flex-column justify-content-evenly ">
-                     <h5>Ordenes de compra</h5>
+                     <h5>Órdenes de compra</h5>
                      <p class="my-3 fs-3 fw-bold ">{{orders.length}}</p>
                      <p>Gestiona de manera efectiva tus órdenes de compra.</p>
                   </div>
@@ -60,7 +60,7 @@
               <thead>
                 <tr class="h-100">
                   <th class="text-center">Puesto</th>
-                  <th class="text-center py-2 text-nowrap">Razon Social</th>
+                  <th class="text-center py-2 text-nowrap">Razón Social</th>
                   <th class="text-center">Cantidad</th>
                 </tr>
               </thead>

@@ -28,7 +28,7 @@
       <div class="row mt-4">
         <h4 class="text-light my-2">Datos Proveedor <i (click)="openModal()" class='bx bx-info-circle text-white ms-2'></i> </h4>
         <div class="col-12 col-md-auto mb-3">
-          <label for="codProv" class="form-label text-light">Codigo:</label>
+          <label for="codProv" class="form-label text-light">Código:</label>
           <div class="underline"></div>
           <input
             [(ngModel)]="this.supplierViewModel.supplierCode"
@@ -53,7 +53,7 @@
           </div>
         </div>        
         <div class="col-12 col-md-auto mb-3">
-          <label for="rs" class="form-label text-light">Razon Social:</label>
+          <label for="rs" class="form-label text-light">Razón Social:</label>
           <input
             [(ngModel)]="this.supplierViewModel.businessName"
             required
@@ -108,7 +108,7 @@
         </div>
         <div class="col-12 col-md-auto mb-3">
           <label for="telefonoproveedor" class="form-label text-light"
-            >Telefono:</label
+            >Teléfono:</label
           >
           <input
             [(ngModel)]="this.supplierViewModel.phoneNumber"
@@ -219,7 +219,7 @@
       <div class="row">
         <h4 class="text-light my-2">Dirección</h4>
         <div class="col-12 col-md-auto mb-3">
-          <label for="pais" class="form-label text-light">Pais:</label>
+          <label for="pais" class="form-label text-light">País:</label>
           <select
             (change)="onCountryChange()"
             [(ngModel)]="this.addressViewModel.location.province.country.id"
@@ -321,7 +321,7 @@
           </div>
         </div>
         <div class="col-12 col-md-auto mb-3">
-          <label for="num" class="form-label text-light">Numero:</label>
+          <label for="num" class="form-label text-light">Número:</label>
           <input
             [(ngModel)]="this.addressViewModel.streetNumber"
             required
@@ -346,7 +346,7 @@
           </div>
         </div>
         <div class="col-12 col-md-auto mb-3">
-          <label for="cp" class="form-label text-light">Codigo Postal:</label>
+          <label for="cp" class="form-label text-light">Código Postal:</label>
           <input
             [(ngModel)]="this.addressViewModel.postalCode"
             required
@@ -368,7 +368,7 @@
             *ngIf="formProv.controls['codigopostal']?.hasError('minlength')"
             class="col-auto"
           >
-            <span class="form-text text-light">Ingrese 4 o mas digitos</span>
+            <span class="form-text text-light">Ingrese 4 o mas dígitos</span>
           </div>
         </div>
 
@@ -450,7 +450,7 @@
             *ngIf="formProv.controls['nombrecontacto']?.hasError('minlength')"
             class="col-auto"
           >
-            <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+            <span class="form-text text-light">Ingrese 3 o mas dígitos</span>
           </div>
         </div>
         <div class="col-12 col-md-auto mb-3">
@@ -478,12 +478,12 @@
             *ngIf="formProv.controls['apellidocontacto']?.hasError('minlength')"
             class="col-auto"
           >
-            <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+            <span class="form-text text-light">Ingrese 3 o mas dígitos</span>
           </div>
         </div>
         <div class="col-12 col-md-auto mb-3">
           <label for="telefonoContacto" class="form-label text-light"
-            >Telefono:</label
+            >Teléfono:</label
           >
           <input
             [(ngModel)]="this.contactViewModel.phoneNumber"
@@ -560,7 +560,7 @@
             *ngIf="formProv.controls['rol']?.hasError('minlength')"
             class="col-auto"
           >
-            <span class="form-text text-light">Ingrese 3 o mas digitos</span>
+            <span class="form-text text-light">Ingrese 3 o mas dígitos</span>
           </div>
         </div>
       </div>
