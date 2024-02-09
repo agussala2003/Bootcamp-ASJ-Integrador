@@ -9,7 +9,7 @@ Pasos necesarios para correr el proyecto localmente
 - Crear una base de datos llamada
 
 ```sql
-  CREATE DATABASE miProyecto;
+  CREATE DATABASE pruebafinal;
 ```
 
 - Crear la(s) siguiente(s) tabla(s)
