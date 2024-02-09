@@ -15,7 +15,6 @@ Pasos necesarios para correr el proyecto localmente
 - Crear la(s) siguiente(s) tabla(s)
 
 ```sql
-
 CREATE TABLE countries (
   id INT PRIMARY KEY IDENTITY(1, 1) NOT NULL,
   country_name VARCHAR(255)
