@@ -614,15 +614,15 @@ INSERT INTO orders (order_number, issuance_date, delivery_date, reception_info, 
 - Insertar **Detalles de orden**
 ```sql
 INSERT INTO order_details (product_id, quantity, subtotal, order_id, created_at, updated_at) VALUES 
-(1, 1, 99999.99, 1, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
-(2, 1, 349999.99, 1, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
-(3, 2, 899999.99, 2, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
-(4, 2, 1299999.99, 2, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
-(5, 3, 799.99, 3, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
-(6, 5, 299.99, 3, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
-(7, 1, 499999.99, 4, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
-(8, 1, 299999.99, 4, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
-(9, 10, 899.99, 4, '2023-06-11 12:00:00', '2023-06-26 12:00:00'); 
+(1, 1, 199999.99, 1, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
+(2, 1, 399999.99, 1, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
+(3, 2, 199999.98, 2, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
+(4, 2, 159998.98, 2, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
+(5, 3, 179997.97, 3, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
+(6, 5, 269997.97, 3, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
+(7, 1, 103996.96, 4, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
+(8, 1, 199996.96, 4, '2023-06-11 12:00:00', '2023-06-26 12:00:00'),
+(9, 10, 199996.96, 4, '2023-06-11 12:00:00', '2023-06-26 12:00:00'); 
 ```
 
 - Ejecutar el servidor de Angular (*puerto 4300*)
@@ -643,18 +643,7 @@ INSERT INTO order_details (product_id, quantity, subtotal, order_id, created_at,
 
 - Insertar algunas **Ordenes de Compra** desde el FRONT
 
-## Aclaraciones sobre algunas partes de su código *(opcional)*
-
-El método o función miMetodo lo hice para que pudiera chequear el estado de la respuesta del servidor ... 
-
-```javascript
-
-function miMetodo() {
-  return "Ok";
-}
-```
-
-## API Reference *(opcional)*
+## API Reference
 
 ### Proveedores
 
@@ -967,6 +956,6 @@ function miMetodo() {
 
 
 
-## Desarrollado por *(opcional)*
+## Desarrollado por
 
 Este proyecto fue desarrollado por: **Agustin Saladino**
